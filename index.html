@@ -302,6 +302,14 @@ body.easy-mode #btnRippleToggle, body.easy-mode #btnDetectBeats, body.easy-mode 
 .cc-ov-title { position:absolute; left:6px; right:6px; text-align:center; z-index:3; pointer-events:none; font-weight:900; text-shadow:0 2px 6px rgba(0,0,0,0.95); letter-spacing:0.6px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
 .tm-slot-row { display:grid; grid-template-columns:56px 64px 1fr 1fr; gap:5px; align-items:center; background:var(--bg-3); padding:5px 7px; border-radius:6px; border:1px solid var(--border); font-size:10.5px; }
 
+
+/* V13: PER-CLIP RICH TEMPLATE MAKER CARDS */
+.tm-clip-card { background: var(--bg-3); border: 1px solid var(--border); border-radius: 8px; padding: 8px 10px; display: flex; flex-direction: column; gap: 6px; }
+.tm-clip-head { display: flex; align-items: center; justify-content: space-between; gap: 6px; font-size: 11.5px; font-weight: 800; color: var(--gold); }
+.tm-clip-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(128px, 1fr)); gap: 6px; }
+.tm-fld { display: flex; flex-direction: column; gap: 2px; font-size: 9.5px; color: var(--text-2); }
+.tm-fld select, .tm-fld input { font-size: 10.5px; padding: 3px 5px; }
+
 </style>
 </head>
 <body>
@@ -437,6 +445,7 @@ body.easy-mode #btnRippleToggle, body.easy-mode #btnDetectBeats, body.easy-mode 
       <button id="cqStepMinus">-0.5s</button>
       <button id="cqStepPlus">+0.5s</button>
       <button id="cqCutAudio" class="cyan" style="display:none;">✂ Cut Part</button>
+      <button id="cqSlowMo" style="background:rgba(56,189,248,0.18);border-color:rgba(56,189,248,0.45);color:#bae6fd;">🐢 0.5x Slow-Mo</button>
       <button id="cqLayer" class="primary">📐 Layer/Chroma</button>
       <button id="cqEdit" class="cyan">🎛 Edit</button>
       <button id="cqRemove" class="danger">🗑 Remove</button>
@@ -478,8 +487,8 @@ body.easy-mode #btnRippleToggle, body.easy-mode #btnDetectBeats, body.easy-mode 
           <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAJMAAABACAIAAACRLdLDAAAvP0lEQVR42u29d5wVRdY/fE5V9+0bJydmyIyAg4hkxCUqQZKCAqIL6oorZnR/G5TVVRH3WRVX3FVECSKga3rUXUEkg4giguQ4AwzMMDnf3F113j/qzp07wwygj/q8v/fz9ud+5E7f7urqOnXS93yrRCKCX+aIfRAi/MJH9OmNHk0Av3hPfqIDf5zkpJRSyhhBIGMMo4NCBETRlhGREDF2yGIuQMZ+LkFKSUQAiJw1OfkzPvT/tZITQjQSUuOfOOctDqMQ0rIAgHHONK2RPgjx0w4lCYmIwDCqWSIYBCJuNxBZw0Nb7u3/1yQXlc3u3bu//vrr/fv3m+Fwl65d+vfvP3jwYM41dYEVCIZOngqdPO07fRpPn5WlZVBZKXx+EQ4DENc15oljqamsc0dXjyud/frYUpIBgKRExn6cpBqMHhEQKJn5jh6r2fplePdeyj9jeX0AYPO4Wbs2toFXx48eaU9PBaL/ezXvB0hOSeXLL798+plnNm7YAABtWreJi487dOgQAPS8queTTz5x48SJp/7+qu/VNxzhIFZVo2UxQM454zponACAJEiSUkphSSLSNNm2tX3C2NT77jZaZ5GUyPCH+56I5KKyr9q8rfrNZda2r3hlFWNMNwwmpAwFTNOUwkJAcVm25/ez0+++k4gQ8P9GZ3epklNie+211x566CEhBEO86bbb3luxAgHmPf/Ck4/9Sbm9x+bMmfvwI7ljbtL27MX0FLJpCIjhMPr9aArNMJjLKYkgMtcRQEIobHq9odZZyS88l3zjuB9txNSNwXNFRX9+Rnz0iWEJ7nGDYUDYNL11Zka60T2HZ2WCJOvkKXP3Hqus0PG7P7Z58Tn48breoub/AofWUgCixlW9khLbJ598cv/99wMAcCaFHFFSXTlhap3Xe01SMgEBZyDkX+fNs8d5nty8unzjFlfbNugwAFD4/WZxsW/P3tC6TbB3v91ukKZTNMDRdT0lVa+qLp9xN7z1RvKk8T/CbCqx1ez8rnTmfcaJPHtykkQkAKqtDcTFeZ6akz55ktG2tRpYAeTbd6BmyfKq+S9raSmZf3j0xxhqIpLKm9bf+AsrLjU+LMuSUkb/FFKapimlrKmpSUtL69unz+Yvv3zxjrucAGN0e35S28rk9rNsbg7wcIcu29atu+2OGQCw7+ABau6wwuGSZSuOZ11WmNzmbKtOBRkdCzI6RD5Z2edS2h5td7kvN4+IpBB0yYe0BBHV7NpzKDO7ML5VYZvOZzM6FmRmF8RnHu8xoG5ffWeklJagmJZrtu848uAjwaoq9esPeGLj7kkiKaUkkkLKH9LO/+RoZC2llIwxACgoKCgtLc3IyMjMzFTnFy1adN999+UVFnQImyVjb36mpGBhZUlPh9vD+LZA3Wh3wlvosf/1ifhZdyXGx48ZM3bVqpWWZWn1MWRsAlC1aWvF1NtdiMQZATVkFhoXldXWDePar1wM9ep+KaE/MBYqOJc/crzrXBF6XGQRIKIZ9rtcrdZ87MrpQqaFGm8UjCiNZwwApGkyXf9ByQYwFiopq/zgo/COb7DWKy0BSOgPBDt0yH7zH/wHtfZjD9ZEbBs3bLzuuuuys7NHjx7VsWPHESNGbN68iTH23x9/jIihYKjypX86Cs9xTUOC7/3ebd4aENKSwrBpwSUrvaVlNqdz0+ZNgVBIs9lIGRPGkHOVVJFpJg4f4rx3Zri2jjGGMU6WLKklJIhPP6tZtwkZIyEuyWIASNMsePARR/4Z9LjJkkCSMQz5/HFPPhYRm641jSEZA8ZISAD6QWIjKYCxyn+vyR80IvD7P+N/Pscvv+Lf7jK++S60bUvC1f25rl9Sz38qaymEIKIFL7+sTj733HOlpaWPPPIIAHDO354/v09ONwC4Kifnta495iVmJGgaAHBADoiADGCmJ+ndDt0mDRkGALqmHT16JNpso0MIkjJwOv9E6y7nUtsVZnQsTO/Q8Mm87KwnPW/8ZCnEpZgvaVlEVPhf808aiedaX1aQ0aEwvWNhq04Fca1yB42yQqH6dn4aC6aMZOXaDUc96YXxmeeyOhe1yj6X2i4/LuOYI/XMX577oXb+f2otlbYd2H/gqp5Xqe87duzo37//pk2brrvuOiJyAmiaVmtZlz4h9uzZ3bNnr6j5bQpEIZ6adJu+bj2Lj4fGM5Qx5gsGUz99P27QwAvHmSqsqPtuT9GYm+IYCoYoAYCYxgMVVa4FL6T99s6fMt0mAoBwZdWpIaPdBYXgcpqmCOg6j/fol3dxz7gt9YYxv2SCyKKR5MKFr0kpe/bsyRibPn36U0899cAD9xt2e5fLLvMDKLGNdMV9kdp2cVrbdE0HAA2RIyKCDfHZhLRtna68d+o0ALDputvtvgDAAQDOXlealhWFORqMNqItFK5eslzBZhcKwQGkaZY8/hdXMCA1DgSABAwhbMr0dM/oERdp4YcKTkpALHtjqS0vjyXEiTofGzqo3ZdftP1yfYePVv3CYotITsEim7dumf3I7J07dy5evPjEiRNPP/30kSNH33v//e/377998DAAiNf1OY6kHqY1mRu3e5IRwCISREQw1B1/r6W3TU157Z1VXbp08cTFtWnbtn7gzssXEQAA27UTjCM14/91t9tat9F/7DgwRlIC0PmNKIUrf3sVbt3O4+JASEQARGDcCoX4Vd0dbVsDEfwkiRoAECHnlj/g+/g/hsslpZTSxNRkZ8f29uREICIhfmE4hkUnphU2W2W00nU9JydHmTjdZmvfsaPDbo9HQIAwUS0JjTNiEARJiAPdcWPjkrjGfcKq8biyXpwnGVaWl48ePdpu2IUQiC0DIh43NI5QGhyvxrWq6qp33q/3w82NI8NwWXnN/FccLpckGX0IIkjT0vr1jmjJT1pqCB/P1fLPkE0DIkQkIUBKJbNfHgKNJNoA0OOqHk8++eTMmTOnTp3KGLvyiu5mOHzzxIl3jhn3+tbN0+JSOjF9dm3Ju8J6OeBdXFM+gtlWgWOp1GYzx1d+72OprvcLz0y88caK6uonn3zi4pYKGWDzsBOR1J2OwCerrdo65ByhqfCU4Sp/Y7F+8jQ4HSCp3oISAgnO3DmX/+RxHAD4806hP8CY1gCY/O/VHBowlBkzbv/oo/9esmQJAKxcsXLq1CkLnnn2/zz7zInjxxHgTsNDNveYivwHq4vV9WMGD3K3ae/jNMbtfmnhK+/t//69qVMBYMGCBZ07d7lw3QAAyAxHamaI0EQyktBusNyT1es2ptx8I0kJjMeaU2QseLbAt2yly+MhKTHqYBBBkOl28/Ztf44qYKi8HKQAQOVPAQn+9w6myi5SyvHjx0+dMkWpQ6tWGZquZ2RmgKaBYbs7MfUqnffh/O3UtumGAZoGnH/u0u3LX2+3fPFn8U6IiADnzZungE1+UesRCivvRaZ5/hATgMGw7t33KeKrGlydqriVL1qiFxaR3RY5rTJ9QLIsFufhaWk/bXgSGaw6L0YmGQEBIPtflJwWiRgQCeit5csTExKXLH7z+tGjB11zzcatWx0A0y32OIhATZFJdB3qHzDjZat2DcC6zz9PdzqdTmd5dTUAXN2//9NPPz1i1CgpJb8Eo8/8PiassGEzu+XYvt+ncRZrE0kSdzmtr77xHT7q7nY5SQuQ1yscBvPzA++85/K4SUgQEliD1SUhdI/HiPf8LPC8JQAQgBD/96vpWrRsDYR2u33hotcf/csTmzdvPn06f8qM2/u4PN01I0RCMkRACdSf2Puc7QVrf9BfVFIipWzfvkP37lf0yL4MAIRlcU0730k0LogDAFBNHScwTcv1mxmBp57VyspB1xvMJhFpXK+oqlu7zt3tciBs8GTIyhYt5cUllJQoADA+TqutJWAAQIgoiZxOtNt/AAYsiaiFWAaxEQhHMjbKpRZg6ObvvWgERNRS3abZsrMWE6sTAPrzC9JWr70rGOLxqaI26K/wVpFERFYf39cAAEEXhlcyxpiBDMTpc+Fjp4qCQePaYUmDro6tdqhMsWkyjgAAVkUlIxRh092nlxg7OvzqIltSUhQ3QgAistmNwOov5EP3M10DIgBCxkPFJf73/9sdH2dV1+LNN2o2u1j1LktKBCEQUJJAuxGJ9PASwH7GgCECv6TijQqVEQEIAVDJmxrhmY2CzEvJ8FQ3OP+hxl2LfUYg/0zh+Cn80JFyzlWPEUGhwsoZkzKrgF4AAhmVA3LGkdW+/Cq8szRpzCgSEhhGzWZR0bn09HTGGo2OKCtHAGYYmtuV+Jvp55avNKSU2PAgkMScDtq337d7j2dAP5IEQMh55b8+4GcKMCMtxAKtHrzP//YqIWSj4F3TLj4EMaMcKigMnsgNnCvCykqs8ZJlAgAybgYC+qCr08aMbhpARWSF0X+j+aUQovrzdeEdO0kI54QxCddcfWHhKYgHORfhcOjY8cDJ02ZpGauqIl8AiAABkYXDZtKMac6unZs0pUVxDdR47SertcNHnG2yhFU/90n5fQAAYhipSBEAxNKHgIBQt/HSiupl7ySNGSVJcNQ553l5eXPnzv3444+XLVs2adIkFbkgYwQQKC1zAnGPk2vMnnO5NugasX4zxrkhVgyM2wLB2v/+t2dAPyBCzoQ/4H3nA7vbadbWsmsGuHtfVfvaGxBDEGIEQsoLOyESEjmTRJUffVL37vty3wHtXLEZqCMwOTiZ3SmBmMaD3krmezhtzOiL5oVKAHV79xfP/gPb+Z0GxACKFy22li1KmTiBpEDGm509yHmouKTyrRW+zz7nuSehrNySQQTimptpOiFyzgLeWlf/vs6unSOq2WxllWpquaYLIcASKpwjYCgpIIQQlsOyWFwckQRJ0WAPEeuDOxM0TfP5AIBrejAQeHH+/Pnz51dXVwNAcXFJJCsiAkQZDFFxCXAOSUnM7QYA9y03167b6IydEQRSCM3h9H+xyZxTp8e5AbFm42Y8dJgnxgcrqxNm3IYExHjEukYddigU8azNCVCNsu/Y8cKH/yA3bfHYDStsiuyOxqCBerccsXGL3LZDczmBMYMheJwXTc9JCKbr1Vu/KrllhquqmicnSYbE0VNTW/X8SwmjRmgO+/maF8GA3vuocs7TxrlzToAQYzD4V85hg52t23hfX8xOnUKHExnaNI3Z9IvUxBERSCJBfdmMMcYCvlrn3L8YPa+oeG4+bN3ucDrQ6SQhgUREJRvZIBJSrlm9es6cOQcOHAAAu90eCoXsdqORqays0srLiTOZnsYNA4gSRl5Xk92JzhaAYYtm1igJDRuePFm7ZVvyhDFEUPPuBzqACATlFTkJ40YDAtrtkoCIQBIBIWPo9UEwCA4HgIwtY0XFVr15a/FvZtlLyvWUFK8Zcj50b/oD99oz0gGg1Ov3fr5Od9gVoIWNoxCKSU6UxwMApuvefQdLbr/bY5qUlirMMBGAQO50YP6ZYG6e+8orQMpYySmxFc79m2/e8263i+wOf0Z6wtNzEm8cp2p73o//LQ8f4Xa7FERCNBcLwfnBD8YmT0jC1DX74IEJQwa1X/2R+9WXfK3Sw+XlTArgHGQDuoUAUkiXy7V//4EJEyYcOHBA0zREtCyLYqIm9SVcVMy8dYiArVsBAFmWlhDvGHd92B/AxkmSRDQk1X3wMSAGThw3t36px7lDXp9n2mTd4wEAdNiJAICRYrZwbtXVhWvqWrJO1V9uL7n1TldtnZaYUBfwJy54sc2zT9kz0ikcJktQKBwzxE11VsUQKJW2EQABUai4pPD2e9wVlZZlkc/HkHFCriLCQNCKGJuGoFRRFIv+66XAU391JycKSwQ6ts/8z/spkydyTSfLIiFQRWoU9aKXJLnohfX2kEAGgyQEY5h+14y2W9dqv5/tRaSauvOjXsZYKBhERM6YklmzFiaQn0+BoER0d+wY/SV+yiTL4wZLNLEq3OWwNm8LV1bXrVnPy8qJQGRlJU29OZJ9OwyJMTErZ2ZdnVleHp0lsSFYMP9syZ2znMEwut3ByirPE4+l3TqVLAukBMZR48BZxEsARFOR80ZHWUkAYIBYMPsx277vgwkJcsK4cMcOMhiMwNyITAiqqW1SmEXOKz/+t/eZec60ZAibAY+71YrFzk4dyTQBSQUssoEAR80C7i1JrvEwq4iSc2VAjJSUrLlPpH/+cXj4YBkOx3JnVCjDNK5qfhfyDcfzeChsGoZ+WTYAAEMgcnbP4b8aKHy+WD+MBKDrenVNxdK3/WvXGU5nuLbOfuM4e2YrMk0AYG43NXCrATjXvD5ZeK6h+zGSK3riGfuZsyzeI6trYPDAVrPvjxTwGANsMmubm+rU0CuyLB4fV/buR+H3VphduyW/t7z922+kv/uWPy6BWRYhAgISqU5GjCsRIguXV1TMecZp2EnTgnW+uN/Pdl2uCvd6VMWRsQgsRQiElyY5PP8v1mA8OQdJFAp5el7Z9sNVZnw8WlYT36usP7UAPik1DRw5yomkx6Nnd1RnSUpEFvfrqWGKTnVCQACUQupuV2jhYu3AYeawm05n0q9vUSAYAEBKiowBrokxLRwOnT7TaLylBMZqv95p/Xu1lpwMlhWWMune3zKFq2Ejg0gxs4aaRjiRAICkZE5naP/+2jlPy9TMVu8tSxjYn0zTld3RdtUVwu9HxupVlpoA5RVL39ZO5IInDvwB6tQxecatIAm1RsEnIVOZORBhC+joJST5TUIQBDSMcFlF8ZyneW0taFqDD1P1F2w5CSYCxmQoFD52gjjT0lIcrbOU/0DGAChu1HWQczkFAsBYZA4gARAgGnV1GpH0+vWBA9w9eyjDCAAsOQljkTMChug7fvz8h1cvX2ULh0jjEAyyTh08w4eovK3x+MaYyGYmewOTmhmGbfdeOluQ9vKLniuvINNCxoBIS0mWEUSGCKihdKwqfF6v990PbE4HSCn8ftuwQXpCPEVmSKxVpIaHESD9YGsZ8dFI9bgOY4RY/u6HBdeNk/9YqGtMUiNvoDoQSdpacHKh/LP8bCEAyOyO3G6PxF2IJKTmcjluuiEcDCnYJZJFKISKM0Q0hfTccjNifWYJ4GiVgTYDpIw8nIjpOh46SkTIeGQ0GAuXlppbtmkuJxCIUIh376bHeSgS8sUWEbHebFBMst08IiX9AW3S+NRbJ5MQqGsRlWUY4z4aDI9KCut27GQnctHpBCKBaO/fpz7YaZ6yiS15uQbJITTb0UjtRLcBItP1uu/2nr5hWt3M+51nC/SUJKofrEaSZkwIIaXUNK0J7qWu9O4/KGtrCNDZvXvs7eolE26+wUpJBssCREQlUwU4AYXCsmO7OEVTUEoJYMtIA48bhBXRTpLcplsnT4dKSxVMpYbM+/0+LCpBm4EIJCS0b9fUEUZEhfXhPrYQ09WPjJQhu5H8yP0x4431EooRQGO6hv/rb7lpETKUUhqGvUP7ZhEWJIV+kHIZzfqdJjpHTUwdITLTtE7nh0vLCx57qmTMJGPjJkdCnLQbFBME1s9s5vP7ruiWs2zZsuzsbEW6VbkBYsNMDH/zrS1sBe12pzJ6sUw6KR3ZnbThg4XXh4wRNSgB48zy+e1jr7clJUZ0RcWSqSlWeiqYJkXjPpsNSkqD+w/HlsXDh45i2ESGgERAtri42Pi5Hs1qmqshNXX7kTFkTPr9et9e7n59gQiaYJWNEevYeSkPH2OMk5pQho0rtg421jaiJh6WLu7nqGk1Ukpy2I26Pz5RMOR6+fdX3UgYHyeFwGZCR1LBpWEYd9xxx+7du+fOfSYpKTEYDBKRaZoAgLouw+HA17sY0zA52X7lFdCYEav0L/7WqWEtQlGJaiQTMuxyxk+ZGDssICW3220dOlDYxAjgjoTMFgp5v97Z6EUKChhJIgRCBLQCwaZoJBEgIsN6HIBYM0YIo2IQlmBt2yCLoRpHuO8x7hEjZFzl4IVlhc4VMV0DEoiAlpBmuF7YFC1vqVIzNut6m5GcolJxTkTINWAMmAaMA2Nksxl+n6OiQk9NlppGpPD1Rh9CJMYQUHAGAMK04uLi/vznJ3bv3j1z5syEhISsrCyV7XkPHobjJwgJu3U10tOawELKyccN+RVd2V36fcAY1gfTwufHfr1cPXuAWrcYI2lb9xxTSqVOSBKkZDabteOb2NUCVFWDyCL0MM5kbl6shyPLQk2TgaBv0zab3U6SGDW7wocaCbFZRmzsycaaILxeUV2FGicAYpz5A6HTZ0DKaPJFpomc+fYdMPcfYg4nkLxITTxqjp3DBwUMXZZXgN8PPh/6vOD1Qp2XAiEKhammFrxe9AXQ50efH3x+8Nf/1+9Hnz9QW2Ub8isAYAwVTbZ9+w5vvvnmkSNHxo4dS1IigG/DFubzWwDOQdc0Q/JBJCmZYThvuiEcCkewR0JEDJmme9KNGGGDNTqMPr2lzQZSgetIkrjDLg4cDhzPa6BKCKmgcSlIc7is7TuC54qRc2XzUdPMmtozd96DO3ai29VQrrtw4UVazQQVJBpJN7aFsImmpaBeAtAQaj9dEylZSAJE1HXvd3tLpt1pq6kBTYcIMQqbVTqt0WS/eoC5YnHtwsW8zgcMYwDMGEi3GeNBIEkiN0YOy7jvt1C/lpdzrpZHZGRkqCBVmmbwi/WGxr26njz4mmaHRmlJwuRJBa8sNGpqQbMRAJlh0TozfswoAECGTS729LqqKqsVlZSBTY/YGV3j5ZXejZudXS8DKQA08LgjawmIpK7pZRXFv5+T+c/5tsQEaVm1G7dUzv0vfe8BzeVqwBCI6Dy+AtEFyncRrLUhdwBsRBvUbaTrkW4IoXnc5povSpesSP3NdGRgVddUvvN+3d9eclRXk24AScALEV20Rm6DKHnCuOQJ46SoF3e9yKgZi4ERthUAkETOEJsBwyI2TUpkzLtzF+3dh5xrnTq6enRvniqCSELYMzOMCddbry3VUu1AZNX69BvHG5kZKqdu4ur05CR94AC56n1u2Iks5S10m+7/92o56y7kGgBgZisBoKnOWJbudlv/+fzMkWNGThez4BztO+AkCifGm6kp/Gwx01gTlYsWP2PjfdasLlhWIzOrSBhEJCX3uLT4OMgXaqglgENjvkf/EHjvQy0jLXTgEDue59K1QFYWdzq0vNNgt0chyIgPlNEEtEmEojiERIwzdSBDZAxZ7MHrP4wxHvmqaYiMpIDmckasJ2bV/OtDLRS2LMsYPoTbDZLNs0vVmyf++rawy4lCIEBI0+JuntgUioxxdZ4bx5mcKWKWiqy4yyl37fZ9s0thadrlXYhzJFI5FpHU3C7X6TPs4/8Ye/e74tzBQMB2/yznLVPMutqGWJEipMrIqpEIWa1emjZbc9kCNQpFEcgSqGvIGNc0W8cOlmlhfdxPjNldTv2bXfDhp/YzBfaEOK+Q8S+/oPXtI3y+CCaHhERkCdT02DpfUy2JzCy12lolwpf4UXhEs45B8ewKCgP/+dzm9oR1W9zYUReAdIEzIHL3uhIHXyO8fgiF4PIunkEDobmlWQriixs2WOZ0oaAf6vM8YkwPhaveXKoui+vdSyQlgWlGs2SSRIaBCfE8IT5UUgZTbmr1p0dNl4vq8wNkDEtLkXPU9aJPV4eqq5nNFsNdIJmc1NiAEgCAukaBc5aQXj9q3Kr1Fnz0KQDogwYKIaOWBlUw6XZhchKz233l5e65f04aOQxIImOKtY2WCFdUocbNsor8pctFPVbMWmLORLzrpX8uTDNFrFr5L62kREqJOV1c/Xo38VhNb5ESEBPvuj3MmQiEjNEjuMPePAMckaTgLpf7zl+HAiHGEEACoJRSi3OH/7O2dud3AGBv11ofeZ1VU4eaFlsM4YjhomIx7vo2ixYAgNE5G3QNAUFKzemkTdvKlizPm3Zn2fKVuttNYTNClGNcSHJe2b0ZF5iRLokQkITQDFvt0rcrFi4+PGBo+HguACSOHW21ycJgCFisuwZuhv2V5fan5mTMvh+kxI4dSZKKtjS74VvyVuXLrx4fMkIWnuM2m2Lr/PyMQSJkzCwr9y1faffEhX1+57jR3DAuTMRXEVP8qGuhWxevvy7hxnEXiPTUxSnTbxN9eso6L3CuqDOSc4dpVjz7PEkCKdMee8SfloK1tajZgHPknJmmv6KCZkxrt+JNzekEoviB/azOl1F1Ddc0MAy7z181867QwUOXL1zANA2IGNc456K0XPTonnD9yNgURR3OUdeFpeAkkXHmdhvf7Sm/7+64Pr06PvY7soSRmZHwp9/5q2s0KVHjyDnjHL0+byjkmv9fWY/9H7IsYCzhhjGhODcGAsgZdzmNg4cqHnnA2a93hyceo+gTf+5lXmqJ27l5z5/U489ldDqRme0/djyykO7Ch1qstmHzmRcXXHz5mxBEVPP1zmNp7YpS2hVkZhdkdDqb0elc1mUnHSklry9VV1Vt3HK04xWnjeSzjpRTztTcrj2KX3tD1i+OiyyP27z1SOvO+fbkfHtybkLmqVtuD5WUqkvO/mXeMdBOJmXlDhnlPXhYLceOeVWpGjnzyB/yjMSzjuTTjqTcjHaFf3lWShn9lYgK5z1/PCEz30g4YyTmuVPzfnVt1aat0cWF6l1K3lh6PLVtviP5tDPlRKsOBU88LSyLVDvnrzb+6Q8pATF4tvDs4JEuf8Dy+cX46zv8662mIeJPottSImNlH3xUdfcDHsbJ5QJBRJKR8DEt/ZN/efr1BoBgSWndp5+Jc0V6difXqGvtqakNJPl6aqj/9JnApi3k8+k9rowffE2UBuHdf9D/7W6jUwfPoIFKBc8zA5EcoXrDZmvfAXS77L+62tUtJ4bBp8wB1u3dF9i4FUxTu/KKuOuGajYjZqkfEREi8x0+GtjxDWqafUBfV9cuTWiAP6vkiIREzs8+8KhY8rYtOTlQXZP07tLE8WN+wIJEtdnTpV2smq1c/XnFo3+ynT6rOx3MZgObDUJhX0pyqxVvOnv3bPaW8wl95wNjzfL+Ln36Nl2l3uTei545r5GWJdcQAf9IFnb9OK6tnHaHMy5O1vmCOV07bF7NDePi8MSPPoQEzkLFxWWLlplr18kzZ5nXx4nQH6hzu+IWvZI1eRIIoQalxS2rIhuGAQJCkz3DZD28eeGgLEr5RWxewPWPuKRuNNfIRXSuKbH8B9lJxkJFRWeGjHaVV4DbFSwtd73yYvr/YAXwJXYm2r4Mm77cPJF3UlZWgZDMMCi7Q0L/vnhpi0t//Lv/xIar+c42IznlMAoWvx3fo5unb+8fs8uLJAIiIU7ddJu+fiNPTYU6b6Bj+/Zb1mpuVyQejxYBGjceBZ8wZns+tYhSXWlZlkIEYi+ObUQqDJck0/TmZpRsFuhpDBoLqF/KG300XYD3j4iI51PxY8/EPle1E7vxXWTroJhXVsBhtA/R/jTPt4yOOzDgh4+ULlvu/nI9EPywgEJRjBk7+8cn8IsNPC0VCIKBoOeBezSPO8LHbnmJ1PnjGH0BpQRqjxW1dwBrrlf1J3nsdI0qIrvYi0QfF0EFlPpK2dIOgxfoeeyZZp8bVevzp2/smdg+XFByAABgz+ni+/sL5/7ybNbcJ0nKS9wcKyqYgr/MC7/2pjM1WRCh10v9eqdMm6wmLQLs/HbXn+c8jogpKSlLlixxOBxRg/7gQw8eOXIUiB5++OHx48crQvuqVatWrVp16tQpt9s9bNiwhx9+OCsrq6SkZNa9s/w+/7Rp0+64447o9o2PP/74jh07cnJy/vrcX2fePbO8vPyxxx8fOWLE88+/8MW6LwybLaoKpml2y8l5ecECNYLRPqxcufLjTz45fOiQrut9+/a9++67BwwYsG3btrlz52qaJilCWUJEzlk4bI0cOfKmmybNnDlT07TFb76p1sgXFBTcc88syzJfWbCgQ8eOU2+Z6vP6GGcMWWZm5vDhw6dMmaJpmpLH7Ece2bN7z7Rbp907a5Zpmrqu79y5c/GSJd/u3Cmk6NWz11133TVkyJBGwmspA6tcv/lUQqsznvSzTz6rMghpWi1uUyKltCyVrJg1tXm/ufeEI6UgMzu/VafCrOzjnoyKLzaobZ4UCfPTT/8dFfbq1aullOFwmIhOnDgRPT9//kuqVDRr1qwm8yMrK+vgwYOmafbq1QsA+vbtG917pbKyMj4+HgBmz55tWZbdbgeARYsWEdGUKVPPn2rdunVT3Y+28Oijj0bmrt2uFMJut3/zzTdrVq9pab7efPPkvfv2qe8HDx1SQ3LkyBF1ZsdXOwL+APCm+nrNNdcUFhSoR/fu3RsA7pl1r7p35cqV569BfPPNN9X2XhG73awYiCiYf/Zk+5zi9A4nnaknJ8/wHTnW6AJLSMuSlkWWiN0mpmrTluMDhp3UE85mZee36lTQunO+I+XUb+6LbvGiHrxmzeecc7vDzhj79fTpRKRK5y+//DIiOhwOzvkrr7xCRB988AEAaJr217/+9fTp01/t+OqK7t3VaxPR66+/zhhzuVx5eXmqA5999hki6rp+4MCBYDCYnpHBOV+2bBkRzZx5N+d86NBhBw4c2Ldv3/4DB/bu3Ru9UYnt5MmTmqZxzufOnVtSUnL69OnRo0cDwOU5OXV1dXv27Dl48OBXO3akpaVxzufPf+nw4cN79uwpLCzc+e23nHObYTty5Ihq8OixY3a7nXP+7bffBoKBlNQUzvnzzz9/6NChFStWKL289tpr1YAMHTqUc/7gww8T0clTJ10uFwBMmTL16NGjeXl5d9xxh5pAqreqqy1gKFJKIU6Nu6nAk1HUuvMZZ2pu264Fs/9YvXW7WV3TBPwQRKHikvJ/rz417Y5jiVln4zILszqfyehwNjO7MKnN8c49A2cLo9CA6ujq1WsAICkpyWazJSUnVVZWqu2Fr776akTMzMoEgH/8459EdMMNNzDGJkyYEH3c+vXr1Xw8eOhgeXm5esnXX39d/XrfffchYq/evaSUZWVl6enpALB06TIiuuuumQBww42Tmt9NzrKI6OtvvlaGdPv27er87t27Z8yY8bvf/S4UCqkz/kAgI6MVAHz8ySfR23d8vQMAuMYPHz4ckdzRY7quA8DOnTuDwWBScjIAfPjhh+rXtWvXaroOAFu2biGia665BgDue+ABInruuecAIDMzs7auVl0cCoWys7MB4Nm5zypqCBFpLeIRnDtHjQhs3Mqk1BLitUDAWrS4avnKyratZacOjsxMHh8HAFZNTSD/LDt2ggqLdSJXnIcQpWUiMk7gDYWTX3jW3jqzPkBotA12+/bt01LT1n6xdv369ZMnTz5y5MjOnTu7du2anZ19rvCcMnQHDx2UUg6/9loppWmamqb17dcvLS2tqKho67Yv75s1a9CgwV98sXbNmjX33HNPMBjcsGEDEU28caJa0nA+E6G46NzmLVuklAyRMd6vX1+Hw6GkRUTdr+ienZ2dm5s7efLkBx98cOzYsb169Vq+fHl96c1ijPm8PlU09/v9ys4bhtEs9YEaqDSRX4PBkJRSCHHttde2a9fuZF7e9i+3Dxk8pJ6YwADg++/3ImKfvn08bo+aTzab7VeDBuXl5e3a/V20asZaxHAB4m8YJ1qlo2mSlMS5lpRgNwz72XOOdZvlkrfD8/8Rnv9PWrLSuWW7o6LaGRfHEuIkEUhJgJzzQEWF8w+zkyYoxITFVo/VO4XCoSlTpgDAipUrEfGzzz6TUk6aNEntX8Q1TgC1tbUAkJiQoIqBnHOH3a48WXlpKRFNmTKZiLZ9+aXf79+3b9/x48dtNtvEiROjwmhUfwDYufOb4cOGXXfttcOHDx86dEhpaakK21SE4nK5Vr2zqmvXrkVFRY8//njPnj2HDRu2Zs0adQ3nqiqJ1MAPYiosomZYWs2VjVlkq3LOeUZ6OhGVlpdF6QWcMwCoqqoiouTkFBU3qY4lJCQQUVVVVTQQ1Vqq8pCURpss49ZbzL+9pKenStMkiwgQbDoYRnRNPUWDHGkxYIqQrGk8WFqGM6Zl/vmPJGSUG9mEw1tRWTl46JD09PQN69dXVlZ+/vnnADB58uQ//OlPACCExJikSjllNYKWEIioIoixY8ampqaWlZXt+X7Pjh07ELF///45OTmxobYqJ6mB7NQp+8YbJpiWBQA2w4iLj2+YxYwBQL++/Q4ePPjOO+98+OGHa9eu3bJly5YtW95+++3p06erfR+jFIHGbM1Gi5Xq1++0yBhHRCkEIuqaFnMXRtUmHArH3hYOhwHApuvRXKLFQF+JOu13D4Z7XwXV1cymR7aCIkKSqPyWECCEYi9FAmWmaYjB0jKYPq3tq39HhMZAUaNJGPD7W2dlTZo0KRgM/u35v+3atavr5V27X9m9vKwUAMLhEACkpaYhYm5uLiKapimEqKqqKi4uJqK2bdsCQFp62thx4xDxvffe37hhIxFNmjSpoXSJDVxeNSLdunV7cf78BQsWLFiw4IXnn4+vl5y65ty5c7t27crPPz19+vRPP/3022+/HTZ8OADMmzfPNM1IvNfcGn8RIbmApmmWZVmWxTmXks5fBxQxuX7fqfx8IurYoWO0KUECADJbZSDiyZN5KrtX9iD/TD4iZqRnNCTyLZN4EYj0hPiMJa/WZWZSZRXTNYzJRrGRPJhaxYQBn8/r1R//ffvF/+SGrUV8kiIpeygc/vWvfw0Af3/p7z6f79Zbb2PIfH4/AJhhEwCGDhtGRO+++25xcbHT6eScL3vrLZ/Pa3fY+w8YoOb25JtvJqK3li3bsnWLYTfGjx/fPAZbz9hulCzHwDQAsGLFin79+g0ePKSquhoAevTo8du772aMVVdV19XVXSATT4iPZ4wR0N69ezVN0zQtNzeXSCJiYmKikEIpicflVtTvF194saS4WLfZRo4cGSVwKKrnyFGjiOj777/ftGmzrus2m+3wocNfbd9ORNdeOzwqOe1CS0EYAylcOZdnfvZhyayH+PYddk8c2g0ZrWeoXWUAQQrp94VCQSuna9JTf04afz3ULyxuaVpwzjWN19XWDhgwoEvXLrkncg3DmDx5srJa6lcAePihh5a/9dapU6eGDRt2xx13nDx5aunSJSTp7rt/26F9e2W+hg4d2qZNm4KCAkQcOmxYp06dolvpMM455/UMa+KcHz1y5Pe//4MQFuNcCNG6TevfPfIoEClTOXHixKeeeqqwsHDSpIkzps/w+f0LX3tNSpl9WXZCQkJknTsC55zzCHWDMSal7Nq1a99+/XZ+883DDz989NgxjfNFbyySUl599cDs7OyqqmrOmNrCfNOmTfv279uyeTMAzHn8cRU0ck01qQHApIkT+/btu2vXrqlTpzz44IOGYSxc+Hp1VXX37t0nT5nSAPFc4i7JVjBY+MLLuTm9TzpTzxpJ5xwpha60QmfqWSPplJF0IrlN3q9GFL3yeqimNpK6tVAMVcHSxx9/oiZabm4uET319NMAMHjwIBUBt2nbBgD+/veX1S3r1q1r06ZNrNxvvfXWQCCgVi+oBqPZ+sKFC4lI5fUlJSUOpzOaid9yy7Tzp1BmVlaTTPyzzz7r0KFD7DWdO3f+/vvvo50vKyt3Ol0AsGzZWypGVzcePHiwW7dusTf26NHj2LFjRFRSWqLrjehGGRkZf3v++WibPXv2BIDf3nOP6kb+6dMDBw6Mvb5nz57Hjx+P3ez10upz9bhlqLLKu3W7uXdfoKBQBkOg2xwpyXp2J713D0+PHtymwcX+3xvKuxYVFW3fvl3TtJEjR7pcrvLy8i1btlzR7Yqul3cVQmzYsKG6urpPnz6dOnVSWlVRUfHFF1/k5uZ6PJ6BAwf279+/SYNnzpz5+uuvGWMjRoxQYRgihkKhdevW+Xz+AQP6t2/ffteuXXl5ebquIzJCQkCSMjExcfjw4U0Aw5qamq1btx49elRKmZOTM3z4cLfbHcUYw+Hw2s/X+gP+q6++ul27dlHkDBH9fv/69euPHj2KiDk5OSNGjDAMI3LL2rXhcFgFlomJid27d09OTo7ibZs3by4uLu7atWvPnj2VZhPRpk2bdu/ebVlW9+7dR44caRhGbPnikiur0Q1XLgxa/gx7z52/Ma1y2j9TCabZfXCb3xz3f3bjBXZHu5SmfmBNvH53pIZlYfVUALwYA+y8ZmQUBVd/Rus4KliIxeaVlYhGRue/cLTBJoh+bFMyppjZiCPYQmtRhTi/SnB+Dy96ozhv0+Pz+xkdgUvpw8/MQ/n/j5/t+H8AhGMoQwrtTbgAAAAASUVORK5CYII=" alt="MahaMovieStudio" style="height:30px;width:auto;display:block;">
         </div>
         <div>
-          <div style="font-size:15px;font-weight:800;">MOVIE STUDIO <span style="color:var(--gold);">V12</span></div>
-          <div style="font-size:10px;color:var(--text-2);">4,800+ Distinct Templates + Own Template Maker • Pro VFX</div>
+          <div style="font-size:15px;font-weight:800;">MOVIE STUDIO <span style="color:var(--gold);">V14</span></div>
+          <div style="font-size:10px;color:var(--text-2);">Slow-Mo • Light Effects • Pro Filters • Per-Clip Template Maker</div>
         </div>
       </div>
       <div style="display:flex;gap:6px;align-items:center;">
@@ -1111,8 +1120,8 @@ body.easy-mode #btnRippleToggle, body.easy-mode #btnDetectBeats, body.easy-mode 
       </div>
 
       <div class="prop-group">
-        <div class="prop-title">3. Per-Slot Movement &amp; Transition Choreography (Har Photo/Clip ka Alag Motion)</div>
-        <div id="tmSlotsList" style="display:flex;flex-direction:column;gap:5px;max-height:175px;overflow-y:auto;"></div>
+        <div class="prop-title">3. Per-Clip Pro Controls (Har Clip ka Alag FX, Color LUT, Motion, Text, Music &amp; Ratio)</div>
+        <div id="tmSlotsList" style="display:flex;flex-direction:column;gap:8px;max-height:260px;overflow-y:auto;"></div>
       </div>
 
       <div style="display:flex;justify-content:space-between;align-items:center;gap:8px;flex-wrap:wrap;padding-top:4px;border-top:1px solid var(--border);">
@@ -1445,7 +1454,15 @@ const VFX_BASE = [
   { engine:'animal_bats', name:'Flying Bats Swarm', cat:'Animals', icon:'🦇' },
   { engine:'animal_birds', name:'Soaring Birds Flock', cat:'Animals', icon:'🦅' },
   { engine:'sparks', name:'Cinematic Flying Sparks', cat:'Action', icon:'✨' },
-  { engine:'bokeh', name:'Golden Cinematic Bokeh', cat:'Cinematic', icon:'💫' }
+  { engine:'bokeh', name:'Golden Cinematic Bokeh', cat:'Cinematic', icon:'💫' },
+  { engine:'light_flare', name:'Anamorphic Lens Flare', cat:'Light FX', icon:'🌟' },
+  { engine:'light_leak', name:'Golden Film Light Leak', cat:'Light FX', icon:'🌅' },
+  { engine:'light_neon', name:'Cyber Neon Light Glow', cat:'Light FX', icon:'🟣' },
+  { engine:'light_strobe', name:'Party Strobe Flash', cat:'Light FX', icon:'🪩' },
+  { engine:'light_sunbeams', name:'Heavenly Sunbeams', cat:'Light FX', icon:'🔆' },
+  { engine:'light_prism', name:'Rainbow Prism Light', cat:'Light FX', icon:'🌈' },
+  { engine:'light_spotlight', name:'Stage Spotlight Beam', cat:'Light FX', icon:'🔦' },
+  { engine:'light_disco', name:'Club Disco Lights', cat:'Light FX', icon:'💃' }
 ];
 const VFX_STYLES = [
   { t:'Classic', c1:'#fef08a', c2:'#f97316', s:1 },{ t:'Golden', c1:'#fde047', c2:'#d97706', s:0.9 },
@@ -1853,6 +1870,59 @@ function drawProceduralVFX(ctx, vfxId, w, h, t, intensity = 1) {
       for (let s = 0; s < 9; s++) { lx += (s%2 ? 1 : -1)*(18 + (s*5)%24); ly += h/9; ctx.lineTo(lx, ly); }
       ctx.stroke(); ctx.fillStyle = 'rgba(186,230,253,0.16)'; ctx.fillRect(0,0,w,h);
     }
+  } else if (eng === 'light_flare') {
+    ctx.globalCompositeOperation = 'screen';
+    const fx = w*(0.5 + Math.sin(tt*0.9)*0.32), fy = h*(0.35 + Math.cos(tt*0.7)*0.15);
+    const rg = ctx.createRadialGradient(fx, fy, 4, fx, fy, Math.max(w,h)*0.45);
+    rg.addColorStop(0, 'rgba(255,255,240,0.92)'); rg.addColorStop(0.25, 'rgba(251,191,36,0.45)'); rg.addColorStop(1, 'rgba(0,0,0,0)');
+    ctx.fillStyle = rg; ctx.fillRect(0,0,w,h);
+    const streak = ctx.createLinearGradient(0, fy, w, fy);
+    streak.addColorStop(0, 'rgba(56,189,248,0)'); streak.addColorStop(0.5, 'rgba(186,230,253,0.75)'); streak.addColorStop(1, 'rgba(56,189,248,0)');
+    ctx.fillStyle = streak; ctx.fillRect(0, fy-5, w, 10);
+  } else if (eng === 'light_leak') {
+    ctx.globalCompositeOperation = 'screen';
+    const lx = w*(0.15 + Math.abs(Math.sin(tt*0.6))*0.7);
+    const lg = ctx.createRadialGradient(lx, h*0.2, 10, lx, h*0.5, Math.max(w,h)*0.75);
+    lg.addColorStop(0, 'rgba(251,146,60,0.68)'); lg.addColorStop(0.45, 'rgba(236,72,153,0.34)'); lg.addColorStop(1, 'rgba(0,0,0,0)');
+    ctx.fillStyle = lg; ctx.fillRect(0,0,w,h);
+  } else if (eng === 'light_neon') {
+    ctx.globalCompositeOperation = 'screen';
+    const pulse = 0.35 + 0.25*Math.sin(tt*4);
+    const g1 = ctx.createLinearGradient(0, 0, w, h);
+    g1.addColorStop(0, `rgba(6,182,212,${pulse})`); g1.addColorStop(0.5, 'rgba(0,0,0,0)'); g1.addColorStop(1, `rgba(217,70,239,${pulse})`);
+    ctx.fillStyle = g1; ctx.fillRect(0,0,w,h);
+  } else if (eng === 'light_strobe') {
+    const on = Math.sin(tt*22) > 0.55;
+    if (on) { ctx.globalCompositeOperation = 'screen'; ctx.fillStyle = 'rgba(255,255,255,0.52)'; ctx.fillRect(0,0,w,h); }
+  } else if (eng === 'light_sunbeams') {
+    ctx.globalCompositeOperation = 'screen'; ctx.translate(w*0.25, -h*0.1);
+    for (let i = 0; i < 6; i++) {
+      ctx.save(); ctx.rotate(0.25 + i*0.16 + Math.sin(tt*0.8+i)*0.04);
+      const sg = ctx.createLinearGradient(0,0,0,h*1.4);
+      sg.addColorStop(0, 'rgba(254,240,138,0.38)'); sg.addColorStop(1, 'rgba(254,240,138,0)');
+      ctx.fillStyle = sg; ctx.fillRect(-26, 0, 52, h*1.4); ctx.restore();
+    }
+  } else if (eng === 'light_prism') {
+    ctx.globalCompositeOperation = 'screen';
+    const px = w*(0.5 + Math.sin(tt*0.8)*0.22);
+    const pg = ctx.createLinearGradient(px-120, 0, px+120, h);
+    pg.addColorStop(0, 'rgba(239,68,68,0)'); pg.addColorStop(0.2, 'rgba(239,68,68,0.32)'); pg.addColorStop(0.4, 'rgba(250,204,21,0.32)');
+    pg.addColorStop(0.6, 'rgba(34,197,94,0.32)'); pg.addColorStop(0.8, 'rgba(56,189,248,0.35)'); pg.addColorStop(1, 'rgba(168,85,247,0)');
+    ctx.fillStyle = pg; ctx.fillRect(0,0,w,h);
+  } else if (eng === 'light_spotlight') {
+    const sx = w*(0.5 + Math.sin(tt*1.1)*0.24), sy = h*0.52;
+    const vg = ctx.createRadialGradient(sx, sy, Math.min(w,h)*0.12, sx, sy, Math.max(w,h)*0.55);
+    vg.addColorStop(0, 'rgba(255,250,220,0.22)'); vg.addColorStop(0.45, 'rgba(0,0,0,0.1)'); vg.addColorStop(1, 'rgba(0,0,0,0.78)');
+    ctx.fillStyle = vg; ctx.fillRect(0,0,w,h);
+  } else if (eng === 'light_disco') {
+    ctx.globalCompositeOperation = 'screen';
+    const dcols = ['rgba(239,68,68,0.42)','rgba(56,189,248,0.42)','rgba(168,85,247,0.42)','rgba(34,197,94,0.42)'];
+    for (let i = 0; i < 4; i++) {
+      const bx = w*(0.2 + i*0.2 + Math.sin(tt*3+i)*0.12), by = h*(0.5 + Math.cos(tt*2.5+i)*0.25);
+      const dg = ctx.createRadialGradient(bx, by, 4, bx, by, w*0.28);
+      dg.addColorStop(0, dcols[i]); dg.addColorStop(1, 'rgba(0,0,0,0)');
+      ctx.fillStyle = dg; ctx.fillRect(0,0,w,h);
+    }
   } else {
     ctx.fillStyle = c1; ctx.globalAlpha = 0.8;
     for (let i = 0; i < 38; i++) { ctx.beginPath(); ctx.arc(((i*83+tt*34)%w), ((i*59+tt*98)%h), (i%3)+1.5, 0, Math.PI*2); ctx.fill(); }
@@ -1893,7 +1963,9 @@ function renderFrameAt(ctx, w, h, time) {
       ctx.save();
       ctx.globalAlpha = clamp(clip.opacity ?? 1, 0, 1);
       ctx.globalCompositeOperation = clip.blendMode || 'source-over';
-      if (!defG) ctx.filter = gFilt;
+      const cFilt = (clip.filterPreset && CC_FILTERS_MAP[clip.filterPreset]) ? CC_FILTERS_MAP[clip.filterPreset].css : '';
+      const combinedFilt = [gFilt, cFilt].filter(Boolean).join(' ');
+      if (combinedFilt) ctx.filter = combinedFilt;
       // V6 Parametric Motion Choreography + Geometric Transition Engine
       const p = clamp(lt / Math.max(0.1, clip.duration), 0, 1);
       const bpmFreq = ((clip.bpm || 120) / 60) * Math.PI * 2;
@@ -2127,6 +2199,11 @@ function renderFrameAt(ctx, w, h, time) {
           if (ti === 'flash_white' && tp < 1) { ctx.fillStyle = `rgba(255,255,255,${(1-tp)*0.9})`; ctx.fillRect(-w/2,-h/2,w,h); }
           if (ti === 'flash_black' && tp < 1) { ctx.fillStyle = `rgba(0,0,0,${(1-tp)*0.95})`; ctx.fillRect(-w/2,-h/2,w,h); }
         }
+      }
+      if (clip.lightFx && clip.lightFx !== 'none') {
+        ctx.save(); ctx.setTransform(1,0,0,1,0,0);
+        drawProceduralVFX(ctx, clip.lightFx, w, h, lt, 0.9);
+        ctx.restore();
       }
       ctx.restore();
     });
@@ -2898,6 +2975,15 @@ function renderInspector() {
     $('iMot').addEventListener('change', e => { clip.motionFn = e.target.value; renderFrame(); });
     $('iTrIn').addEventListener('change', e => { clip.transIn = e.target.value; renderFrame(); });
     $('iLay').addEventListener('change', e => { clip.layoutMode = e.target.value; renderFrame(); });
+    const fg = document.createElement('div'); fg.className = 'prop-group';
+    fg.innerHTML = `<div class="prop-title">🎞️ Filter, 💡 Light FX &amp; 🐢 Slow-Mo</div>
+      <div class="prop-row"><label>Filter</label><select id="iFilt">${CC_FILTERS.map(f=>`<option value="${f.id}"${(clip.filterPreset||'none')===f.id?' selected':''}>${f.name}</option>`).join('')}</select></div>
+      <div class="prop-row"><label>Light FX</label><select id="iLfx"><option value="none">None</option>${CC_LIGHT_FX.map(l=>`<option value="${l.id}"${(clip.lightFx||'none')===l.id?' selected':''}>${l.name}</option>`).join('')}</select></div>
+      <div class="prop-row"><label>Speed</label><select id="iSpdSel">${CC_SPEED_MODES.map(s=>`<option value="${s.v}"${Number(clip.speed||1)===s.v?' selected':''}>${s.name}</option>`).join('')}</select></div>`;
+    body.appendChild(fg);
+    $('iFilt').addEventListener('change', e => { clip.filterPreset = e.target.value; renderFrame(); });
+    $('iLfx').addEventListener('change', e => { clip.lightFx = e.target.value; renderFrame(); });
+    $('iSpdSel').addEventListener('change', e => { clip.speed = parseFloat(e.target.value) || 1; renderTimeline(); renderFrame(); });
   }
 }
 document.querySelectorAll('#inspectorTabs .subtab').forEach(b => b.addEventListener('click', () => {
@@ -3240,6 +3326,32 @@ const CC_TEXT_STYLES = [
   { col:'#e879f9', font:'900', fam:'system-ui', pos:'bottom', stroke:'#3b0764' },
   { col:'#f87171', font:'900', fam:'Impact, system-ui', pos:'center', stroke:'#000' }
 ];
+const CC_FILTERS = [
+  { id:'none', name:'Original (No Filter)', css:'' },
+  { id:'vivid', name:'Vivid HD Pop', css:'contrast(1.18) saturate(1.48) brightness(1.05)' },
+  { id:'warm_gold', name:'Golden Hour Warm', css:'contrast(1.1) saturate(1.32) sepia(0.24) brightness(1.05)' },
+  { id:'cool_teal', name:'Hollywood Teal-Orange', css:'contrast(1.22) saturate(1.28) hue-rotate(-12deg)' },
+  { id:'bw_noir', name:'B&W Noir Cinema', css:'grayscale(1) contrast(1.4) brightness(0.92)' },
+  { id:'vintage_90s', name:'90s Vintage Film', css:'sepia(0.42) contrast(1.12) saturate(0.86)' },
+  { id:'cyber_neon', name:'Cyberpunk Neon', css:'contrast(1.26) saturate(1.55) hue-rotate(20deg)' },
+  { id:'horror_cold', name:'Horror Chilling Cold', css:'contrast(1.3) saturate(0.55) hue-rotate(-26deg) brightness(0.82)' },
+  { id:'dreamy_soft', name:'Dreamy Soft Glow', css:'brightness(1.08) contrast(0.94) saturate(1.22) blur(0.4px)' },
+  { id:'rose_pink', name:'Romantic Rose Tint', css:'saturate(1.28) hue-rotate(-14deg) brightness(1.04)' },
+  { id:'emerald_nat', name:'Nature Emerald', css:'contrast(1.14) saturate(1.38) hue-rotate(12deg)' },
+  { id:'hdr_sharp', name:'HDR Ultra Crisp', css:'contrast(1.32) saturate(1.25) brightness(1.02)' }
+];
+const CC_FILTERS_MAP = Object.fromEntries(CC_FILTERS.map(f => [f.id, f]));
+const CC_LIGHT_FX = [
+  { id:'light_flare', name:'🌟 Lens Flare' }, { id:'light_leak', name:'🌅 Golden Light Leak' },
+  { id:'light_neon', name:'🟣 Neon Rim Glow' }, { id:'light_strobe', name:'🪩 Party Strobe' },
+  { id:'light_sunbeams', name:'🔆 Sunbeams Rays' }, { id:'light_prism', name:'🌈 Rainbow Prism' },
+  { id:'light_spotlight', name:'🔦 Stage Spotlight' }, { id:'light_disco', name:'💃 Disco Lights' }
+];
+const CC_SPEED_MODES = [
+  { v:0.25, name:'🐢 0.25x Ultra Slow-Mo' }, { v:0.5, name:'🐢 0.5x Smooth Slow-Mo' },
+  { v:0.75, name:'🎬 0.75x Cine Slow' }, { v:1, name:'▶ 1.0x Normal' },
+  { v:1.5, name:'⚡ 1.5x Fast' }, { v:2, name:'🚀 2.0x Turbo' }
+];
 const ALL_VFX_KEYS = ['snow','water_drops','rain','fire','firestorm','disaster_tornado','disaster_tsunami','disaster_volcano','disaster_earthquake','animal_attack','animal_love','ghost_fx','zombie_horde','bomb','portal','lightning','divine_rays','petals_fall','confetti_burst','glitch_rgb','vhs_scan','bokeh','sparks'];
 const SLOT_COUNTS_POOL = [3, 4, 5, 6, 7, 8, 9, 10, 5, 6, 4, 8, 3, 7, 10, 5];
 
@@ -3524,7 +3636,14 @@ async function openMastPreviewPlayer(tpl) {
       if (tp < 1 && sl.tr === 'spin_blur') rot += (1-tp)*180;
 
       ctx.save();
-      ctx.filter = lut.css;
+      const slotLut = (sl.lut !== undefined && CC_LUTS[sl.lut]) ? CC_LUTS[sl.lut] : lut;
+      const slotF = (sl.filt && CC_FILTERS_MAP[sl.filt]) ? CC_FILTERS_MAP[sl.filt].css : '';
+      ctx.filter = [slotLut.css, slotF].filter(Boolean).join(' ') || 'none';
+      if (sl.ratio && sl.ratio !== 'inherit' && sl.ratio !== tpl.a) {
+        const [rw, rh] = sl.ratio === '9:16' ? [9,16] : (sl.ratio === '1:1' ? [1,1] : [16,9]);
+        const boxW = Math.min(w, h*(rw/rh)), boxH = boxW*(rh/rw);
+        ctx.beginPath(); ctx.rect(-boxW/2, -boxH/2, boxW, boxH); ctx.clip();
+      }
       ctx.translate(w/2 + mx, h/2 + my); ctx.rotate(rot*Math.PI/180); ctx.scale(sx, sy);
       const cov = Math.max(w/img.naturalWidth, h/img.naturalHeight);
       const dw = img.naturalWidth*cov, dh = img.naturalHeight*cov;
@@ -3560,9 +3679,11 @@ async function openMastPreviewPlayer(tpl) {
       ctx.restore();
     }
 
-    // 3. Dual Hollywood VFX Layers
-    if (tpl.vx && tpl.vx !== 'none') drawProceduralVFX(ctx, tpl.vx, w, h, el, 0.92);
+    // 3. Per-Slot FX (e.g. Clip 1 Snowfall, Clip 2 Rain, Clip 3 Fire) OR Template FX
+    const slotVx = sl.fx !== undefined ? sl.fx : tpl.vx;
+    if (slotVx && slotVx !== 'none') drawProceduralVFX(ctx, slotVx, w, h, lt + sIdx*0.7, 0.94);
     if (tpl.vx2 && tpl.vx2 !== 'none') drawProceduralVFX(ctx, tpl.vx2, w, h, el + 1.3, 0.65);
+    if (sl.lfx && sl.lfx !== 'none') drawProceduralVFX(ctx, sl.lfx, w, h, lt * (sl.sp||1), 0.92);
 
     // 4. Flash / Bars / Magazine Frame
     if (tp < 1 && sl.tr === 'flash_white') { ctx.fillStyle = `rgba(255,255,255,${(1-tp)*0.85})`; ctx.fillRect(0,0,w,h); }
@@ -3570,22 +3691,24 @@ async function openMastPreviewPlayer(tpl) {
     if (tpl.ly === 'anamorphic_bars') { ctx.fillStyle='#000'; ctx.fillRect(0,0,w,h*0.11); ctx.fillRect(0,h*0.89,w,h*0.11); }
     if (tpl.ly === 'magazine_cover') { ctx.strokeStyle=ts.col; ctx.lineWidth=5; ctx.strokeRect(10,10,w-20,h-20); }
 
-    // 5. Real Kinetic Typography (Unique Font, Color, Position & Animation per Template!)
-    const rawT = tpl.n.toUpperCase();
+    // 5. Per-Clip Kinetic Typography (Har Clip ka Alag Text, Color & Animation!)
+    const rawT = (sl.txt && sl.txt.trim()) ? sl.txt.trim() : tpl.n.toUpperCase();
+    const activeTa = sl.ta || tpl.ta;
+    const tCol = sl.tcol || ts.col;
     let showT = rawT, tx = w/2, ty = ts.pos === 'top' ? h*0.18 : (ts.pos === 'center' ? h*0.5 : h*0.82), tsc = 1;
-    if (tpl.ta === 'slam_zoom' || tpl.ta === 'stamp_drop') tsc = 1 + Math.exp(-lt*7)*1.2;
-    else if (tpl.ta === 'typewriter') showT = rawT.slice(0, Math.max(1, Math.floor(rawT.length * clamp(el/2.2, 0, 1))));
-    else if (tpl.ta === 'slide_up_mask') ty += (1 - clamp(lt/0.45, 0, 1))*42;
-    else if (tpl.ta === 'glitch_flicker') tx += Math.sin(el*48)*5;
-    else if (tpl.ta === 'karaoke_bounce') ty -= Math.abs(Math.sin(el*7))*11;
-    else if (tpl.ta === 'wave_float') ty += Math.sin(el*3.5)*9;
-    else if (tpl.ta === 'ticker_scroll') tx = w*1.1 - ((el*120) % (w*1.8));
-    else if (tpl.ta === 'neon_pulse') { ctx.shadowColor = ts.col; ctx.shadowBlur = 14 + Math.sin(el*9)*8; }
+    if (activeTa === 'slam_zoom' || activeTa === 'stamp_drop') tsc = 1 + Math.exp(-lt*7)*1.2;
+    else if (activeTa === 'typewriter') showT = rawT.slice(0, Math.max(1, Math.floor(rawT.length * clamp(lt/Math.max(0.8, sl.d*0.75), 0, 1))));
+    else if (activeTa === 'slide_up_mask') ty += (1 - clamp(lt/0.45, 0, 1))*42;
+    else if (activeTa === 'glitch_flicker') tx += Math.sin(el*48)*5;
+    else if (activeTa === 'karaoke_bounce') ty -= Math.abs(Math.sin(el*7))*11;
+    else if (activeTa === 'wave_float') ty += Math.sin(el*3.5)*9;
+    else if (activeTa === 'ticker_scroll') tx = w*1.1 - ((lt*120) % (w*1.8));
+    else if (activeTa === 'neon_pulse') { ctx.shadowColor = tCol; ctx.shadowBlur = 14 + Math.sin(el*9)*8; }
 
     ctx.save(); ctx.translate(tx, ty); ctx.scale(tsc, tsc);
     ctx.font = `${ts.font} ${Math.max(16, Math.round(w*0.064))}px ${ts.fam}`;
     ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
-    ctx.strokeStyle = ts.stroke || '#000'; ctx.lineWidth = 3.5; ctx.fillStyle = ts.col;
+    ctx.strokeStyle = ts.stroke || '#000'; ctx.lineWidth = 3.5; ctx.fillStyle = tCol;
     ctx.strokeText(showT, 0, 0); ctx.fillText(showT, 0, 0);
     ctx.restore();
     ctx.restore();
@@ -3681,34 +3804,57 @@ async function buildMovieFromCapcutTemplate(useDemoIfEmpty = false) {
         State.mediaPool.push(media);
       }
     }
+    let regP = 'full';
+    if (sl.ratio && sl.ratio !== 'inherit' && sl.ratio !== State.aspect) {
+      regP = sl.ratio === '9:16' ? 'split3_v2' : (sl.ratio === '1:1' ? 'pip_center' : 'split2_t');
+    }
     State.clips.push({
       id:uid('c'), trackId:trVid.id, name:`${idx+1}. ${media?media.name:'Scene'}`,
       kind:media?media.type:'bg', mediaId:media?media.id:undefined, bgId:'myth_temple',
       start:Number(curT.toFixed(2)), duration:sl.d, x:0, y:0, scale:1, opacity:1, speed:sl.sp||1,
-      motionFn:sl.m, transIn:sl.tr, layoutMode:tpl.ly, bpm:tpl.b
+      motionFn:sl.m, transIn:sl.tr, layoutMode:tpl.ly, bpm:tpl.b, regionPreset:regP, filterPreset:sl.filt||'none', lightFx:sl.lfx||'none'
     });
+    const sFx = sl.fx !== undefined ? sl.fx : tpl.vx;
+    if (tpl.isOwn && sFx && sFx !== 'none') {
+      State.clips.push({ id:uid('c'), trackId:trVfx.id, name:`C${idx+1} FX: ${sFx}`, kind:'vfx', vfxId:sFx, start:Number(curT.toFixed(2)), duration:sl.d, x:0,y:0,scale:1,opacity:0.9,blendMode:'screen' });
+    }
+    if (tpl.isOwn && sl.txt && sl.txt.trim()) {
+      const tyOff = ts.pos === 'top' ? -150 : (ts.pos === 'center' ? 0 : (State.aspect==='9:16'?210:135));
+      State.clips.push({
+        id:uid('c'), trackId:trTxt.id, name:sl.txt.trim(), kind:'text', text:sl.txt.trim(),
+        start:Number(curT.toFixed(2)), duration:sl.d, x:0, y:tyOff, scale:1, opacity:1,
+        textAnim:sl.ta||tpl.ta, textStyle:{ size:46, color:sl.tcol||ts.col, style3d:true, karaoke:(sl.ta||tpl.ta)==='karaoke_bounce' }
+      });
+    }
+    if (tpl.isOwn && $('tuAutoMusic')?.checked && sl.mood && sl.mood !== 'none') {
+      try {
+        const abS = await renderProceduralMusic({ mood:sl.mood, bpm:tpl.b||120, duration:Math.max(1.5, Math.ceil(sl.d)), volume:0.88 });
+        const kS = 'tpl_sbgm_' + uid('a'); audioBufferCache.set(kS, abS);
+        State.clips.push({ id:uid('c'), trackId:trAud.id, name:`🎵 C${idx+1}: ${sl.mood}`, kind:'audio', start:Number(curT.toFixed(2)), duration:sl.d, volume:0.92, audioBufferKey:kS, waveform:extractWaveform(abS,32) });
+      } catch (e) {}
+    }
     curT += sl.d;
   }
 
-  if (tpl.vx && tpl.vx !== 'none') State.clips.push({ id:uid('c'), trackId:trVfx.id, name:`VFX: ${tpl.vx}`, kind:'vfx', vfxId:tpl.vx, start:0, duration:Number(curT.toFixed(2)), x:0,y:0,scale:1,opacity:0.88,blendMode:'screen' });
-  if (tpl.vx2 && tpl.vx2 !== 'none') State.clips.push({ id:uid('c'), trackId:trVfx.id, name:`VFX2: ${tpl.vx2}`, kind:'vfx', vfxId:tpl.vx2, start:0, duration:Number(curT.toFixed(2)), x:0,y:0,scale:1,opacity:0.55,blendMode:'screen' });
-
-  const customTxt = ($('tuCustomText').value || tpl.n).trim();
-  if (customTxt) {
-    const tyOff = ts.pos === 'top' ? -150 : (ts.pos === 'center' ? 0 : (State.aspect==='9:16'?210:135));
-    State.clips.push({
-      id:uid('c'), trackId:trTxt.id, name:customTxt, kind:'text', text:customTxt,
-      start:0.25, duration:Number(Math.max(2.5, curT-0.5).toFixed(2)), x:0, y:tyOff, scale:1, opacity:1,
-      textAnim:tpl.ta, textStyle:{ size:48, color:ts.col, style3d:true, karaoke:tpl.ta==='karaoke_bounce' }
-    });
-  }
-
-  if ($('tuAutoMusic')?.checked) {
-    try {
-      const ab = await renderProceduralMusic({ mood:tpl.md||'Action', bpm:tpl.b||120, duration:Math.min(16, Math.ceil(curT)), volume:0.88 });
-      const key = 'tpl_bgm_' + uid('a'); audioBufferCache.set(key, ab);
-      State.clips.push({ id:uid('c'), trackId:trAud.id, name:`🎵 ${tpl.md} (${tpl.b} BPM)`, kind:'audio', start:0, duration:Number(curT.toFixed(2)), volume:0.92, audioBufferKey:key, waveform:extractWaveform(ab,56) });
-    } catch (e) {}
+  if (!tpl.isOwn) {
+    if (tpl.vx && tpl.vx !== 'none') State.clips.push({ id:uid('c'), trackId:trVfx.id, name:`VFX: ${tpl.vx}`, kind:'vfx', vfxId:tpl.vx, start:0, duration:Number(curT.toFixed(2)), x:0,y:0,scale:1,opacity:0.88,blendMode:'screen' });
+    if (tpl.vx2 && tpl.vx2 !== 'none') State.clips.push({ id:uid('c'), trackId:trVfx.id, name:`VFX2: ${tpl.vx2}`, kind:'vfx', vfxId:tpl.vx2, start:0, duration:Number(curT.toFixed(2)), x:0,y:0,scale:1,opacity:0.55,blendMode:'screen' });
+    const customTxt = ($('tuCustomText').value || tpl.n).trim();
+    if (customTxt) {
+      const tyOff = ts.pos === 'top' ? -150 : (ts.pos === 'center' ? 0 : (State.aspect==='9:16'?210:135));
+      State.clips.push({
+        id:uid('c'), trackId:trTxt.id, name:customTxt, kind:'text', text:customTxt,
+        start:0.25, duration:Number(Math.max(2.5, curT-0.5).toFixed(2)), x:0, y:tyOff, scale:1, opacity:1,
+        textAnim:tpl.ta, textStyle:{ size:48, color:ts.col, style3d:true, karaoke:tpl.ta==='karaoke_bounce' }
+      });
+    }
+    if ($('tuAutoMusic')?.checked) {
+      try {
+        const ab = await renderProceduralMusic({ mood:tpl.md||'Action', bpm:tpl.b||120, duration:Math.min(16, Math.ceil(curT)), volume:0.88 });
+        const key = 'tpl_bgm_' + uid('a'); audioBufferCache.set(key, ab);
+        State.clips.push({ id:uid('c'), trackId:trAud.id, name:`🎵 ${tpl.md} (${tpl.b} BPM)`, kind:'audio', start:0, duration:Number(curT.toFixed(2)), volume:0.92, audioBufferKey:key, waveform:extractWaveform(ab,56) });
+      } catch (e) {}
+    }
   }
 
   $('tplUseModal').classList.remove('open'); $('capcutTplModal').classList.remove('open');
@@ -3730,6 +3876,8 @@ function initTemplateMakerDropdowns() {
   $('tmTextAnim').innerHTML = CC_TEXT_ANIMS.map(a => `<option value="${a}">${a.replace(/_/g,' ')}</option>`).join('');
 }
 
+const DEF_SLOT_FX = ['snow','rain','fire','lightning','petals_fall','portal','ghost_fx','confetti_burst','water_drops','firestorm','animal_attack','animal_love'];
+const DEF_SLOT_MOODS = ['Romantic','Action','Sci-Fi','Horror','Mythological'];
 function renderTmSlotRows(presetSlots = null) {
   const cnt = clamp(parseInt($('tmSlotCount').value) || 5, 1, 12);
   const wrap = $('tmSlotsList'); wrap.innerHTML = '';
@@ -3738,22 +3886,53 @@ function renderTmSlotRows(presetSlots = null) {
     const dur = ps ? ps.d : Number((15 / cnt).toFixed(1));
     const mot = ps ? ps.m : CC_MOTIONS[(i * 3) % CC_MOTIONS.length];
     const trn = ps ? ps.tr : CC_TRANS[(i * 2) % CC_TRANS.length];
-    const row = document.createElement('div'); row.className = 'tm-slot-row';
-    row.innerHTML = `<b>Clip ${i+1}</b>
-      <input type="number" class="tm-sdur" step="0.2" min="0.8" max="10" value="${dur}" style="width:56px;padding:3px;">
-      <select class="tm-smot">${CC_MOTIONS.map(m => `<option value="${m}"${m===mot?' selected':''}>${MOTION_LABELS[m]||m}</option>`).join('')}</select>
-      <select class="tm-strn">${CC_TRANS.map(t => `<option value="${t}"${t===trn?' selected':''}>${t.replace(/_/g,' ')}</option>`).join('')}</select>`;
+    const fx = ps ? (ps.fx || 'none') : DEF_SLOT_FX[i % DEF_SLOT_FX.length];
+    const lut = ps ? (ps.lut ?? (i % CC_LUTS.length)) : (i % CC_LUTS.length);
+    const ta = ps ? (ps.ta || CC_TEXT_ANIMS[i % CC_TEXT_ANIMS.length]) : CC_TEXT_ANIMS[i % CC_TEXT_ANIMS.length];
+    const mood = ps ? (ps.mood || DEF_SLOT_MOODS[i % DEF_SLOT_MOODS.length]) : DEF_SLOT_MOODS[i % DEF_SLOT_MOODS.length];
+    const ratio = ps ? (ps.ratio || 'inherit') : 'inherit';
+    const txt = ps ? (ps.txt || `Scene ${i+1}`) : `Scene ${i+1}`;
+    const tcol = ps ? (ps.tcol || '#fef08a') : ['#fef08a','#38bdf8','#f472b6','#4ade80','#fb923c'][i % 5];
+
+    const row = document.createElement('div'); row.className = 'tm-clip-card';
+    row.innerHTML = `
+      <div class="tm-clip-head">
+        <span>🎬 Clip ${i+1} Settings</span>
+        <span style="font-size:10px;color:var(--cyan);">Duration (s): <input type="number" class="tm-sdur" step="0.2" min="0.8" max="10" value="${dur}" style="width:52px;padding:2px 4px;"></span>
+      </div>
+      <div class="tm-clip-grid">
+        <div class="tm-fld"><span>✨ Clip FX</span><select class="tm-sfx"><option value="none">None</option>${ALL_VFX_KEYS.map(v=>`<option value="${v}"${v===fx?' selected':''}>${v.replace(/_/g,' ')}</option>`).join('')}</select></div>
+        <div class="tm-fld"><span>🎨 Color LUT</span><select class="tm-slut">${CC_LUTS.map((l,li)=>`<option value="${li}"${li===lut?' selected':''}>${l.name}</option>`).join('')}</select></div>
+        <div class="tm-fld"><span>🎥 Motion</span><select class="tm-smot">${CC_MOTIONS.map(m=>`<option value="${m}"${m===mot?' selected':''}>${MOTION_LABELS[m]||m}</option>`).join('')}</select></div>
+        <div class="tm-fld"><span>⚡ Transition</span><select class="tm-strn">${CC_TRANS.map(t=>`<option value="${t}"${t===trn?' selected':''}>${t.replace(/_/g,' ')}</option>`).join('')}</select></div>
+        <div class="tm-fld"><span>𝐓 Clip Text</span><input type="text" class="tm-stxt" value="${escHtml(txt)}" placeholder="Clip Text"></div>
+        <div class="tm-fld"><span>🔤 Text Anim &amp; Col</span><div style="display:flex;gap:3px;"><select class="tm-sta" style="flex:1;">${CC_TEXT_ANIMS.map(a=>`<option value="${a}"${a===ta?' selected':''}>${a.replace(/_/g,' ')}</option>`).join('')}</select><input type="color" class="tm-stcol" value="${tcol}" style="width:26px;height:24px;padding:0;"></div></div>
+        <div class="tm-fld"><span>🎵 Clip Music</span><select class="tm-smood"><option value="none">None</option>${DEF_SLOT_MOODS.map(md=>`<option value="${md}"${md===mood?' selected':''}>${md}</option>`).join('')}</select></div>
+        <div class="tm-fld"><span>🐢 Speed / Slow-Mo</span><select class="tm-sspd">${CC_SPEED_MODES.map(s=>`<option value="${s.v}"${(ps?.sp??1)===s.v?' selected':''}>${s.name}</option>`).join('')}</select></div>
+        <div class="tm-fld"><span>💡 Light Effect</span><select class="tm-slfx"><option value="none">None</option>${CC_LIGHT_FX.map(l=>`<option value="${l.id}"${(ps?.lfx||'none')===l.id?' selected':''}>${l.name}</option>`).join('')}</select></div>
+        <div class="tm-fld"><span>🎞️ Filter</span><select class="tm-sfilt">${CC_FILTERS.map(f=>`<option value="${f.id}"${(ps?.filt||'none')===f.id?' selected':''}>${f.name}</option>`).join('')}</select></div>
+        <div class="tm-fld"><span>📐 Clip Ratio</span><select class="tm-sratio"><option value="inherit"${ratio==='inherit'?' selected':''}>Template Ratio</option><option value="9:16"${ratio==='9:16'?' selected':''}>9:16 Vertical</option><option value="16:9"${ratio==='16:9'?' selected':''}>16:9 Wide</option><option value="1:1"${ratio==='1:1'?' selected':''}>1:1 Square</option></select></div>
+      </div>`;
     wrap.appendChild(row);
   }
 }
 
 function buildDraftTemplateFromMaker() {
-  const rows = [...document.querySelectorAll('#tmSlotsList .tm-slot-row')];
+  const rows = [...document.querySelectorAll('#tmSlotsList .tm-clip-card')];
   const slots = rows.map((r, i) => ({
     d: Math.max(0.8, parseFloat(r.querySelector('.tm-sdur').value) || 2.5),
     m: r.querySelector('.tm-smot').value || 'zoom_punch',
     tr: r.querySelector('.tm-strn').value || 'whip_slide_l',
-    sp: r.querySelector('.tm-smot').value === 'velocity_ramp' ? 1.35 : 1.0,
+    fx: r.querySelector('.tm-sfx').value || 'none',
+    lut: parseInt(r.querySelector('.tm-slut').value) || 0,
+    txt: r.querySelector('.tm-stxt').value || '',
+    ta: r.querySelector('.tm-sta').value || 'slam_zoom',
+    tcol: r.querySelector('.tm-stcol').value || '#fef08a',
+    mood: r.querySelector('.tm-smood').value || 'Action',
+    ratio: r.querySelector('.tm-sratio').value || 'inherit',
+    sp: parseFloat(r.querySelector('.tm-sspd')?.value) || 1.0,
+    lfx: r.querySelector('.tm-slfx')?.value || 'none',
+    filt: r.querySelector('.tm-sfilt')?.value || 'none',
     sc: Object.keys(HUMAN_SCENE_DATA)[i % Object.keys(HUMAN_SCENE_DATA).length]
   }));
   const td = Number(slots.reduce((a, b) => a + b.d, 0).toFixed(1));
@@ -3977,6 +4156,14 @@ function autoArrange3Section(orientation = 'v') {
   toast(`✨ ${Math.min(vTracks.length, 3)}-Section ${orientation==='v'?'Vertical':'Horizontal'} Split Ready!`, 'success');
 }
 
+$('cqSlowMo')?.addEventListener('click', () => {
+  const c = getSelectedClip(); if (!c) return;
+  pushHistory();
+  c.speed = (c.speed === 0.5) ? 1.0 : 0.5;
+  if (c.kind === 'video' || c.kind === 'image') c.duration = Number(Math.max(1.0, c.speed === 0.5 ? c.duration * 1.6 : c.duration / 1.6).toFixed(2));
+  recalcDuration(); renderTimeline(); renderInspector(); renderFrame();
+  toast(c.speed === 0.5 ? '🐢 0.5x Smooth Slow-Motion ON!' : '▶ 1.0x Normal Speed', 'success');
+});
 $('cqLayer')?.addEventListener('click', () => openLayerPlacementModal(getSelectedClip()));
 $('btnCloseLayerPlacement')?.addEventListener('click', () => $('layerPlacementModal').classList.remove('open'));
 document.querySelectorAll('#lpPresetGrid .lp-btn').forEach(b => b.addEventListener('click', () => {
