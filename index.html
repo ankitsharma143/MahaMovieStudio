@@ -426,6 +426,8 @@ body.easy-mode #btnRippleToggle, body.easy-mode #btnDetectBeats, body.easy-mode 
         <button id="btnRippleToggle">⚡ Ripple</button>
         <button id="btnDetectBeats">🥁 Beats</button>
         <button id="btnVoiceoverRec" class="danger">🎙 Dub</button>
+        <button id="btnAutoCaptions" class="cyan">💬 Auto-Cap</button>
+        <button id="btnAutoDuck" class="active" title="Auto-Duck Music under Voice">🔉 Duck</button>
       </div>
       <div class="transport-group" style="gap:3px;">
         <button id="btnTrackSize" style="padding:2px 6px;font-size:10.5px;">↕ Trk:M</button>
@@ -487,8 +489,8 @@ body.easy-mode #btnRippleToggle, body.easy-mode #btnDetectBeats, body.easy-mode 
           <img src="data:image/png;base64,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" alt="MahaMovieStudio" style="height:30px;width:auto;display:block;">
         </div>
         <div>
-          <div style="font-size:15px;font-weight:800;">MOVIE STUDIO <span style="color:var(--gold);">V14</span></div>
-          <div style="font-size:10px;color:var(--text-2);">Slow-Mo • Light Effects • Pro Filters • Per-Clip Template Maker</div>
+          <div style="font-size:15px;font-weight:800;">MOVIE STUDIO <span style="color:var(--gold);">V15</span></div>
+          <div style="font-size:10px;color:var(--text-2);">Keyframes • Speed Curve • Auto-Captions • Smart BG Remove • MP4</div>
         </div>
       </div>
       <div style="display:flex;gap:6px;align-items:center;">
@@ -627,7 +629,7 @@ body.easy-mode #btnRippleToggle, body.easy-mode #btnDetectBeats, body.easy-mode 
 <!-- EXPORT STUDIO MODAL -->
 <div class="modal-backdrop" id="exportModal">
   <div class="modal-box">
-    <div class="modal-head"><span>🎬 EXPORT STUDIO V5</span><button class="icon-btn" id="btnCloseExport">✕</button></div>
+    <div class="modal-head"><span>🎬 EXPORT STUDIO V15 (MP4 / HD / WAV)</span><button class="icon-btn" id="btnCloseExport">✕</button></div>
     <div class="modal-body">
       <div class="grid-2">
         <div class="prop-group">
@@ -988,7 +990,12 @@ body.easy-mode #btnRippleToggle, body.easy-mode #btnDetectBeats, body.easy-mode 
         </div>
 
         <div class="prop-group">
-          <div class="prop-title">3. 🟢 Green Screen (Chroma Key) &amp; Blend</div>
+          <div class="prop-title">3. 🪄 Smart BG Remove, 🟢 Green Screen &amp; ✨ Beauty</div>
+          <label style="display:flex;align-items:center;gap:6px;font-size:11.5px;font-weight:700;color:#38bdf8;cursor:pointer;margin-bottom:4px;">
+            <input type="checkbox" id="lpSmartBg"> 🪄 No-Green-Screen BG Remove (Auto Subject)
+          </label>
+          <div class="prop-row"><label>BG Sens</label><input type="range" id="lpSmartSens" min="20" max="120" value="58"><span class="prop-val" id="lpSmartSensV">58</span></div>
+          <div class="prop-row"><label>✨ Beauty</label><input type="range" id="lpBeauty" min="0" max="100" value="0"><span class="prop-val" id="lpBeautyV">0%</span></div>
           <label style="display:flex;align-items:center;gap:6px;font-size:12px;font-weight:700;color:#4ade80;cursor:pointer;margin-bottom:4px;">
             <input type="checkbox" id="lpCkEnabled"> 🟢 Enable Green Screen (Chroma Key)
           </label>
@@ -1246,7 +1253,7 @@ const TRACK_COLORS = { video:'#2563eb', vfx:'#7c3aed', text:'#d97706', overlay:'
 
 const State = {
   projectId: uid('proj'), projectName: 'Mahabharat_Epic_Trailer', aspect: '16:9', fps: 30,
-  currentTime: 1.5, duration: 12, playing: false, loop: true, snap: true, ripple: false, zoom: 75,
+  currentTime: 1.5, duration: 12, playing: false, autoDuck: true, loop: true, snap: true, ripple: false, zoom: 75,
   activeModule: 'media', activeInspectorTab: 'transform', selectedClipIds: [], clipboardClip: null,
   easyMode: false, safeGuides: false, cinemaBars: false, beforeAfter: false, showScopes: false,
   voiceChanger: 'normal', canvasMode: null, tempDrawPaths: [], targetAddTrackId: null, targetAddTime: null,
@@ -1968,6 +1975,25 @@ function renderFrameAt(ctx, w, h, time) {
       if (combinedFilt) ctx.filter = combinedFilt;
       // V6 Parametric Motion Choreography + Geometric Transition Engine
       const p = clamp(lt / Math.max(0.1, clip.duration), 0, 1);
+      // V15: Keyframe Interpolation (Smooth Ease-In-Out)
+      let kfX = clip.x||0, kfY = clip.y||0, kfS = clip.scale??1, kfR = clip.rotation||0, kfO = clip.opacity??1;
+      if (clip.keyframes && clip.keyframes.length >= 2) {
+        const kfs = [...clip.keyframes].sort((a,b) => a.t - b.t);
+        if (lt <= kfs[0].t) { kfX=kfs[0].x; kfY=kfs[0].y; kfS=kfs[0].scale; kfR=kfs[0].rotation; kfO=kfs[0].opacity; }
+        else if (lt >= kfs[kfs.length-1].t) { const L=kfs[kfs.length-1]; kfX=L.x; kfY=L.y; kfS=L.scale; kfR=L.rotation; kfO=L.opacity; }
+        else {
+          for (let ki = 0; ki < kfs.length - 1; ki++) {
+            const A = kfs[ki], B = kfs[ki+1];
+            if (lt >= A.t && lt <= B.t) {
+              const u = (lt - A.t) / Math.max(0.001, B.t - A.t);
+              const e = u < 0.5 ? 2*u*u : 1 - Math.pow(-2*u+2, 2)/2;
+              kfX = A.x + (B.x - A.x)*e; kfY = A.y + (B.y - A.y)*e;
+              kfS = A.scale + (B.scale - A.scale)*e; kfR = A.rotation + (B.rotation - A.rotation)*e;
+              kfO = A.opacity + (B.opacity - A.opacity)*e; break;
+            }
+          }
+        }
+      }
       const bpmFreq = ((clip.bpm || 120) / 60) * Math.PI * 2;
       let mx = 0, my = 0, msx = 1, msy = 1, mrot = 0, mAlpha = 1;
       const mf = clip.motionFn || '';
@@ -2019,11 +2045,11 @@ function renderFrameAt(ctx, w, h, time) {
         else if (ti === 'blinds_wipe') { ctx.beginPath(); for (let bi = 0; bi < 6; bi++) ctx.rect(0, bi*(h/6), w, (h/6)*tp); ctx.clip(); }
         else if (ti === 'glitch_slice') { mx += Math.sin(tp*45)*w*0.09*(1-tp); }
       }
-      ctx.globalAlpha = clamp((clip.opacity ?? 1) * mAlpha, 0, 1);
+      ctx.globalAlpha = clamp(kfO * mAlpha, 0, 1);
 
-      ctx.translate(w/2 + (clip.x||0) + mx, h/2 + (clip.y||0) + my);
-      ctx.rotate((((clip.rotation||0) + mrot) * Math.PI) / 180);
-      ctx.scale((clip.flipH ? -1 : 1) * (clip.scale ?? 1) * msx, (clip.flipV ? -1 : 1) * (clip.scale ?? 1) * msy);
+      ctx.translate(w/2 + kfX + mx, h/2 + kfY + my);
+      ctx.rotate(((kfR + mrot) * Math.PI) / 180);
+      ctx.scale((clip.flipH ? -1 : 1) * kfS * msx, (clip.flipV ? -1 : 1) * kfS * msy);
 
       if (clip.kind === 'bg') { ctx.translate(-w/2,-h/2); drawProceduralBackground(ctx, clip.bgId, w, h, time); }
       else if (clip.kind === 'vfx') { ctx.translate(-w/2,-h/2); drawProceduralVFX(ctx, clip.vfxId, w, h, lt*(clip.speed||1), clip.intensity||1); }
@@ -2073,7 +2099,8 @@ function renderFrameAt(ctx, w, h, time) {
         const m = State.mediaPool.find(x => x.id === clip.mediaId);
         if (m && m.el) {
           if (clip.kind === 'video' && m.el.readyState >= 2) {
-            const tv = clamp((clip.trimStart||0) + lt*(clip.speed||1), 0, Math.max(0.1, m.duration-0.05));
+            const curveLt = evalSpeedCurveTime(clip.speedCurve || 'linear', lt, clip.duration);
+            const tv = clamp((clip.trimStart||0) + curveLt*(clip.speed||1), 0, Math.max(0.1, m.duration-0.05));
             if (Math.abs(m.el.currentTime - tv) > 0.18) try { m.el.currentTime = tv; } catch (e) {}
           }
           const mw = m.width || m.el.videoWidth || m.el.naturalWidth || w;
@@ -2086,7 +2113,7 @@ function renderFrameAt(ctx, w, h, time) {
 
           // Optional Real-Time Green Screen / Chroma Key Processing
           let drawSrc = m.el, srcX = sx, srcY = sy, srcW = sw, srcH = sh;
-          if (clip.chromaKey && clip.chromaKey.enabled) {
+          if ((clip.chromaKey && clip.chromaKey.enabled) || (clip.smartBg && clip.smartBg.enabled)) {
             const ckW = Math.min(480, Math.max(64, Math.round(w * 0.65)));
             const ckH = Math.max(64, Math.round(ckW * (sh / Math.max(1, sw))));
             if (offCanvas.width !== ckW || offCanvas.height !== ckH) { offCanvas.width = ckW; offCanvas.height = ckH; }
@@ -2109,6 +2136,24 @@ function renderFrameAt(ctx, w, h, time) {
                   d[i+1] = Math.round(g * 0.72 + Math.max(r,b) * 0.28);
                 }
               }
+              if (clip.smartBg && clip.smartBg.enabled) {
+                // Sample border pixels (top-left, top-right, bottom-left, bottom-right) to auto-detect background without green screen!
+                const pts = [0, (ckW-1)*4, (ckH-1)*ckW*4, ((ckH-1)*ckW + ckW-1)*4];
+                let br=0, bg=0, bb=0;
+                pts.forEach(p => { br+=d[p]; bg+=d[p+1]; bb+=d[p+2]; });
+                br/=4; bg/=4; bb/=4;
+                const sens = clip.smartBg.sens || 58;
+                for (let y = 0; y < ckH; y++) {
+                  for (let x = 0; x < ckW; x++) {
+                    const i = (y*ckW + x)*4;
+                    const dist = Math.hypot(d[i]-br, d[i+1]-bg, d[i+2]-bb);
+                    const edgeDist = Math.min(x, y, ckW-1-x, ckH-1-y) / Math.max(1, Math.min(ckW, ckH)*0.25);
+                    const thr = sens * (edgeDist < 1 ? 1.18 : 0.88);
+                    if (dist < thr) d[i+3] = 0;
+                    else if (dist < thr + 22) d[i+3] = Math.round(d[i+3] * ((dist - thr) / 22));
+                  }
+                }
+              }
               offCtx.putImageData(imgD, 0, 0);
               drawSrc = offCanvas; srcX = 0; srcY = 0; srcW = ckW; srcH = ckH;
             } catch (e) {}
@@ -2116,7 +2161,7 @@ function renderFrameAt(ctx, w, h, time) {
 
           // Multi-Section Region / Custom Unlimited Box / PiP / Shape Mask (V9 Pro Layering)
           const regKey = clip.regionPreset || 'full';
-          if (clip.customBox || regKey !== 'full' || (clip.maskShape && clip.maskShape !== 'rect') || (clip.borderCol && clip.borderCol !== 'none') || sc.l || sc.r || sc.t || sc.b || (clip.chromaKey && clip.chromaKey.enabled)) {
+          if (clip.customBox || regKey !== 'full' || (clip.maskShape && clip.maskShape !== 'rect') || (clip.borderCol && clip.borderCol !== 'none') || sc.l || sc.r || sc.t || sc.b || (clip.chromaKey && clip.chromaKey.enabled) || (clip.smartBg && clip.smartBg.enabled)) {
             const box = clip.customBox
               ? { x: clip.customBox.x * w, y: clip.customBox.y * h, w: clip.customBox.w * w, h: clip.customBox.h * h }
               : getRegionBoxCoords(regKey, w, h);
@@ -2200,6 +2245,14 @@ function renderFrameAt(ctx, w, h, time) {
           if (ti === 'flash_black' && tp < 1) { ctx.fillStyle = `rgba(0,0,0,${(1-tp)*0.95})`; ctx.fillRect(-w/2,-h/2,w,h); }
         }
       }
+      if (clip.beautyGlow && clip.beautyGlow > 0) {
+        ctx.save(); ctx.globalCompositeOperation = 'screen'; ctx.globalAlpha = clamp((clip.beautyGlow/100)*0.32, 0, 0.35);
+        ctx.fillStyle = '#fff5e6'; ctx.fillRect(-w/2, -h/2, w, h); ctx.restore();
+      }
+      if (clip.motionBlur && clip.motionBlur > 0 && (clip.motionFn || (clip.keyframes && clip.keyframes.length >= 2))) {
+        ctx.save(); ctx.globalAlpha = clamp((clip.motionBlur/100)*0.24, 0, 0.25);
+        ctx.translate(6, 0); ctx.fillStyle = 'rgba(255,255,255,0.06)'; ctx.fillRect(-w/2, -h/2, w, h); ctx.restore();
+      }
       if (clip.lightFx && clip.lightFx !== 'none') {
         ctx.save(); ctx.setTransform(1,0,0,1,0,0);
         drawProceduralVFX(ctx, clip.lightFx, w, h, lt, 0.9);
@@ -2270,7 +2323,13 @@ function startAudioForPlayback(fromT) {
       if (!buf && clip.lazySfxName) { renderSFXBuffer(clip.lazySfxName, clip.duration||2.5).then(b => { audioBufferCache.set(clip.audioBufferKey, b); if (State.playing) startAudioForPlayback(State.currentTime); }); return; }
       if (!buf) return;
       const src = ctx.createBufferSource(); src.buffer = buf; src.playbackRate.value = clip.speed || 1;
-      const g = ctx.createGain(); g.gain.value = (clip.volume ?? 1) * (tr.volume ?? 1);
+      const g = ctx.createGain();
+      let baseV = (clip.volume ?? 1) * (tr.volume ?? 1);
+      if (State.autoDuck && !clip.isVoiceover && tr.type !== 'voice') {
+        const hasVoice = State.clips.some(vc => vc.isVoiceover && vc.start + vc.duration > fromT);
+        if (hasVoice) baseV *= 0.32;
+      }
+      g.gain.value = baseV;
       src.connect(g); g.connect(eqLow);
       const del = Math.max(0, clip.start - fromT), off = Math.max(0, fromT - clip.start) + (clip.trimStart||0), dur = Math.max(0.05, clip.duration - Math.max(0, fromT - clip.start));
       try { src.start(ctx.currentTime + del, off % buf.duration, dur); activeAudioSources.push(src); } catch (e) {}
@@ -2959,10 +3018,53 @@ function renderInspector() {
       body.appendChild(g); $('iTx').addEventListener('input', e => { clip.text = e.target.value; renderFrame(); });
     }
   } else if (tab === 'audio') {
-    body.innerHTML = `<div class="prop-group"><div class="prop-title">Speed &amp; Sound Boost</div><div class="prop-row"><label>Speed</label><input type="range" id="iSp" min="0.25" max="3" step="0.05" value="${clip.speed||1}"></div><div class="prop-row"><label>Volume</label><input type="range" id="iVl" min="0" max="2.5" step="0.05" value="${clip.volume??1}"></div>${clip.kind==='audio'?'<button id="iCutBtn" class="cyan" style="width:100%;">✂ Open Audio Part Cutter</button>':''}</div>`;
+    const curves = [['linear','▶ Linear (Normal)'],['bullet','⚡ Bullet Ramp (Fast→Slow→Fast)'],['slow_drop','🐢 Slow-Mo Drop (Normal→0.3x)'],['jump_cut','🚀 Jump Surge (Slow→Fast)'],['pulse','💓 Beat Pulse Curve']];
+    body.innerHTML = `<div class="prop-group"><div class="prop-title">⚡ Velocity Speed Curve &amp; Audio</div>
+      <div class="prop-row"><label>Speed</label><input type="range" id="iSp" min="0.25" max="3" step="0.05" value="${clip.speed||1}"></div>
+      <div class="prop-row"><label>Curve</label><select id="iSpCurve">${curves.map(([k,n])=>`<option value="${k}"${(clip.speedCurve||'linear')===k?' selected':''}>${n}</option>`).join('')}</select></div>
+      <canvas id="speedCurveCanvas" width="230" height="64" style="width:100%;height:64px;background:#07090e;border:1px solid var(--border);border-radius:5px;"></canvas>
+      <div class="prop-row"><label>Volume</label><input type="range" id="iVl" min="0" max="2.5" step="0.05" value="${clip.volume??1}"></div>
+      <label style="display:flex;align-items:center;gap:6px;font-size:11px;cursor:pointer;"><input type="checkbox" id="iIsVoice"${clip.isVoiceover?' checked':''}> 🎙 Voiceover (Auto-Duck Music)</label>
+      ${clip.kind==='audio'?'<button id="iCutBtn" class="cyan" style="width:100%;">✂ Open Audio Part Cutter</button>':''}</div>`;
+    paintSpeedCurveCanvas(clip.speedCurve || 'linear');
     $('iSp').addEventListener('input', e => { clip.speed = parseFloat(e.target.value); });
+    $('iSpCurve').addEventListener('change', e => { clip.speedCurve = e.target.value; paintSpeedCurveCanvas(clip.speedCurve); renderFrame(); });
     $('iVl').addEventListener('input', e => { clip.volume = parseFloat(e.target.value); });
+    $('iIsVoice').addEventListener('change', e => { clip.isVoiceover = e.target.checked; });
     $('iCutBtn')?.addEventListener('click', () => openAudioPartCutter(null, clip.trackId, clip.start, clip));
+  } else if (tab === 'keyframes') {
+    const kfs = (clip.keyframes || []).sort((a,b) => a.t - b.t);
+    const relT = Number(clamp(State.currentTime - clip.start, 0, clip.duration).toFixed(2));
+    body.innerHTML = `<div class="prop-group"><div class="prop-title">◆ Keyframe Animation (${kfs.length})</div>
+      <button id="kfAddBtn" class="primary" style="width:100%;">◆ Add Keyframe at ${relT}s</button>
+      <div class="grid-2" style="gap:4px;">
+        <button id="kfPreZoom" style="font-size:10px;padding:4px;">🔍 Smooth Zoom-In</button>
+        <button id="kfPreFade" style="font-size:10px;padding:4px;">🌅 Fade In &amp; Out</button>
+        <button id="kfPreSlide" style="font-size:10px;padding:4px;">➡ Slide L → R</button>
+        <button id="kfClearAll" class="danger" style="font-size:10px;padding:4px;">🗑 Clear Keys</button>
+      </div>
+      <div id="kfList" style="display:flex;flex-direction:column;gap:4px;max-height:170px;overflow-y:auto;"></div></div>`;
+    const kl = $('kfList');
+    kfs.forEach((kf, ki) => {
+      const r = document.createElement('div');
+      r.style.cssText = 'display:flex;align-items:center;justify-content:space-between;background:var(--bg-3);padding:4px 6px;border-radius:5px;font-size:10.5px;';
+      r.innerHTML = `<span style="color:var(--gold);font-weight:700;">◆ ${kf.t}s (S:${kf.scale}x, O:${Math.round(kf.opacity*100)}%)</span>
+        <div style="display:flex;gap:3px;"><button data-j="${ki}" style="padding:2px 5px;font-size:9.5px;">⏱</button><button data-d="${ki}" class="danger" style="padding:2px 5px;font-size:9.5px;">✕</button></div>`;
+      r.querySelector('[data-j]').addEventListener('click', () => { State.currentTime = clip.start + kf.t; renderFrame(); });
+      r.querySelector('[data-d]').addEventListener('click', () => { clip.keyframes.splice(ki, 1); renderInspector(); renderFrame(); });
+      kl.appendChild(r);
+    });
+    $('kfAddBtn').addEventListener('click', () => {
+      pushHistory();
+      if (!clip.keyframes) clip.keyframes = [];
+      clip.keyframes = clip.keyframes.filter(k => Math.abs(k.t - relT) > 0.05);
+      clip.keyframes.push({ t: relT, x: clip.x||0, y: clip.y||0, scale: clip.scale??1, rotation: clip.rotation||0, opacity: clip.opacity??1 });
+      renderInspector(); renderFrame(); toast(`◆ Keyframe added at ${relT}s!`, 'success');
+    });
+    $('kfPreZoom').addEventListener('click', () => { pushHistory(); clip.keyframes = [{t:0,x:0,y:0,scale:1,rotation:0,opacity:1},{t:clip.duration,x:0,y:0,scale:1.35,rotation:0,opacity:1}]; renderInspector(); renderFrame(); toast('Zoom-In Keyframes Applied!','success'); });
+    $('kfPreFade').addEventListener('click', () => { pushHistory(); const d=clip.duration; clip.keyframes = [{t:0,x:0,y:0,scale:1,rotation:0,opacity:0},{t:Math.min(0.6,d*0.25),x:0,y:0,scale:1,rotation:0,opacity:1},{t:Math.max(0.7,d*0.75),x:0,y:0,scale:1,rotation:0,opacity:1},{t:d,x:0,y:0,scale:1,rotation:0,opacity:0}]; renderInspector(); renderFrame(); toast('Fade Keyframes Applied!','success'); });
+    $('kfPreSlide').addEventListener('click', () => { pushHistory(); clip.keyframes = [{t:0,x:-180,y:0,scale:1,rotation:0,opacity:0.4},{t:clip.duration*0.3,x:0,y:0,scale:1,rotation:0,opacity:1},{t:clip.duration,x:60,y:0,scale:1.08,rotation:0,opacity:1}]; renderInspector(); renderFrame(); toast('Slide Keyframes Applied!','success'); });
+    $('kfClearAll').addEventListener('click', () => { pushHistory(); clip.keyframes = []; renderInspector(); renderFrame(); });
   } else {
     body.innerHTML = `<div class="prop-group"><div class="prop-title">Animation Preset</div><select id="iAn">${['none','fade','zoom','roll'].map(x=>`<option value="${x}" ${clip.animPreset===x?'selected':''}>${x}</option>`).join('')}</select></div>`;
     $('iAn').addEventListener('change', e => { clip.animPreset = e.target.value; renderFrame(); });
@@ -2984,6 +3086,13 @@ function renderInspector() {
     $('iFilt').addEventListener('change', e => { clip.filterPreset = e.target.value; renderFrame(); });
     $('iLfx').addEventListener('change', e => { clip.lightFx = e.target.value; renderFrame(); });
     $('iSpdSel').addEventListener('change', e => { clip.speed = parseFloat(e.target.value) || 1; renderTimeline(); renderFrame(); });
+    const bg = document.createElement('div'); bg.className = 'prop-group';
+    bg.innerHTML = `<div class="prop-title">✨ Beauty Glow &amp; 💨 Motion Blur</div>
+      <div class="prop-row"><label>Beauty</label><input type="range" id="iBeau" min="0" max="100" value="${clip.beautyGlow||0}"></div>
+      <div class="prop-row"><label>M. Blur</label><input type="range" id="iMBlr" min="0" max="100" value="${clip.motionBlur||0}"></div>`;
+    body.appendChild(bg);
+    $('iBeau').addEventListener('input', e => { clip.beautyGlow = parseInt(e.target.value)||0; renderFrame(); });
+    $('iMBlr').addEventListener('input', e => { clip.motionBlur = parseInt(e.target.value)||0; renderFrame(); });
   }
 }
 document.querySelectorAll('#inspectorTabs .subtab').forEach(b => b.addEventListener('click', () => {
@@ -3029,7 +3138,7 @@ $('btnStartRender').addEventListener('click', async () => {
     const ec = document.createElement('canvas'); ec.width = Math.round(resH*ar); ec.height = resH;
     const ectx = ec.getContext('2d'), stream = ec.captureStream(fps);
     try { ensureAudioCtx(); streamDestNode.stream.getAudioTracks().forEach(t => stream.addTrack(t)); startAudioForPlayback(0); } catch (e) {}
-    const cands = fmt==='mp4' ? ['video/mp4','video/webm;codecs=vp8,opus','video/webm'] : ['video/webm;codecs=vp8,opus','video/webm'];
+    const cands = fmt==='mp4' ? ['video/mp4;codecs=avc1.42E01E,mp4a.40.2','video/mp4;codecs=h264','video/mp4','video/webm;codecs=vp8,opus','video/webm'] : ['video/webm;codecs=vp8,opus','video/webm'];
     const mime = cands.find(m => window.MediaRecorder && MediaRecorder.isTypeSupported(m)) || '';
     const ext = mime.startsWith('video/mp4') ? 'mp4' : 'webm';
     const rec = new MediaRecorder(stream, mime ? { mimeType:mime, videoBitsPerSecond:6000000 } : {});
@@ -4096,6 +4205,10 @@ function openLayerPlacementModal(clip = null, track = null) {
   $('lpMaskShape').value = cfg.maskShape || 'rect';
   $('lpBorderCol').value = cfg.borderCol || 'none';
   const ck = cfg.chromaKey || { enabled:false, color:'#00b140', tolerance:72, smooth:18, spill:true };
+  const sb = cfg.smartBg || { enabled:false, sens:58 };
+  $('lpSmartBg').checked = !!sb.enabled;
+  $('lpSmartSens').value = sb.sens || 58; $('lpSmartSensV').textContent = $('lpSmartSens').value;
+  $('lpBeauty').value = cfg.beautyGlow || 0; $('lpBeautyV').textContent = $('lpBeauty').value + '%';
   $('lpCkEnabled').checked = !!ck.enabled;
   $('lpCkColor').value = ck.color || '#00b140';
   $('lpCkTol').value = ck.tolerance || 72; $('lpCkTolV').textContent = $('lpCkTol').value;
@@ -4110,6 +4223,8 @@ function openLayerPlacementModal(clip = null, track = null) {
 function collectLayerCfgFromModal() {
   return {
     regionPreset: lpChosenReg,
+    smartBg: { enabled: $('lpSmartBg').checked, sens: +$('lpSmartSens').value },
+    beautyGlow: +$('lpBeauty').value,
     srcCrop: { l:+$('lpCropL').value, r:+$('lpCropR').value, t:+$('lpCropT').value, b:+$('lpCropB').value },
     maskShape: $('lpMaskShape').value,
     borderCol: $('lpBorderCol').value,
@@ -4354,7 +4469,75 @@ previewCanvas.addEventListener('touchmove', e => {
 
 previewCanvas.addEventListener('touchend', e => { if (e.touches.length < 2) pinchState = null; });
 
-// Init V8 Studio
+
+// V15: Speed Curve Time-Remapping + Graph Painter + AI Auto-Captions + Voice Ducking
+function evalSpeedCurveTime(curve, lt, dur) {
+  const p = clamp(lt / Math.max(0.1, dur), 0, 1);
+  if (curve === 'bullet') return dur * (p < 0.3 ? p*1.8 : (p < 0.7 ? 0.54 + (p-0.3)*0.35 : 0.68 + (p-0.7)*1.06));
+  if (curve === 'slow_drop') return dur * (p < 0.4 ? p*1.4 : 0.56 + (p-0.4)*0.35);
+  if (curve === 'jump_cut') return dur * (p < 0.5 ? p*0.45 : 0.225 + (p-0.5)*1.55);
+  if (curve === 'pulse') return lt + Math.sin(p*Math.PI*4)*0.12;
+  return lt;
+}
+function paintSpeedCurveCanvas(curve) {
+  const c = $('speedCurveCanvas'); if (!c) return;
+  const ctx = c.getContext('2d'), w = c.width, h = c.height;
+  ctx.fillStyle = '#07090e'; ctx.fillRect(0,0,w,h);
+  ctx.strokeStyle = 'rgba(255,255,255,0.1)'; ctx.beginPath(); ctx.moveTo(0,h/2); ctx.lineTo(w,h/2); ctx.stroke();
+  ctx.strokeStyle = '#38bdf8'; ctx.lineWidth = 2.5; ctx.beginPath();
+  for (let x = 0; x <= w; x += 4) {
+    const p = x / w;
+    let spd = 0.5;
+    if (curve === 'bullet') spd = p < 0.3 || p > 0.7 ? 0.85 : 0.2;
+    else if (curve === 'slow_drop') spd = p < 0.4 ? 0.75 : 0.22;
+    else if (curve === 'jump_cut') spd = p < 0.5 ? 0.25 : 0.88;
+    else if (curve === 'pulse') spd = 0.5 + Math.sin(p*Math.PI*4)*0.35;
+    const y = h - spd * (h - 10) - 5;
+    x === 0 ? ctx.moveTo(x, y) : ctx.lineTo(x, y);
+  }
+  ctx.stroke();
+}
+
+$('lpSmartSens')?.addEventListener('input', e => $('lpSmartSensV').textContent = e.target.value);
+$('lpBeauty')?.addEventListener('input', e => $('lpBeautyV').textContent = e.target.value + '%');
+$('btnAutoDuck')?.addEventListener('click', e => {
+  State.autoDuck = !State.autoDuck;
+  e.currentTarget.classList.toggle('active', State.autoDuck);
+  toast(State.autoDuck ? '🔉 Voiceover Auto-Ducking ON' : '🔊 Auto-Ducking OFF');
+});
+$('btnAutoCaptions')?.addEventListener('click', () => {
+  const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
+  showDialog('💬 AI Auto-Captions (Karaoke Subtitles)', `
+    <div style="font-size:11.5px;color:var(--text-1);line-height:1.5;">Apna dialogue ya script likhein — ya <b>🎤 Speak Live</b> se bolkar automatic timed Karaoke Captions timeline par lagayein:</div>
+    <textarea id="acScriptBox" rows="3" placeholder="Jaise: Aaj hum banayenge ek Hollywood level ki movie..." style="width:100%;margin-top:6px;"></textarea>
+    <div style="display:flex;gap:6px;margin-top:6px;">
+      <button id="acMicBtn" class="cyan" style="flex:1;">🎤 Speak Live (Hindi/Eng)</button>
+      <button id="acGenBtn" class="primary" style="flex:1;">✨ Add Synced Captions</button>
+    </div>`, []);
+  $('acMicBtn').addEventListener('click', () => {
+    if (!SR) return toast('Live mic speech Chrome/Android par supported hai — box mein type karein!', 'error');
+    const rec = new SR(); rec.lang = 'hi-IN'; rec.interimResults = true;
+    rec.onresult = ev => { $('acScriptBox').value = Array.from(ev.results).map(r=>r[0].transcript).join(' '); };
+    rec.start(); toast('🎤 Boliye — Sun raha hoon...', 'info');
+  });
+  $('acGenBtn').addEventListener('click', () => {
+    const txt = ($('acScriptBox').value || '').trim();
+    if (!txt) return toast('Pehle kuch text likhein ya bolein!', 'error');
+    const words = txt.split(/\s+/);
+    let t = State.currentTime;
+    const tr = findOrCreateTrack('text');
+    for (let i = 0; i < words.length; i += 4) {
+      const chunk = words.slice(i, i + 4).join(' ');
+      const dur = Math.max(1.2, chunk.length * 0.08);
+      State.clips.push({ id:uid('c'), trackId:tr.id, name:'💬 '+chunk, kind:'text', text:chunk, start:Number(t.toFixed(2)), duration:Number(dur.toFixed(2)), x:0, y:State.aspect==='9:16'?210:135, scale:1, opacity:1, textAnim:'karaoke_bounce', textStyle:{ size:42, color:'#ffffff', karaoke:true, karaokeColor:'#facc15', style3d:true } });
+      t += dur;
+    }
+    closeDialog(); recalcDuration(); renderTimeline(); renderFrame();
+    toast('💬 Synced Karaoke Auto-Captions Added!', 'success');
+  });
+});
+
+// Init V15 Studio
 function initStudio() {
   if (window.innerWidth <= 820) { State.easyMode = true; document.body.classList.add('easy-mode'); $('easyModeLbl').textContent = 'Easy'; $('previewResSelect').value = '0.5'; }
   const trVfx = { id:uid('tr'), type:'vfx', name:'VFX 1', hidden:false, locked:false, muted:false, solo:false, volume:1 };
