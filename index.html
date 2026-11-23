@@ -271,6 +271,14 @@ body.easy-mode #btnRippleToggle, body.easy-mode #btnDetectBeats, body.easy-mode 
 .hg-num { flex-shrink: 0; width: 24px; height: 24px; border-radius: 50%; background: linear-gradient(135deg,#f59e0b,#dc2626); color: #fff; font-size: 11px; font-weight: 800; display: flex; align-items: center; justify-content: center; margin-top: 2px; }
 .hg-tip { background: rgba(6,182,212,0.1); border: 1px solid rgba(6,182,212,0.35); border-radius: 8px; padding: 9px 12px; font-size: 11.5px; color: #bae6fd; }
 
+
+/* V8: PRO MULTI-LAYER PLACEMENT, 3-SECTION SPLIT & CHROMA KEY */
+.lp-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(105px, 1fr)); gap: 6px; }
+.lp-btn { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 3px; padding: 7px 5px; border-radius: 7px; background: var(--bg-3); border: 1.5px solid var(--border); font-size: 10px; font-weight: 700; color: var(--text-1); text-align: center; cursor: pointer; }
+.lp-btn.active { border-color: var(--gold); background: rgba(245,158,11,0.16); color: #fef08a; }
+.lp-mini { width: 42px; height: 26px; border: 1px solid rgba(255,255,255,0.35); border-radius: 3px; position: relative; background: #090c12; overflow: hidden; }
+.lp-mini i { position: absolute; background: linear-gradient(135deg,#06b6d4,#f59e0b); border-radius: 1.5px; display: block; }
+
 </style>
 </head>
 <body>
@@ -406,6 +414,7 @@ body.easy-mode #btnRippleToggle, body.easy-mode #btnDetectBeats, body.easy-mode 
       <button id="cqStepMinus">-0.5s</button>
       <button id="cqStepPlus">+0.5s</button>
       <button id="cqCutAudio" class="cyan" style="display:none;">✂ Cut Part</button>
+      <button id="cqLayer" class="primary">📐 Layer/Chroma</button>
       <button id="cqEdit" class="cyan">🎛 Edit</button>
       <button id="cqRemove" class="danger">🗑 Remove</button>
     </div>
@@ -446,8 +455,8 @@ body.easy-mode #btnRippleToggle, body.easy-mode #btnDetectBeats, body.easy-mode 
           <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAJMAAABACAIAAACRLdLDAAAvP0lEQVR42u29d5wVRdY/fE5V9+0bJydmyIyAg4hkxCUqQZKCAqIL6oorZnR/G5TVVRH3WRVX3FVECSKga3rUXUEkg4giguQ4AwzMMDnf3F113j/qzp07wwygj/q8v/fz9ud+5E7f7urqOnXS93yrRCKCX+aIfRAi/MJH9OmNHk0Av3hPfqIDf5zkpJRSyhhBIGMMo4NCBETRlhGREDF2yGIuQMZ+LkFKSUQAiJw1OfkzPvT/tZITQjQSUuOfOOctDqMQ0rIAgHHONK2RPgjx0w4lCYmIwDCqWSIYBCJuNxBZw0Nb7u3/1yQXlc3u3bu//vrr/fv3m+Fwl65d+vfvP3jwYM41dYEVCIZOngqdPO07fRpPn5WlZVBZKXx+EQ4DENc15oljqamsc0dXjyud/frYUpIBgKRExn6cpBqMHhEQKJn5jh6r2fplePdeyj9jeX0AYPO4Wbs2toFXx48eaU9PBaL/ezXvB0hOSeXLL798+plnNm7YAABtWreJi487dOgQAPS8queTTz5x48SJp/7+qu/VNxzhIFZVo2UxQM454zponACAJEiSUkphSSLSNNm2tX3C2NT77jZaZ5GUyPCH+56I5KKyr9q8rfrNZda2r3hlFWNMNwwmpAwFTNOUwkJAcVm25/ez0+++k4gQ8P9GZ3epklNie+211x566CEhBEO86bbb3luxAgHmPf/Ck4/9Sbm9x+bMmfvwI7ljbtL27MX0FLJpCIjhMPr9aArNMJjLKYkgMtcRQEIobHq9odZZyS88l3zjuB9txNSNwXNFRX9+Rnz0iWEJ7nGDYUDYNL11Zka60T2HZ2WCJOvkKXP3Hqus0PG7P7Z58Tn48breoub/AofWUgCixlW9khLbJ598cv/99wMAcCaFHFFSXTlhap3Xe01SMgEBZyDkX+fNs8d5nty8unzjFlfbNugwAFD4/WZxsW/P3tC6TbB3v91ukKZTNMDRdT0lVa+qLp9xN7z1RvKk8T/CbCqx1ez8rnTmfcaJPHtykkQkAKqtDcTFeZ6akz55ktG2tRpYAeTbd6BmyfKq+S9raSmZf3j0xxhqIpLKm9bf+AsrLjU+LMuSUkb/FFKapimlrKmpSUtL69unz+Yvv3zxjrucAGN0e35S28rk9rNsbg7wcIcu29atu+2OGQCw7+ABau6wwuGSZSuOZ11WmNzmbKtOBRkdCzI6RD5Z2edS2h5td7kvN4+IpBB0yYe0BBHV7NpzKDO7ML5VYZvOZzM6FmRmF8RnHu8xoG5ffWeklJagmJZrtu848uAjwaoq9esPeGLj7kkiKaUkkkLKH9LO/+RoZC2llIwxACgoKCgtLc3IyMjMzFTnFy1adN999+UVFnQImyVjb36mpGBhZUlPh9vD+LZA3Wh3wlvosf/1ifhZdyXGx48ZM3bVqpWWZWn1MWRsAlC1aWvF1NtdiMQZATVkFhoXldXWDePar1wM9ep+KaE/MBYqOJc/crzrXBF6XGQRIKIZ9rtcrdZ87MrpQqaFGm8UjCiNZwwApGkyXf9ByQYwFiopq/zgo/COb7DWKy0BSOgPBDt0yH7zH/wHtfZjD9ZEbBs3bLzuuuuys7NHjx7VsWPHESNGbN68iTH23x9/jIihYKjypX86Cs9xTUOC7/3ebd4aENKSwrBpwSUrvaVlNqdz0+ZNgVBIs9lIGRPGkHOVVJFpJg4f4rx3Zri2jjGGMU6WLKklJIhPP6tZtwkZIyEuyWIASNMsePARR/4Z9LjJkkCSMQz5/HFPPhYRm641jSEZA8ZISAD6QWIjKYCxyn+vyR80IvD7P+N/Pscvv+Lf7jK++S60bUvC1f25rl9Sz38qaymEIKIFL7+sTj733HOlpaWPPPIIAHDO354/v09ONwC4Kifnta495iVmJGgaAHBADoiADGCmJ+ndDt0mDRkGALqmHT16JNpso0MIkjJwOv9E6y7nUtsVZnQsTO/Q8Mm87KwnPW/8ZCnEpZgvaVlEVPhf808aiedaX1aQ0aEwvWNhq04Fca1yB42yQqH6dn4aC6aMZOXaDUc96YXxmeeyOhe1yj6X2i4/LuOYI/XMX577oXb+f2otlbYd2H/gqp5Xqe87duzo37//pk2brrvuOiJyAmiaVmtZlz4h9uzZ3bNnr6j5bQpEIZ6adJu+bj2Lj4fGM5Qx5gsGUz99P27QwAvHmSqsqPtuT9GYm+IYCoYoAYCYxgMVVa4FL6T99s6fMt0mAoBwZdWpIaPdBYXgcpqmCOg6j/fol3dxz7gt9YYxv2SCyKKR5MKFr0kpe/bsyRibPn36U0899cAD9xt2e5fLLvMDKLGNdMV9kdp2cVrbdE0HAA2RIyKCDfHZhLRtna68d+o0ALDputvtvgDAAQDOXlealhWFORqMNqItFK5eslzBZhcKwQGkaZY8/hdXMCA1DgSABAwhbMr0dM/oERdp4YcKTkpALHtjqS0vjyXEiTofGzqo3ZdftP1yfYePVv3CYotITsEim7dumf3I7J07dy5evPjEiRNPP/30kSNH33v//e/377998DAAiNf1OY6kHqY1mRu3e5IRwCISREQw1B1/r6W3TU157Z1VXbp08cTFtWnbtn7gzssXEQAA27UTjCM14/91t9tat9F/7DgwRlIC0PmNKIUrf3sVbt3O4+JASEQARGDcCoX4Vd0dbVsDEfwkiRoAECHnlj/g+/g/hsslpZTSxNRkZ8f29uREICIhfmE4hkUnphU2W2W00nU9JydHmTjdZmvfsaPDbo9HQIAwUS0JjTNiEARJiAPdcWPjkrjGfcKq8biyXpwnGVaWl48ePdpu2IUQiC0DIh43NI5QGhyvxrWq6qp33q/3w82NI8NwWXnN/FccLpckGX0IIkjT0vr1jmjJT1pqCB/P1fLPkE0DIkQkIUBKJbNfHgKNJNoA0OOqHk8++eTMmTOnTp3KGLvyiu5mOHzzxIl3jhn3+tbN0+JSOjF9dm3Ju8J6OeBdXFM+gtlWgWOp1GYzx1d+72OprvcLz0y88caK6uonn3zi4pYKGWDzsBOR1J2OwCerrdo65ByhqfCU4Sp/Y7F+8jQ4HSCp3oISAgnO3DmX/+RxHAD4806hP8CY1gCY/O/VHBowlBkzbv/oo/9esmQJAKxcsXLq1CkLnnn2/zz7zInjxxHgTsNDNveYivwHq4vV9WMGD3K3ae/jNMbtfmnhK+/t//69qVMBYMGCBZ07d7lw3QAAyAxHamaI0EQyktBusNyT1es2ptx8I0kJjMeaU2QseLbAt2yly+MhKTHqYBBBkOl28/Ztf44qYKi8HKQAQOVPAQn+9w6myi5SyvHjx0+dMkWpQ6tWGZquZ2RmgKaBYbs7MfUqnffh/O3UtumGAZoGnH/u0u3LX2+3fPFn8U6IiADnzZungE1+UesRCivvRaZ5/hATgMGw7t33KeKrGlydqriVL1qiFxaR3RY5rTJ9QLIsFufhaWk/bXgSGaw6L0YmGQEBIPtflJwWiRgQCeit5csTExKXLH7z+tGjB11zzcatWx0A0y32OIhATZFJdB3qHzDjZat2DcC6zz9PdzqdTmd5dTUAXN2//9NPPz1i1CgpJb8Eo8/8PiassGEzu+XYvt+ncRZrE0kSdzmtr77xHT7q7nY5SQuQ1yscBvPzA++85/K4SUgQEliD1SUhdI/HiPf8LPC8JQAQgBD/96vpWrRsDYR2u33hotcf/csTmzdvPn06f8qM2/u4PN01I0RCMkRACdSf2Puc7QVrf9BfVFIipWzfvkP37lf0yL4MAIRlcU0730k0LogDAFBNHScwTcv1mxmBp57VyspB1xvMJhFpXK+oqlu7zt3tciBs8GTIyhYt5cUllJQoADA+TqutJWAAQIgoiZxOtNt/AAYsiaiFWAaxEQhHMjbKpRZg6ObvvWgERNRS3abZsrMWE6sTAPrzC9JWr70rGOLxqaI26K/wVpFERFYf39cAAEEXhlcyxpiBDMTpc+Fjp4qCQePaYUmDro6tdqhMsWkyjgAAVkUlIxRh092nlxg7OvzqIltSUhQ3QgAistmNwOov5EP3M10DIgBCxkPFJf73/9sdH2dV1+LNN2o2u1j1LktKBCEQUJJAuxGJ9PASwH7GgCECv6TijQqVEQEIAVDJmxrhmY2CzEvJ8FQ3OP+hxl2LfUYg/0zh+Cn80JFyzlWPEUGhwsoZkzKrgF4AAhmVA3LGkdW+/Cq8szRpzCgSEhhGzWZR0bn09HTGGo2OKCtHAGYYmtuV+Jvp55avNKSU2PAgkMScDtq337d7j2dAP5IEQMh55b8+4GcKMCMtxAKtHrzP//YqIWSj4F3TLj4EMaMcKigMnsgNnCvCykqs8ZJlAgAybgYC+qCr08aMbhpARWSF0X+j+aUQovrzdeEdO0kI54QxCddcfWHhKYgHORfhcOjY8cDJ02ZpGauqIl8AiAABkYXDZtKMac6unZs0pUVxDdR47SertcNHnG2yhFU/90n5fQAAYhipSBEAxNKHgIBQt/HSiupl7ySNGSVJcNQ553l5eXPnzv3444+XLVs2adIkFbkgYwQQKC1zAnGPk2vMnnO5NugasX4zxrkhVgyM2wLB2v/+t2dAPyBCzoQ/4H3nA7vbadbWsmsGuHtfVfvaGxBDEGIEQsoLOyESEjmTRJUffVL37vty3wHtXLEZqCMwOTiZ3SmBmMaD3krmezhtzOiL5oVKAHV79xfP/gPb+Z0GxACKFy22li1KmTiBpEDGm509yHmouKTyrRW+zz7nuSehrNySQQTimptpOiFyzgLeWlf/vs6unSOq2WxllWpquaYLIcASKpwjYCgpIIQQlsOyWFwckQRJ0WAPEeuDOxM0TfP5AIBrejAQeHH+/Pnz51dXVwNAcXFJJCsiAkQZDFFxCXAOSUnM7QYA9y03167b6IydEQRSCM3h9H+xyZxTp8e5AbFm42Y8dJgnxgcrqxNm3IYExHjEukYddigU8azNCVCNsu/Y8cKH/yA3bfHYDStsiuyOxqCBerccsXGL3LZDczmBMYMheJwXTc9JCKbr1Vu/KrllhquqmicnSYbE0VNTW/X8SwmjRmgO+/maF8GA3vuocs7TxrlzToAQYzD4V85hg52t23hfX8xOnUKHExnaNI3Z9IvUxBERSCJBfdmMMcYCvlrn3L8YPa+oeG4+bN3ucDrQ6SQhgUREJRvZIBJSrlm9es6cOQcOHAAAu90eCoXsdqORqays0srLiTOZnsYNA4gSRl5Xk92JzhaAYYtm1igJDRuePFm7ZVvyhDFEUPPuBzqACATlFTkJ40YDAtrtkoCIQBIBIWPo9UEwCA4HgIwtY0XFVr15a/FvZtlLyvWUFK8Zcj50b/oD99oz0gGg1Ov3fr5Od9gVoIWNoxCKSU6UxwMApuvefQdLbr/bY5qUlirMMBGAQO50YP6ZYG6e+8orQMpYySmxFc79m2/e8263i+wOf0Z6wtNzEm8cp2p73o//LQ8f4Xa7FERCNBcLwfnBD8YmT0jC1DX74IEJQwa1X/2R+9WXfK3Sw+XlTArgHGQDuoUAUkiXy7V//4EJEyYcOHBA0zREtCyLYqIm9SVcVMy8dYiArVsBAFmWlhDvGHd92B/AxkmSRDQk1X3wMSAGThw3t36px7lDXp9n2mTd4wEAdNiJAICRYrZwbtXVhWvqWrJO1V9uL7n1TldtnZaYUBfwJy54sc2zT9kz0ikcJktQKBwzxE11VsUQKJW2EQABUai4pPD2e9wVlZZlkc/HkHFCriLCQNCKGJuGoFRRFIv+66XAU391JycKSwQ6ts/8z/spkydyTSfLIiFQRWoU9aKXJLnohfX2kEAGgyQEY5h+14y2W9dqv5/tRaSauvOjXsZYKBhERM6YklmzFiaQn0+BoER0d+wY/SV+yiTL4wZLNLEq3OWwNm8LV1bXrVnPy8qJQGRlJU29OZJ9OwyJMTErZ2ZdnVleHp0lsSFYMP9syZ2znMEwut3ByirPE4+l3TqVLAukBMZR48BZxEsARFOR80ZHWUkAYIBYMPsx277vgwkJcsK4cMcOMhiMwNyITAiqqW1SmEXOKz/+t/eZec60ZAibAY+71YrFzk4dyTQBSQUssoEAR80C7i1JrvEwq4iSc2VAjJSUrLlPpH/+cXj4YBkOx3JnVCjDNK5qfhfyDcfzeChsGoZ+WTYAAEMgcnbP4b8aKHy+WD+MBKDrenVNxdK3/WvXGU5nuLbOfuM4e2YrMk0AYG43NXCrATjXvD5ZeK6h+zGSK3riGfuZsyzeI6trYPDAVrPvjxTwGANsMmubm+rU0CuyLB4fV/buR+H3VphduyW/t7z922+kv/uWPy6BWRYhAgISqU5GjCsRIguXV1TMecZp2EnTgnW+uN/Pdl2uCvd6VMWRsQgsRQiElyY5PP8v1mA8OQdJFAp5el7Z9sNVZnw8WlYT36usP7UAPik1DRw5yomkx6Nnd1RnSUpEFvfrqWGKTnVCQACUQupuV2jhYu3AYeawm05n0q9vUSAYAEBKiowBrokxLRwOnT7TaLylBMZqv95p/Xu1lpwMlhWWMune3zKFq2Ejg0gxs4aaRjiRAICkZE5naP/+2jlPy9TMVu8tSxjYn0zTld3RdtUVwu9HxupVlpoA5RVL39ZO5IInDvwB6tQxecatIAm1RsEnIVOZORBhC+joJST5TUIQBDSMcFlF8ZyneW0taFqDD1P1F2w5CSYCxmQoFD52gjjT0lIcrbOU/0DGAChu1HWQczkFAsBYZA4gARAgGnV1GpH0+vWBA9w9eyjDCAAsOQljkTMChug7fvz8h1cvX2ULh0jjEAyyTh08w4eovK3x+MaYyGYmewOTmhmGbfdeOluQ9vKLniuvINNCxoBIS0mWEUSGCKihdKwqfF6v990PbE4HSCn8ftuwQXpCPEVmSKxVpIaHESD9YGsZ8dFI9bgOY4RY/u6HBdeNk/9YqGtMUiNvoDoQSdpacHKh/LP8bCEAyOyO3G6PxF2IJKTmcjluuiEcDCnYJZJFKISKM0Q0hfTccjNifWYJ4GiVgTYDpIw8nIjpOh46SkTIeGQ0GAuXlppbtmkuJxCIUIh376bHeSgS8sUWEbHebFBMst08IiX9AW3S+NRbJ5MQqGsRlWUY4z4aDI9KCut27GQnctHpBCKBaO/fpz7YaZ6yiS15uQbJITTb0UjtRLcBItP1uu/2nr5hWt3M+51nC/SUJKofrEaSZkwIIaXUNK0J7qWu9O4/KGtrCNDZvXvs7eolE26+wUpJBssCREQlUwU4AYXCsmO7OEVTUEoJYMtIA48bhBXRTpLcplsnT4dKSxVMpYbM+/0+LCpBm4EIJCS0b9fUEUZEhfXhPrYQ09WPjJQhu5H8yP0x4431EooRQGO6hv/rb7lpETKUUhqGvUP7ZhEWJIV+kHIZzfqdJjpHTUwdITLTtE7nh0vLCx57qmTMJGPjJkdCnLQbFBME1s9s5vP7ruiWs2zZsuzsbEW6VbkBYsNMDH/zrS1sBe12pzJ6sUw6KR3ZnbThg4XXh4wRNSgB48zy+e1jr7clJUZ0RcWSqSlWeiqYJkXjPpsNSkqD+w/HlsXDh45i2ESGgERAtri42Pi5Hs1qmqshNXX7kTFkTPr9et9e7n59gQiaYJWNEevYeSkPH2OMk5pQho0rtg421jaiJh6WLu7nqGk1Ukpy2I26Pz5RMOR6+fdX3UgYHyeFwGZCR1LBpWEYd9xxx+7du+fOfSYpKTEYDBKRaZoAgLouw+HA17sY0zA52X7lFdCYEav0L/7WqWEtQlGJaiQTMuxyxk+ZGDssICW3220dOlDYxAjgjoTMFgp5v97Z6EUKChhJIgRCBLQCwaZoJBEgIsN6HIBYM0YIo2IQlmBt2yCLoRpHuO8x7hEjZFzl4IVlhc4VMV0DEoiAlpBmuF7YFC1vqVIzNut6m5GcolJxTkTINWAMmAaMA2Nksxl+n6OiQk9NlppGpPD1Rh9CJMYQUHAGAMK04uLi/vznJ3bv3j1z5syEhISsrCyV7XkPHobjJwgJu3U10tOawELKyccN+RVd2V36fcAY1gfTwufHfr1cPXuAWrcYI2lb9xxTSqVOSBKkZDabteOb2NUCVFWDyCL0MM5kbl6shyPLQk2TgaBv0zab3U6SGDW7wocaCbFZRmzsycaaILxeUV2FGicAYpz5A6HTZ0DKaPJFpomc+fYdMPcfYg4nkLxITTxqjp3DBwUMXZZXgN8PPh/6vOD1Qp2XAiEKhammFrxe9AXQ50efH3x+8Nf/1+9Hnz9QW2Ub8isAYAwVTbZ9+w5vvvnmkSNHxo4dS1IigG/DFubzWwDOQdc0Q/JBJCmZYThvuiEcCkewR0JEDJmme9KNGGGDNTqMPr2lzQZSgetIkrjDLg4cDhzPa6BKCKmgcSlIc7is7TuC54qRc2XzUdPMmtozd96DO3ai29VQrrtw4UVazQQVJBpJN7aFsImmpaBeAtAQaj9dEylZSAJE1HXvd3tLpt1pq6kBTYcIMQqbVTqt0WS/eoC5YnHtwsW8zgcMYwDMGEi3GeNBIEkiN0YOy7jvt1C/lpdzrpZHZGRkqCBVmmbwi/WGxr26njz4mmaHRmlJwuRJBa8sNGpqQbMRAJlh0TozfswoAECGTS729LqqKqsVlZSBTY/YGV3j5ZXejZudXS8DKQA08LgjawmIpK7pZRXFv5+T+c/5tsQEaVm1G7dUzv0vfe8BzeVqwBCI6Dy+AtEFyncRrLUhdwBsRBvUbaTrkW4IoXnc5povSpesSP3NdGRgVddUvvN+3d9eclRXk24AScALEV20Rm6DKHnCuOQJ46SoF3e9yKgZi4ERthUAkETOEJsBwyI2TUpkzLtzF+3dh5xrnTq6enRvniqCSELYMzOMCddbry3VUu1AZNX69BvHG5kZKqdu4ur05CR94AC56n1u2Iks5S10m+7/92o56y7kGgBgZisBoKnOWJbudlv/+fzMkWNGThez4BztO+AkCifGm6kp/Gwx01gTlYsWP2PjfdasLlhWIzOrSBhEJCX3uLT4OMgXaqglgENjvkf/EHjvQy0jLXTgEDue59K1QFYWdzq0vNNgt0chyIgPlNEEtEmEojiERIwzdSBDZAxZ7MHrP4wxHvmqaYiMpIDmckasJ2bV/OtDLRS2LMsYPoTbDZLNs0vVmyf++rawy4lCIEBI0+JuntgUioxxdZ4bx5mcKWKWiqy4yyl37fZ9s0thadrlXYhzJFI5FpHU3C7X6TPs4/8Ye/e74tzBQMB2/yznLVPMutqGWJEipMrIqpEIWa1emjZbc9kCNQpFEcgSqGvIGNc0W8cOlmlhfdxPjNldTv2bXfDhp/YzBfaEOK+Q8S+/oPXtI3y+CCaHhERkCdT02DpfUy2JzCy12lolwpf4UXhEs45B8ewKCgP/+dzm9oR1W9zYUReAdIEzIHL3uhIHXyO8fgiF4PIunkEDobmlWQriixs2WOZ0oaAf6vM8YkwPhaveXKoui+vdSyQlgWlGs2SSRIaBCfE8IT5UUgZTbmr1p0dNl4vq8wNkDEtLkXPU9aJPV4eqq5nNFsNdIJmc1NiAEgCAukaBc5aQXj9q3Kr1Fnz0KQDogwYKIaOWBlUw6XZhchKz233l5e65f04aOQxIImOKtY2WCFdUocbNsor8pctFPVbMWmLORLzrpX8uTDNFrFr5L62kREqJOV1c/Xo38VhNb5ESEBPvuj3MmQiEjNEjuMPePAMckaTgLpf7zl+HAiHGEEACoJRSi3OH/7O2dud3AGBv11ofeZ1VU4eaFlsM4YjhomIx7vo2ixYAgNE5G3QNAUFKzemkTdvKlizPm3Zn2fKVuttNYTNClGNcSHJe2b0ZF5iRLokQkITQDFvt0rcrFi4+PGBo+HguACSOHW21ycJgCFisuwZuhv2V5fan5mTMvh+kxI4dSZKKtjS74VvyVuXLrx4fMkIWnuM2m2Lr/PyMQSJkzCwr9y1faffEhX1+57jR3DAuTMRXEVP8qGuhWxevvy7hxnEXiPTUxSnTbxN9eso6L3CuqDOSc4dpVjz7PEkCKdMee8SfloK1tajZgHPknJmmv6KCZkxrt+JNzekEoviB/azOl1F1Ddc0MAy7z181867QwUOXL1zANA2IGNc456K0XPTonnD9yNgURR3OUdeFpeAkkXHmdhvf7Sm/7+64Pr06PvY7soSRmZHwp9/5q2s0KVHjyDnjHL0+byjkmv9fWY/9H7IsYCzhhjGhODcGAsgZdzmNg4cqHnnA2a93hyceo+gTf+5lXmqJ27l5z5/U489ldDqRme0/djyykO7Ch1qstmHzmRcXXHz5mxBEVPP1zmNp7YpS2hVkZhdkdDqb0elc1mUnHSklry9VV1Vt3HK04xWnjeSzjpRTztTcrj2KX3tD1i+OiyyP27z1SOvO+fbkfHtybkLmqVtuD5WUqkvO/mXeMdBOJmXlDhnlPXhYLceOeVWpGjnzyB/yjMSzjuTTjqTcjHaFf3lWShn9lYgK5z1/PCEz30g4YyTmuVPzfnVt1aat0cWF6l1K3lh6PLVtviP5tDPlRKsOBU88LSyLVDvnrzb+6Q8pATF4tvDs4JEuf8Dy+cX46zv8662mIeJPottSImNlH3xUdfcDHsbJ5QJBRJKR8DEt/ZN/efr1BoBgSWndp5+Jc0V6difXqGvtqakNJPl6aqj/9JnApi3k8+k9rowffE2UBuHdf9D/7W6jUwfPoIFKBc8zA5EcoXrDZmvfAXS77L+62tUtJ4bBp8wB1u3dF9i4FUxTu/KKuOuGajYjZqkfEREi8x0+GtjxDWqafUBfV9cuTWiAP6vkiIREzs8+8KhY8rYtOTlQXZP07tLE8WN+wIJEtdnTpV2smq1c/XnFo3+ynT6rOx3MZgObDUJhX0pyqxVvOnv3bPaW8wl95wNjzfL+Ln36Nl2l3uTei545r5GWJdcQAf9IFnb9OK6tnHaHMy5O1vmCOV07bF7NDePi8MSPPoQEzkLFxWWLlplr18kzZ5nXx4nQH6hzu+IWvZI1eRIIoQalxS2rIhuGAQJCkz3DZD28eeGgLEr5RWxewPWPuKRuNNfIRXSuKbH8B9lJxkJFRWeGjHaVV4DbFSwtd73yYvr/YAXwJXYm2r4Mm77cPJF3UlZWgZDMMCi7Q0L/vnhpi0t//Lv/xIar+c42IznlMAoWvx3fo5unb+8fs8uLJAIiIU7ddJu+fiNPTYU6b6Bj+/Zb1mpuVyQejxYBGjceBZ8wZns+tYhSXWlZlkIEYi+ObUQqDJck0/TmZpRsFuhpDBoLqF/KG300XYD3j4iI51PxY8/EPle1E7vxXWTroJhXVsBhtA/R/jTPt4yOOzDgh4+ULlvu/nI9EPywgEJRjBk7+8cn8IsNPC0VCIKBoOeBezSPO8LHbnmJ1PnjGH0BpQRqjxW1dwBrrlf1J3nsdI0qIrvYi0QfF0EFlPpK2dIOgxfoeeyZZp8bVevzp2/smdg+XFByAABgz+ni+/sL5/7ybNbcJ0nKS9wcKyqYgr/MC7/2pjM1WRCh10v9eqdMm6wmLQLs/HbXn+c8jogpKSlLlixxOBxRg/7gQw8eOXIUiB5++OHx48crQvuqVatWrVp16tQpt9s9bNiwhx9+OCsrq6SkZNa9s/w+/7Rp0+64447o9o2PP/74jh07cnJy/vrcX2fePbO8vPyxxx8fOWLE88+/8MW6LwybLaoKpml2y8l5ecECNYLRPqxcufLjTz45fOiQrut9+/a9++67BwwYsG3btrlz52qaJilCWUJEzlk4bI0cOfKmmybNnDlT07TFb76p1sgXFBTcc88syzJfWbCgQ8eOU2+Z6vP6GGcMWWZm5vDhw6dMmaJpmpLH7Ece2bN7z7Rbp907a5Zpmrqu79y5c/GSJd/u3Cmk6NWz11133TVkyJBGwmspA6tcv/lUQqsznvSzTz6rMghpWi1uUyKltCyVrJg1tXm/ufeEI6UgMzu/VafCrOzjnoyKLzaobZ4UCfPTT/8dFfbq1aullOFwmIhOnDgRPT9//kuqVDRr1qwm8yMrK+vgwYOmafbq1QsA+vbtG917pbKyMj4+HgBmz55tWZbdbgeARYsWEdGUKVPPn2rdunVT3Y+28Oijj0bmrt2uFMJut3/zzTdrVq9pab7efPPkvfv2qe8HDx1SQ3LkyBF1ZsdXOwL+APCm+nrNNdcUFhSoR/fu3RsA7pl1r7p35cqV569BfPPNN9X2XhG73awYiCiYf/Zk+5zi9A4nnaknJ8/wHTnW6AJLSMuSlkWWiN0mpmrTluMDhp3UE85mZee36lTQunO+I+XUb+6LbvGiHrxmzeecc7vDzhj79fTpRKRK5y+//DIiOhwOzvkrr7xCRB988AEAaJr217/+9fTp01/t+OqK7t3VaxPR66+/zhhzuVx5eXmqA5999hki6rp+4MCBYDCYnpHBOV+2bBkRzZx5N+d86NBhBw4c2Ldv3/4DB/bu3Ru9UYnt5MmTmqZxzufOnVtSUnL69OnRo0cDwOU5OXV1dXv27Dl48OBXO3akpaVxzufPf+nw4cN79uwpLCzc+e23nHObYTty5Ihq8OixY3a7nXP+7bffBoKBlNQUzvnzzz9/6NChFStWKL289tpr1YAMHTqUc/7gww8T0clTJ10uFwBMmTL16NGjeXl5d9xxh5pAqreqqy1gKFJKIU6Nu6nAk1HUuvMZZ2pu264Fs/9YvXW7WV3TBPwQRKHikvJ/rz417Y5jiVln4zILszqfyehwNjO7MKnN8c49A2cLo9CA6ujq1WsAICkpyWazJSUnVVZWqu2Fr776akTMzMoEgH/8459EdMMNNzDGJkyYEH3c+vXr1Xw8eOhgeXm5esnXX39d/XrfffchYq/evaSUZWVl6enpALB06TIiuuuumQBww42Tmt9NzrKI6OtvvlaGdPv27er87t27Z8yY8bvf/S4UCqkz/kAgI6MVAHz8ySfR23d8vQMAuMYPHz4ckdzRY7quA8DOnTuDwWBScjIAfPjhh+rXtWvXaroOAFu2biGia665BgDue+ABInruuecAIDMzs7auVl0cCoWys7MB4Nm5zypqCBFpLeIRnDtHjQhs3Mqk1BLitUDAWrS4avnKyratZacOjsxMHh8HAFZNTSD/LDt2ggqLdSJXnIcQpWUiMk7gDYWTX3jW3jqzPkBotA12+/bt01LT1n6xdv369ZMnTz5y5MjOnTu7du2anZ19rvCcMnQHDx2UUg6/9loppWmamqb17dcvLS2tqKho67Yv75s1a9CgwV98sXbNmjX33HNPMBjcsGEDEU28caJa0nA+E6G46NzmLVuklAyRMd6vX1+Hw6GkRUTdr+ienZ2dm5s7efLkBx98cOzYsb169Vq+fHl96c1ijPm8PlU09/v9ys4bhtEs9YEaqDSRX4PBkJRSCHHttde2a9fuZF7e9i+3Dxk8pJ6YwADg++/3ImKfvn08bo+aTzab7VeDBuXl5e3a/V20asZaxHAB4m8YJ1qlo2mSlMS5lpRgNwz72XOOdZvlkrfD8/8Rnv9PWrLSuWW7o6LaGRfHEuIkEUhJgJzzQEWF8w+zkyYoxITFVo/VO4XCoSlTpgDAipUrEfGzzz6TUk6aNEntX8Q1TgC1tbUAkJiQoIqBnHOH3a48WXlpKRFNmTKZiLZ9+aXf79+3b9/x48dtNtvEiROjwmhUfwDYufOb4cOGXXfttcOHDx86dEhpaakK21SE4nK5Vr2zqmvXrkVFRY8//njPnj2HDRu2Zs0adQ3nqiqJ1MAPYiosomZYWs2VjVlkq3LOeUZ6OhGVlpdF6QWcMwCoqqoiouTkFBU3qY4lJCQQUVVVVTQQ1Vqq8pCURpss49ZbzL+9pKenStMkiwgQbDoYRnRNPUWDHGkxYIqQrGk8WFqGM6Zl/vmPJGSUG9mEw1tRWTl46JD09PQN69dXVlZ+/vnnADB58uQ//OlPACCExJikSjllNYKWEIioIoixY8ampqaWlZXt+X7Pjh07ELF///45OTmxobYqJ6mB7NQp+8YbJpiWBQA2w4iLj2+YxYwBQL++/Q4ePPjOO+98+OGHa9eu3bJly5YtW95+++3p06erfR+jFIHGbM1Gi5Xq1++0yBhHRCkEIuqaFnMXRtUmHArH3hYOhwHApuvRXKLFQF+JOu13D4Z7XwXV1cymR7aCIkKSqPyWECCEYi9FAmWmaYjB0jKYPq3tq39HhMZAUaNJGPD7W2dlTZo0KRgM/u35v+3atavr5V27X9m9vKwUAMLhEACkpaYhYm5uLiKapimEqKqqKi4uJqK2bdsCQFp62thx4xDxvffe37hhIxFNmjSpoXSJDVxeNSLdunV7cf78BQsWLFiw4IXnn4+vl5y65ty5c7t27crPPz19+vRPP/3022+/HTZ8OADMmzfPNM1IvNfcGn8RIbmApmmWZVmWxTmXks5fBxQxuX7fqfx8IurYoWO0KUECADJbZSDiyZN5KrtX9iD/TD4iZqRnNCTyLZN4EYj0hPiMJa/WZWZSZRXTNYzJRrGRPJhaxYQBn8/r1R//ffvF/+SGrUV8kiIpeygc/vWvfw0Af3/p7z6f79Zbb2PIfH4/AJhhEwCGDhtGRO+++25xcbHT6eScL3vrLZ/Pa3fY+w8YoOb25JtvJqK3li3bsnWLYTfGjx/fPAZbz9hulCzHwDQAsGLFin79+g0ePKSquhoAevTo8du772aMVVdV19XVXSATT4iPZ4wR0N69ezVN0zQtNzeXSCJiYmKikEIpicflVtTvF194saS4WLfZRo4cGSVwKKrnyFGjiOj777/ftGmzrus2m+3wocNfbd9ORNdeOzwqOe1CS0EYAylcOZdnfvZhyayH+PYddk8c2g0ZrWeoXWUAQQrp94VCQSuna9JTf04afz3ULyxuaVpwzjWN19XWDhgwoEvXLrkncg3DmDx5srJa6lcAePihh5a/9dapU6eGDRt2xx13nDx5aunSJSTp7rt/26F9e2W+hg4d2qZNm4KCAkQcOmxYp06dolvpMM455/UMa+KcHz1y5Pe//4MQFuNcCNG6TevfPfIoEClTOXHixKeeeqqwsHDSpIkzps/w+f0LX3tNSpl9WXZCQkJknTsC55zzCHWDMSal7Nq1a99+/XZ+883DDz989NgxjfNFbyySUl599cDs7OyqqmrOmNrCfNOmTfv279uyeTMAzHn8cRU0ck01qQHApIkT+/btu2vXrqlTpzz44IOGYSxc+Hp1VXX37t0nT5nSAPFc4i7JVjBY+MLLuTm9TzpTzxpJ5xwpha60QmfqWSPplJF0IrlN3q9GFL3yeqimNpK6tVAMVcHSxx9/oiZabm4uET319NMAMHjwIBUBt2nbBgD+/veX1S3r1q1r06ZNrNxvvfXWQCCgVi+oBqPZ+sKFC4lI5fUlJSUOpzOaid9yy7Tzp1BmVlaTTPyzzz7r0KFD7DWdO3f+/vvvo50vKyt3Ol0AsGzZWypGVzcePHiwW7dusTf26NHj2LFjRFRSWqLrjehGGRkZf3v++WibPXv2BIDf3nOP6kb+6dMDBw6Mvb5nz57Hjx+P3ez10upz9bhlqLLKu3W7uXdfoKBQBkOg2xwpyXp2J713D0+PHtymwcX+3xvKuxYVFW3fvl3TtJEjR7pcrvLy8i1btlzR7Yqul3cVQmzYsKG6urpPnz6dOnVSWlVRUfHFF1/k5uZ6PJ6BAwf279+/SYNnzpz5+uuvGWMjRoxQYRgihkKhdevW+Xz+AQP6t2/ffteuXXl5ebquIzJCQkCSMjExcfjw4U0Aw5qamq1btx49elRKmZOTM3z4cLfbHcUYw+Hw2s/X+gP+q6++ul27dlHkDBH9fv/69euPHj2KiDk5OSNGjDAMI3LL2rXhcFgFlomJid27d09OTo7ibZs3by4uLu7atWvPnj2VZhPRpk2bdu/ebVlW9+7dR44caRhGbPnikiur0Q1XLgxa/gx7z52/Ma1y2j9TCabZfXCb3xz3f3bjBXZHu5SmfmBNvH53pIZlYfVUALwYA+y8ZmQUBVd/Rus4KliIxeaVlYhGRue/cLTBJoh+bFMyppjZiCPYQmtRhTi/SnB+Dy96ozhv0+Pz+xkdgUvpw8/MQ/n/j5/t+H8AhGMoQwrtTbgAAAAASUVORK5CYII=" alt="MahaMovieStudio" style="height:30px;width:auto;display:block;">
         </div>
         <div>
-          <div style="font-size:15px;font-weight:800;">MOVIE STUDIO <span style="color:var(--gold);">V7</span></div>
-          <div style="font-size:10px;color:var(--text-2);">Real Hollywood VFX • 520+ Templates • हिंदी मूवी गाइड</div>
+          <div style="font-size:15px;font-weight:800;">MOVIE STUDIO <span style="color:var(--gold);">V9</span></div>
+          <div style="font-size:10px;color:var(--text-2);">Unlimited N-Split • Touch Drag/Resize • Green Screen • Real VFX</div>
         </div>
       </div>
       <div style="display:flex;gap:6px;align-items:center;">
@@ -851,6 +860,133 @@ body.easy-mode #btnRippleToggle, body.easy-mode #btnDetectBeats, body.easy-mode 
           <div class="hg-step"><span class="hg-num">8</span><div><b>एक्सपोर्ट करें:</b> हेडफोन लगाकर प्रीव्यू सुनें और <b>⬇ Export</b> से अपनी हॉलीवुड हॉरर फिल्म सेव करें।</div></div>
         </div>
         <div class="hg-tip">💡 <b>प्रो टिप:</b> भूत या ज़ॉम्बी दिखने से ठीक 1 सेकंड पहले ऑडियो को बिल्कुल शांत (Mute/Split) कर दें — अचानक साउंड और बिजली चमकने पर दर्शक सच में डर जाएंगे!</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!-- V8: PRO MULTI-LAYER PLACEMENT, SOURCE CROP, 3-SECTION SPLIT & GREEN SCREEN MODAL -->
+<div class="modal-backdrop" id="layerPlacementModal">
+  <div class="modal-box" style="width:680px;max-width:96vw;max-height:92dvh;">
+    <div class="modal-head">
+      <span id="lpModalTitle">📐 Layer Placement, 3-Section Split &amp; Green Screen</span>
+      <button class="icon-btn" id="btnCloseLayerPlacement">✕</button>
+    </div>
+    <div class="modal-body" style="gap:10px;">
+      <div id="lpSubInfo" style="font-size:11.5px;color:#bae6fd;background:rgba(6,182,212,0.1);border:1px solid rgba(6,182,212,0.35);border-radius:7px;padding:8px 10px;">
+        Neeche wali timeline ki video <b>Full Display</b> rahegi. Upar wali video/photo ko screen ke kis hisse mein, kis crop part ke saath, ya <b>Green Screen (Chroma Key)</b> mein show karna hai — yahan chunein:
+      </div>
+
+      <div class="prop-group" style="border-color:rgba(6,182,212,0.45);background:rgba(6,182,212,0.06);">
+        <div class="prop-title">🔢 Unlimited Sections Builder (Jitne Chahein Utne Sections Banayein!)</div>
+        <div style="display:flex;gap:6px;flex-wrap:wrap;align-items:center;">
+          <label style="font-size:11px;color:var(--text-1);">Total Sections:</label>
+          <input type="number" id="lpNSections" min="2" max="24" value="4" style="width:54px;padding:4px 6px;font-size:12px;">
+          <select id="lpNMode" style="padding:4px 7px;font-size:11.5px;">
+            <option value="grid">⊞ Auto Grid (2×2, 3×2, 3×3...)</option>
+            <option value="v">⫼ Vertical Strips (Side-by-Side)</option>
+            <option value="h">☰ Horizontal Strips (Top-to-Bottom)</option>
+          </select>
+          <button id="lpApplyAutoN" class="cyan" style="padding:5px 10px;font-size:11px;">✨ Auto-Split All Tracks</button>
+        </div>
+        <div style="display:flex;gap:6px;flex-wrap:wrap;align-items:center;margin-top:4px;">
+          <label style="font-size:11px;color:var(--text-1);">Assign Current Clip to Section #:</label>
+          <input type="number" id="lpNSlotIdx" min="1" max="24" value="1" style="width:54px;padding:4px 6px;font-size:12px;">
+          <button id="lpAssignSlotBtn" class="primary" style="padding:5px 10px;font-size:11px;">📐 Set This Clip to Section</button>
+        </div>
+        <div style="display:flex;gap:6px;flex-wrap:wrap;margin-top:4px;">
+          <button id="lpAuto3V" style="flex:1;min-width:140px;font-size:10.5px;padding:4px 6px;">⫼ Quick 3-Section Vertical</button>
+          <button id="lpAuto3H" style="flex:1;min-width:140px;font-size:10.5px;padding:4px 6px;">☰ Quick 3-Section Horizontal</button>
+        </div>
+      </div>
+
+      <div class="prop-group">
+        <div class="prop-title">1. Screen Position / Multi-Section Layout (Kis Hisse Mein Dikhe)</div>
+        <div class="lp-grid" id="lpPresetGrid">
+          <button class="lp-btn" data-reg="full"><span class="lp-mini"><i style="inset:0;"></i></span>Full Display</button>
+          <button class="lp-btn" data-reg="pip_tr"><span class="lp-mini"><i style="top:2px;right:2px;width:44%;height:44%;"></i></span>PiP Top-Right</button>
+          <button class="lp-btn" data-reg="pip_tl"><span class="lp-mini"><i style="top:2px;left:2px;width:44%;height:44%;"></i></span>PiP Top-Left</button>
+          <button class="lp-btn" data-reg="pip_br"><span class="lp-mini"><i style="bottom:2px;right:2px;width:44%;height:44%;"></i></span>PiP Bot-Right</button>
+          <button class="lp-btn" data-reg="pip_bl"><span class="lp-mini"><i style="bottom:2px;left:2px;width:44%;height:44%;"></i></span>PiP Bot-Left</button>
+          <button class="lp-btn" data-reg="pip_center"><span class="lp-mini"><i style="top:22%;left:22%;width:56%;height:56%;"></i></span>PiP Center</button>
+          <button class="lp-btn" data-reg="split2_l"><span class="lp-mini"><i style="top:0;left:0;width:49%;height:100%;"></i></span>2-Split Left</button>
+          <button class="lp-btn" data-reg="split2_r"><span class="lp-mini"><i style="top:0;right:0;width:49%;height:100%;"></i></span>2-Split Right</button>
+          <button class="lp-btn" data-reg="split2_t"><span class="lp-mini"><i style="top:0;left:0;width:100%;height:49%;"></i></span>2-Split Top</button>
+          <button class="lp-btn" data-reg="split2_b"><span class="lp-mini"><i style="bottom:0;left:0;width:100%;height:49%;"></i></span>2-Split Bot</button>
+          <button class="lp-btn" data-reg="split3_v1"><span class="lp-mini"><i style="top:0;left:0;width:32%;height:100%;"></i></span>3-Sec Left</button>
+          <button class="lp-btn" data-reg="split3_v2"><span class="lp-mini"><i style="top:0;left:34%;width:32%;height:100%;"></i></span>3-Sec Mid</button>
+          <button class="lp-btn" data-reg="split3_v3"><span class="lp-mini"><i style="top:0;right:0;width:32%;height:100%;"></i></span>3-Sec Right</button>
+          <button class="lp-btn" data-reg="split3_h1"><span class="lp-mini"><i style="top:0;left:0;width:100%;height:32%;"></i></span>3-Strip Top</button>
+          <button class="lp-btn" data-reg="split3_h2"><span class="lp-mini"><i style="top:34%;left:0;width:100%;height:32%;"></i></span>3-Strip Mid</button>
+          <button class="lp-btn" data-reg="split3_h3"><span class="lp-mini"><i style="bottom:0;left:0;width:100%;height:32%;"></i></span>3-Strip Bot</button>
+          <button class="lp-btn" data-reg="grid3_big_l"><span class="lp-mini"><i style="top:0;left:0;width:58%;height:100%;"></i></span>3-Grid Big L</button>
+          <button class="lp-btn" data-reg="grid3_rt"><span class="lp-mini"><i style="top:0;right:0;width:40%;height:49%;"></i></span>3-Grid Top-R</button>
+          <button class="lp-btn" data-reg="grid3_rb"><span class="lp-mini"><i style="bottom:0;right:0;width:40%;height:49%;"></i></span>3-Grid Bot-R</button>
+          <button class="lp-btn" data-reg="quad_tl"><span class="lp-mini"><i style="top:0;left:0;width:49%;height:49%;"></i></span>4-Quad Q1</button>
+        </div>
+      </div>
+
+      <div class="grid-2" style="gap:8px;">
+        <div class="prop-group">
+          <div class="prop-title">2. Source Crop (Video/Photo ka Konsa Part Dikhe)</div>
+          <div class="prop-row"><label>Crop Left</label><input type="range" id="lpCropL" min="0" max="45" value="0"><span class="prop-val" id="lpCropLV">0%</span></div>
+          <div class="prop-row"><label>Crop Right</label><input type="range" id="lpCropR" min="0" max="45" value="0"><span class="prop-val" id="lpCropRV">0%</span></div>
+          <div class="prop-row"><label>Crop Top</label><input type="range" id="lpCropT" min="0" max="45" value="0"><span class="prop-val" id="lpCropTV">0%</span></div>
+          <div class="prop-row"><label>Crop Bot</label><input type="range" id="lpCropB" min="0" max="45" value="0"><span class="prop-val" id="lpCropBV">0%</span></div>
+          <div class="prop-row"><label>Mask Shape</label>
+            <select id="lpMaskShape">
+              <option value="rect">Rectangle</option>
+              <option value="rounded">Rounded Card</option>
+              <option value="circle">Circle / Spotlight</option>
+              <option value="diamond">Diamond</option>
+              <option value="heart">Heart Shape</option>
+            </select>
+          </div>
+          <div class="prop-row"><label>Frame Border</label>
+            <select id="lpBorderCol">
+              <option value="none">No Border</option>
+              <option value="#ffffff">White Pro Frame</option>
+              <option value="#f59e0b">Golden Frame</option>
+              <option value="#06b6d4">Neon Cyan Frame</option>
+              <option value="#ef4444">Crimson Frame</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="prop-group">
+          <div class="prop-title">3. 🟢 Green Screen (Chroma Key) &amp; Blend</div>
+          <label style="display:flex;align-items:center;gap:6px;font-size:12px;font-weight:700;color:#4ade80;cursor:pointer;margin-bottom:4px;">
+            <input type="checkbox" id="lpCkEnabled"> 🟢 Enable Green Screen (Chroma Key)
+          </label>
+          <div style="display:flex;gap:5px;margin-bottom:4px;">
+            <button type="button" id="lpCkGreen" style="flex:1;padding:3px;font-size:10px;background:#14532d;">🟢 Green</button>
+            <button type="button" id="lpCkBlue" style="flex:1;padding:3px;font-size:10px;background:#1e3a8a;">🔵 Blue</button>
+            <button type="button" id="lpCkBlack" style="flex:1;padding:3px;font-size:10px;background:#111827;">⚫ Black</button>
+            <input type="color" id="lpCkColor" value="#00b140" style="width:34px;height:24px;padding:0;">
+          </div>
+          <div class="prop-row"><label>Strength</label><input type="range" id="lpCkTol" min="15" max="155" value="72"><span class="prop-val" id="lpCkTolV">72</span></div>
+          <div class="prop-row"><label>Smoothness</label><input type="range" id="lpCkSmooth" min="0" max="45" value="18"><span class="prop-val" id="lpCkSmoothV">18</span></div>
+          <label style="display:flex;align-items:center;gap:6px;font-size:11px;cursor:pointer;"><input type="checkbox" id="lpCkSpill" checked> Edge Spill Removal (No Green Halo)</label>
+          <div class="prop-row" style="margin-top:4px;"><label>Blend Mode</label>
+            <select id="lpBlend">
+              <option value="source-over">Normal (Over)</option>
+              <option value="screen">Screen (Glow/VFX)</option>
+              <option value="overlay">Overlay (Cinematic)</option>
+              <option value="multiply">Multiply (Shadow)</option>
+              <option value="lighter">Add (Brighter)</option>
+            </select>
+          </div>
+          <div class="prop-row"><label>Opacity</label><input type="range" id="lpOpacity" min="10" max="100" value="100"><span class="prop-val" id="lpOpacityV">100%</span></div>
+        </div>
+      </div>
+
+      <div style="display:flex;justify-content:space-between;align-items:center;gap:8px;flex-wrap:wrap;padding-top:4px;border-top:1px solid var(--border);">
+        <span style="font-size:10.5px;color:var(--text-2);">💡 Tip: Preview screen par direct finger/mouse se drag karke bhi position set kar sakte hain!</span>
+        <div style="display:flex;gap:6px;">
+          <button id="lpApplyToAllTrack">Apply to Whole Track</button>
+          <button id="lpApplyBtn" class="primary" style="padding:7px 16px;">✓ Apply &amp; Save</button>
+        </div>
       </div>
     </div>
   </div>
@@ -1734,6 +1870,65 @@ function renderFrameAt(ctx, w, h, time) {
             const tv = clamp((clip.trimStart||0) + lt*(clip.speed||1), 0, Math.max(0.1, m.duration-0.05));
             if (Math.abs(m.el.currentTime - tv) > 0.18) try { m.el.currentTime = tv; } catch (e) {}
           }
+          const mw = m.width || m.el.videoWidth || m.el.naturalWidth || w;
+          const mh = m.height || m.el.videoHeight || m.el.naturalHeight || h;
+          const sc = clip.srcCrop || { l:0, r:0, t:0, b:0 };
+          const sx = Math.round(mw * clamp(sc.l||0, 0, 45) / 100);
+          const sy = Math.round(mh * clamp(sc.t||0, 0, 45) / 100);
+          const sw = Math.max(8, Math.round(mw * (100 - clamp(sc.l||0,0,45) - clamp(sc.r||0,0,45)) / 100));
+          const sh = Math.max(8, Math.round(mh * (100 - clamp(sc.t||0,0,45) - clamp(sc.b||0,0,45)) / 100));
+
+          // Optional Real-Time Green Screen / Chroma Key Processing
+          let drawSrc = m.el, srcX = sx, srcY = sy, srcW = sw, srcH = sh;
+          if (clip.chromaKey && clip.chromaKey.enabled) {
+            const ckW = Math.min(480, Math.max(64, Math.round(w * 0.65)));
+            const ckH = Math.max(64, Math.round(ckW * (sh / Math.max(1, sw))));
+            if (offCanvas.width !== ckW || offCanvas.height !== ckH) { offCanvas.width = ckW; offCanvas.height = ckH; }
+            offCtx.clearRect(0, 0, ckW, ckH);
+            offCtx.drawImage(m.el, sx, sy, sw, sh, 0, 0, ckW, ckH);
+            try {
+              const imgD = offCtx.getImageData(0, 0, ckW, ckH), d = imgD.data;
+              const hex = (clip.chromaKey.color || '#00b140').replace('#','');
+              const kr = parseInt(hex.slice(0,2),16)||0, kg = parseInt(hex.slice(2,4),16)||177, kb = parseInt(hex.slice(4,6),16)||64;
+              const tol = clip.chromaKey.tolerance || 72, sm = Math.max(1, clip.chromaKey.smooth || 18);
+              const spill = clip.chromaKey.spill !== false;
+              for (let i = 0; i < d.length; i += 4) {
+                const r = d[i], g = d[i+1], b = d[i+2];
+                const dist = Math.hypot(r - kr, g - kg, b - kb);
+                if (dist < tol) { d[i+3] = 0; }
+                else if (dist < tol + sm) {
+                  d[i+3] = Math.round(d[i+3] * ((dist - tol) / sm));
+                  if (spill && kg > kr + 20 && kg > kb + 20 && g > Math.max(r,b)) d[i+1] = Math.round((r+b)*0.5);
+                } else if (spill && kg > kr + 25 && kg > kb + 25 && g > Math.max(r,b) + 18) {
+                  d[i+1] = Math.round(g * 0.72 + Math.max(r,b) * 0.28);
+                }
+              }
+              offCtx.putImageData(imgD, 0, 0);
+              drawSrc = offCanvas; srcX = 0; srcY = 0; srcW = ckW; srcH = ckH;
+            } catch (e) {}
+          }
+
+          // Multi-Section Region / Custom Unlimited Box / PiP / Shape Mask (V9 Pro Layering)
+          const regKey = clip.regionPreset || 'full';
+          if (clip.customBox || regKey !== 'full' || (clip.maskShape && clip.maskShape !== 'rect') || (clip.borderCol && clip.borderCol !== 'none') || sc.l || sc.r || sc.t || sc.b || (clip.chromaKey && clip.chromaKey.enabled)) {
+            const box = clip.customBox
+              ? { x: clip.customBox.x * w, y: clip.customBox.y * h, w: clip.customBox.w * w, h: clip.customBox.h * h }
+              : getRegionBoxCoords(regKey, w, h);
+            const bx = box.x - w/2, by = box.y - h/2, bw = box.w, bh = box.h;
+            const bcx = bx + bw/2, bcy = by + bh/2;
+            const shp = clip.maskShape || 'rect';
+            ctx.save();
+            buildShapeMaskPath(ctx, shp, bx, by, bw, bh, bcx, bcy);
+            ctx.clip();
+            const fitC = Math.max(bw / Math.max(1, srcW), bh / Math.max(1, srcH));
+            const rw = srcW * fitC, rh = srcH * fitC;
+            ctx.drawImage(drawSrc, srcX, srcY, srcW, srcH, bcx - rw/2, bcy - rh/2, rw, rh);
+            ctx.restore();
+            if (clip.borderCol && clip.borderCol !== 'none') {
+              ctx.save(); buildShapeMaskPath(ctx, shp, bx+2, by+2, bw-4, bh-4, bcx, bcy);
+              ctx.strokeStyle = clip.borderCol; ctx.lineWidth = 4; ctx.stroke(); ctx.restore();
+            }
+          } else {
           const lay = clip.layoutMode || 'full';
           const cover = Math.max(w/(m.width||w), h/(m.height||h));
           const dw = (m.width||w)*cover, dh = (m.height||h)*cover;
@@ -1794,6 +1989,7 @@ function renderFrameAt(ctx, w, h, time) {
           } else {
             ctx.drawImage(m.el, -dw/2, -dh/2, dw, dh);
           }
+          }
           if (ti === 'flash_white' && tp < 1) { ctx.fillStyle = `rgba(255,255,255,${(1-tp)*0.9})`; ctx.fillRect(-w/2,-h/2,w,h); }
           if (ti === 'flash_black' && tp < 1) { ctx.fillStyle = `rgba(0,0,0,${(1-tp)*0.95})`; ctx.fillRect(-w/2,-h/2,w,h); }
         }
@@ -1809,6 +2005,34 @@ function renderFrameAt(ctx, w, h, time) {
   }
   if (State.cinemaBars) { const bh = Math.round(h*0.115); ctx.fillStyle='#000'; ctx.fillRect(0,0,w,bh); ctx.fillRect(0,h-bh,w,bh); }
   if (ctx === pCtx && State.safeGuides) { ctx.strokeStyle='rgba(245,158,11,0.55)'; ctx.strokeRect(w*0.08,h*0.12,w*0.84,h*0.72); }
+  if (ctx === pCtx && !State.playing && State.canvasMode !== 'draw') {
+    const sel = getSelectedClip();
+    if (sel && (sel.kind === 'video' || sel.kind === 'image') && time >= sel.start && time <= sel.start + sel.duration) {
+      const sb = getClipScreenBox(sel, w, h);
+      ctx.save();
+      ctx.strokeStyle = '#38bdf8'; ctx.lineWidth = 2; ctx.setLineDash([6, 4]);
+      ctx.strokeRect(sb.x, sb.y, sb.w, sb.h); ctx.setLineDash([]);
+      // 8 Touch-Friendly Resize Handles (4 corners + 4 edges)
+      const hs = Math.max(8, Math.round(Math.min(w, h) * 0.022));
+      const pts = [
+        [sb.x, sb.y], [sb.x + sb.w, sb.y], [sb.x, sb.y + sb.h], [sb.x + sb.w, sb.y + sb.h],
+        [sb.x + sb.w/2, sb.y], [sb.x + sb.w/2, sb.y + sb.h], [sb.x, sb.y + sb.h/2], [sb.x + sb.w, sb.y + sb.h/2]
+      ];
+      pts.forEach(([hx, hy], idx) => {
+        ctx.fillStyle = idx < 4 ? '#f59e0b' : '#38bdf8';
+        ctx.strokeStyle = '#090b10'; ctx.lineWidth = 1.8;
+        ctx.beginPath(); ctx.arc(hx, hy, idx < 4 ? hs : hs * 0.78, 0, Math.PI * 2); ctx.fill(); ctx.stroke();
+      });
+      // Live Size & Position Tag
+      const lbl = `${Math.round((sb.w/w)*100)}% × ${Math.round((sb.h/h)*100)}%  (Drag / Resize)`;
+      ctx.font = '700 11px system-ui'; const tw = ctx.measureText(lbl).width + 12;
+      const ly = Math.max(4, sb.y - 22);
+      ctx.fillStyle = 'rgba(9,12,18,0.85)'; ctx.fillRect(Math.max(4, sb.x), ly, tw, 18);
+      ctx.fillStyle = '#fef08a'; ctx.textAlign = 'left'; ctx.textBaseline = 'middle';
+      ctx.fillText(lbl, Math.max(4, sb.x) + 6, ly + 9);
+      ctx.restore();
+    }
+  }
   ctx.restore();
 }
 
@@ -1935,12 +2159,18 @@ async function handleDirectTrackImport(files) {
 // ============================================================================
 // MULTI-TRACK TIMELINE + TRACK-SPECIFIC '+' + INLINE '+' + FILMSTRIP
 // ============================================================================
-function addTrack(type = 'video') {
+function addTrack(type = 'video', askPlacement = false) {
   pushHistory();
+  const vidCount = State.tracks.filter(t => t.type === 'video' || t.type === 'overlay').length;
   const n = State.tracks.filter(t => t.type === type).length + 1;
-  const tr = { id:uid('tr'), type, name:`${type.toUpperCase()} ${n}`, hidden:false, locked:false, muted:false, solo:false, volume:1 };
+  const defReg = (type === 'video' || type === 'overlay') && vidCount >= 1 ? (vidCount === 1 ? 'pip_tr' : 'split3_v3') : 'full';
+  const tr = { id:uid('tr'), type, name:`${type.toUpperCase()} ${n}`, hidden:false, locked:false, muted:false, solo:false, volume:1, defaultLayerCfg:{ regionPreset:defReg, srcCrop:{l:0,r:0,t:0,b:0}, maskShape:'rect', borderCol:defReg==='full'?'none':'#ffffff', blendMode:'source-over', opacity:1, chromaKey:{enabled:false,color:'#00b140',tolerance:72,smooth:18,spill:true} } };
   if (type === 'audio' || type === 'music') State.tracks.push(tr); else State.tracks.unshift(tr);
-  renderTimeline(); toast(`Added ${tr.name}`, 'success'); return tr;
+  renderTimeline(); toast(`Added ${tr.name}`, 'success');
+  if (askPlacement && (type === 'video' || type === 'overlay') && vidCount >= 1) {
+    setTimeout(() => openLayerPlacementModal(null, tr), 80);
+  }
+  return tr;
 }
 function findOrCreateTrack(type) { return State.tracks.find(t => t.type === type && !t.locked) || addTrack(type); }
 
@@ -1951,7 +2181,8 @@ function addClipToTimeline(clipData, trackType = 'video') {
   if (!tr) tr = findOrCreateTrack(trackType);
   const startT = (State.targetAddTime !== null && State.targetAddTime !== undefined) ? State.targetAddTime : State.currentTime;
   State.targetAddTime = null;
-  const clip = Object.assign({
+  const tCfg = (tr && tr.defaultLayerCfg && (clipData.kind==='video'||clipData.kind==='image')) ? JSON.parse(JSON.stringify(tr.defaultLayerCfg)) : {};
+  const clip = Object.assign(tCfg, {
     id:uid('clip'), trackId:tr.id, name:'Clip', kind:'bg', start:Math.max(0, Number(startT.toFixed(2))), duration:4,
     trimStart:0, x:0, y:0, scale:1, rotation:0, opacity:1, flipH:false, flipV:false, speed:1, volume:1, blendMode:'source-over', animPreset:'none', fx:{}, keyframes:[]
   }, clipData);
@@ -2795,7 +3026,7 @@ let allowExit = false;
 const pushGuard = () => { try { history.pushState({ maha:1 }, '', location.href); } catch (e) {} };
 pushGuard();
 function handleBack() {
-  for (const id of ['dialogModal','hindiGuideModal','tplUseModal','capcutTplModal','audioCutterModal','exportDoneModal','exportModal','settingsModal','trackAddModal','newTrackModal']) {
+  for (const id of ['dialogModal','layerPlacementModal','hindiGuideModal','tplUseModal','capcutTplModal','audioCutterModal','exportDoneModal','exportModal','settingsModal','trackAddModal','newTrackModal']) {
     if ($(id)?.classList.contains('open')) { $(id).classList.remove('open'); return; }
   }
   if (State.canvasMode) { $('btnCanvasModeCancel').click(); return; }
@@ -2823,7 +3054,7 @@ $('btnExportModal').addEventListener('click', () => { $('expAspect').value = Sta
 $('btnCloseExport').addEventListener('click', () => $('exportModal').classList.remove('open'));
 $('btnOpenNewTrackModal').addEventListener('click', () => $('newTrackModal').classList.add('open'));
 $('btnCloseNewTrack').addEventListener('click', () => $('newTrackModal').classList.remove('open'));
-document.querySelectorAll('#newTrackGrid [data-nt]').forEach(b => b.addEventListener('click', () => { addTrack(b.dataset.nt); $('newTrackModal').classList.remove('open'); }));
+document.querySelectorAll('#newTrackGrid [data-nt]').forEach(b => b.addEventListener('click', () => { $('newTrackModal').classList.remove('open'); addTrack(b.dataset.nt, true); }));
 $('previewResSelect').addEventListener('change', updatePreviewDimensions);
 $('aspectBadge').addEventListener('click', () => { const cs = ['16:9','9:16','1:1']; State.aspect = cs[(cs.indexOf(State.aspect)+1)%3]; updatePreviewDimensions(); });
 $('btnSafeGuides').addEventListener('click', e => { State.safeGuides = !State.safeGuides; e.currentTarget.classList.toggle('active', State.safeGuides); renderFrame(); });
@@ -3114,7 +3345,328 @@ $('mmOpenHindiGuide')?.addEventListener('click', () => openHindiGuide('features'
 $('btnCloseHindiGuide')?.addEventListener('click', () => $('hindiGuideModal').classList.remove('open'));
 document.querySelectorAll('#hgTabs .hg-tab').forEach(b => b.addEventListener('click', () => openHindiGuide(b.dataset.hg)));
 
-// Init V7 Studio
+
+// ============================================================================
+// V8: PRO MULTI-LAYER PLACEMENT, 3-SECTION SPLIT, SOURCE CROP, CHROMA KEY & CANVAS DRAG
+// ============================================================================
+function getRegionBoxCoords(reg, w, h) {
+  const m = 4;
+  switch (reg) {
+    case 'pip_tl': return { x: w*0.04, y: h*0.04, w: w*0.38, h: h*0.38 };
+    case 'pip_tr': return { x: w*0.58, y: h*0.04, w: w*0.38, h: h*0.38 };
+    case 'pip_bl': return { x: w*0.04, y: h*0.58, w: w*0.38, h: h*0.38 };
+    case 'pip_br': return { x: w*0.58, y: h*0.58, w: w*0.38, h: h*0.38 };
+    case 'pip_center': return { x: w*0.2, y: h*0.2, w: w*0.6, h: h*0.6 };
+    case 'split2_l': return { x: 0, y: 0, w: w/2 - m/2, h };
+    case 'split2_r': return { x: w/2 + m/2, y: 0, w: w/2 - m/2, h };
+    case 'split2_t': return { x: 0, y: 0, w, h: h/2 - m/2 };
+    case 'split2_b': return { x: 0, y: h/2 + m/2, w, h: h/2 - m/2 };
+    case 'split3_v1': return { x: 0, y: 0, w: w/3 - m/2, h };
+    case 'split3_v2': return { x: w/3 + m/2, y: 0, w: w/3 - m, h };
+    case 'split3_v3': return { x: (2*w)/3 + m/2, y: 0, w: w/3 - m/2, h };
+    case 'split3_h1': return { x: 0, y: 0, w, h: h/3 - m/2 };
+    case 'split3_h2': return { x: 0, y: h/3 + m/2, w, h: h/3 - m };
+    case 'split3_h3': return { x: 0, y: (2*h)/3 + m/2, w, h: h/3 - m/2 };
+    case 'grid3_big_l': return { x: 0, y: 0, w: w*0.58 - m/2, h };
+    case 'grid3_rt': return { x: w*0.58 + m/2, y: 0, w: w*0.42 - m/2, h: h/2 - m/2 };
+    case 'grid3_rb': return { x: w*0.58 + m/2, y: h/2 + m/2, w: w*0.42 - m/2, h: h/2 - m/2 };
+    case 'quad_tl': return { x: 0, y: 0, w: w/2 - m/2, h: h/2 - m/2 };
+    case 'quad_tr': return { x: w/2 + m/2, y: 0, w: w/2 - m/2, h: h/2 - m/2 };
+    case 'quad_bl': return { x: 0, y: h/2 + m/2, w: w/2 - m/2, h: h/2 - m/2 };
+    case 'quad_br': return { x: w/2 + m/2, y: h/2 + m/2, w: w/2 - m/2, h: h/2 - m/2 };
+    default: return { x: 0, y: 0, w, h };
+  }
+}
+
+function buildShapeMaskPath(ctx, shp, x, y, w, h, cx, cy) {
+  ctx.beginPath();
+  if (shp === 'circle') {
+    ctx.arc(cx, cy, Math.min(w, h)/2, 0, Math.PI*2);
+  } else if (shp === 'rounded') {
+    const r = Math.min(w, h)*0.12;
+    ctx.moveTo(x+r, y); ctx.lineTo(x+w-r, y); ctx.quadraticCurveTo(x+w, y, x+w, y+r);
+    ctx.lineTo(x+w, y+h-r); ctx.quadraticCurveTo(x+w, y+h, x+w-r, y+h);
+    ctx.lineTo(x+r, y+h); ctx.quadraticCurveTo(x, y+h, x, y+h-r);
+    ctx.lineTo(x, y+r); ctx.quadraticCurveTo(x, y, x+r, y); ctx.closePath();
+  } else if (shp === 'diamond') {
+    ctx.moveTo(cx, y); ctx.lineTo(x+w, cy); ctx.lineTo(cx, y+h); ctx.lineTo(x, cy); ctx.closePath();
+  } else if (shp === 'heart') {
+    const s = Math.min(w, h)*0.48;
+    ctx.moveTo(cx, cy + s*0.75);
+    ctx.bezierCurveTo(cx - s*1.3, cy - s*0.1, cx - s*0.7, cy - s*1.1, cx, cy - s*0.25);
+    ctx.bezierCurveTo(cx + s*0.7, cy - s*1.1, cx + s*1.3, cy - s*0.1, cx, cy + s*0.75); ctx.closePath();
+  } else {
+    ctx.rect(x, y, w, h);
+  }
+}
+
+let lpTargetClip = null, lpTargetTrack = null, lpChosenReg = 'full';
+
+function openLayerPlacementModal(clip = null, track = null) {
+  lpTargetClip = clip || getSelectedClip();
+  lpTargetTrack = track || (lpTargetClip ? State.tracks.find(t => t.id === lpTargetClip.trackId) : null);
+  const cfg = lpTargetClip || (lpTargetTrack && lpTargetTrack.defaultLayerCfg) || {};
+  lpChosenReg = cfg.regionPreset || 'full';
+  $('lpModalTitle').textContent = track && !clip
+    ? `📐 New Track "${track.name}" — Display Position & Chroma`
+    : `📐 Layer / Split / Chroma — ${lpTargetClip ? lpTargetClip.name : 'Track'}`;
+  document.querySelectorAll('#lpPresetGrid .lp-btn').forEach(b => b.classList.toggle('active', b.dataset.reg === lpChosenReg));
+  const sc = cfg.srcCrop || { l:0, r:0, t:0, b:0 };
+  [['lpCropL',sc.l||0],['lpCropR',sc.r||0],['lpCropT',sc.t||0],['lpCropB',sc.b||0]].forEach(([id,v]) => { $(id).value = v; $(id+'V').textContent = v + '%'; });
+  $('lpMaskShape').value = cfg.maskShape || 'rect';
+  $('lpBorderCol').value = cfg.borderCol || 'none';
+  const ck = cfg.chromaKey || { enabled:false, color:'#00b140', tolerance:72, smooth:18, spill:true };
+  $('lpCkEnabled').checked = !!ck.enabled;
+  $('lpCkColor').value = ck.color || '#00b140';
+  $('lpCkTol').value = ck.tolerance || 72; $('lpCkTolV').textContent = $('lpCkTol').value;
+  $('lpCkSmooth').value = ck.smooth || 18; $('lpCkSmoothV').textContent = $('lpCkSmooth').value;
+  $('lpCkSpill').checked = ck.spill !== false;
+  $('lpBlend').value = cfg.blendMode || 'source-over';
+  const op = Math.round((cfg.opacity ?? 1) * 100);
+  $('lpOpacity').value = op; $('lpOpacityV').textContent = op + '%';
+  $('layerPlacementModal').classList.add('open');
+}
+
+function collectLayerCfgFromModal() {
+  return {
+    regionPreset: lpChosenReg,
+    srcCrop: { l:+$('lpCropL').value, r:+$('lpCropR').value, t:+$('lpCropT').value, b:+$('lpCropB').value },
+    maskShape: $('lpMaskShape').value,
+    borderCol: $('lpBorderCol').value,
+    blendMode: $('lpBlend').value,
+    opacity: (+$('lpOpacity').value) / 100,
+    chromaKey: {
+      enabled: $('lpCkEnabled').checked,
+      color: $('lpCkColor').value,
+      tolerance: +$('lpCkTol').value,
+      smooth: +$('lpCkSmooth').value,
+      spill: $('lpCkSpill').checked
+    }
+  };
+}
+
+function applyLayerCfg(applyWholeTrack = false) {
+  const cfg = collectLayerCfgFromModal();
+  pushHistory();
+  if (lpTargetTrack) lpTargetTrack.defaultLayerCfg = JSON.parse(JSON.stringify(cfg));
+  if (applyWholeTrack && lpTargetTrack) {
+    State.clips.filter(c => c.trackId === lpTargetTrack.id).forEach(c => Object.assign(c, JSON.parse(JSON.stringify(cfg))));
+  } else if (lpTargetClip) {
+    Object.assign(lpTargetClip, JSON.parse(JSON.stringify(cfg)));
+  }
+  $('layerPlacementModal').classList.remove('open');
+  renderTimeline(); renderInspector(); renderFrame();
+  toast(cfg.chromaKey.enabled ? '🟢 Green Screen + Layer Applied!' : `📐 Layer "${cfg.regionPreset}" Applied!`, 'success');
+}
+
+function autoArrange3Section(orientation = 'v') {
+  const vTracks = State.tracks.filter(t => t.type === 'video' || t.type === 'overlay').reverse(); // bottom -> top
+  if (vTracks.length < 2) return toast('Pehle "+ Track" se 2 ya 3 Video/Photo tracks banayein!', 'error');
+  pushHistory();
+  const regs = orientation === 'v'
+    ? (vTracks.length === 2 ? ['split2_l','split2_r'] : ['split3_v1','split3_v2','split3_v3'])
+    : (vTracks.length === 2 ? ['split2_t','split2_b'] : ['split3_h1','split3_h2','split3_h3']);
+  vTracks.slice(0, regs.length).forEach((tr, idx) => {
+    const r = regs[idx];
+    tr.defaultLayerCfg = Object.assign(tr.defaultLayerCfg || {}, { regionPreset: r, borderCol: '#ffffff' });
+    State.clips.filter(c => c.trackId === tr.id).forEach(c => { c.regionPreset = r; c.borderCol = '#ffffff'; c.x = 0; c.y = 0; });
+  });
+  $('layerPlacementModal').classList.remove('open');
+  renderTimeline(); renderInspector(); renderFrame();
+  toast(`✨ ${Math.min(vTracks.length, 3)}-Section ${orientation==='v'?'Vertical':'Horizontal'} Split Ready!`, 'success');
+}
+
+$('cqLayer')?.addEventListener('click', () => openLayerPlacementModal(getSelectedClip()));
+$('btnCloseLayerPlacement')?.addEventListener('click', () => $('layerPlacementModal').classList.remove('open'));
+document.querySelectorAll('#lpPresetGrid .lp-btn').forEach(b => b.addEventListener('click', () => {
+  lpChosenReg = b.dataset.reg;
+  document.querySelectorAll('#lpPresetGrid .lp-btn').forEach(x => x.classList.toggle('active', x === b));
+}));
+['lpCropL','lpCropR','lpCropT','lpCropB'].forEach(id => $(id)?.addEventListener('input', e => $(id+'V').textContent = e.target.value + '%'));
+$('lpCkTol')?.addEventListener('input', e => $('lpCkTolV').textContent = e.target.value);
+$('lpCkSmooth')?.addEventListener('input', e => $('lpCkSmoothV').textContent = e.target.value);
+$('lpOpacity')?.addEventListener('input', e => $('lpOpacityV').textContent = e.target.value + '%');
+$('lpCkGreen')?.addEventListener('click', () => { $('lpCkColor').value = '#00b140'; $('lpCkEnabled').checked = true; });
+$('lpCkBlue')?.addEventListener('click', () => { $('lpCkColor').value = '#0047ff'; $('lpCkEnabled').checked = true; });
+$('lpCkBlack')?.addEventListener('click', () => { $('lpCkColor').value = '#000000'; $('lpCkEnabled').checked = true; });
+$('lpApplyBtn')?.addEventListener('click', () => applyLayerCfg(false));
+$('lpApplyToAllTrack')?.addEventListener('click', () => applyLayerCfg(true));
+$('lpAuto3V')?.addEventListener('click', () => autoArrange3Section('v'));
+$('lpAuto3H')?.addEventListener('click', () => autoArrange3Section('h'));
+
+// V9: Unlimited N-Section Split Helper + Direct Finger/Mouse Drag, 8-Handle Resize & Pinch-to-Zoom!
+function computeNSectionBox(totalN, slotIdx0, mode = 'grid') {
+  const n = Math.max(2, Math.min(24, Math.round(totalN || 2)));
+  const idx = Math.max(0, Math.min(n - 1, Math.round(slotIdx0 || 0)));
+  const gap = 0.006;
+  if (mode === 'v') {
+    const cw = 1 / n;
+    return { x: idx * cw + (idx > 0 ? gap/2 : 0), y: 0, w: cw - (idx > 0 && idx < n-1 ? gap : gap/2), h: 1 };
+  }
+  if (mode === 'h') {
+    const ch = 1 / n;
+    return { x: 0, y: idx * ch + (idx > 0 ? gap/2 : 0), w: 1, h: ch - (idx > 0 && idx < n-1 ? gap : gap/2) };
+  }
+  const cols = Math.ceil(Math.sqrt(n));
+  const rows = Math.ceil(n / cols);
+  const r = Math.floor(idx / cols), c = idx % cols;
+  const cw = 1 / cols, ch = 1 / rows;
+  return { x: c * cw + gap/2, y: r * ch + gap/2, w: cw - gap, h: ch - gap };
+}
+
+function getClipScreenBox(clip, w, h) {
+  const base = clip.customBox
+    ? { x: clip.customBox.x * w, y: clip.customBox.y * h, w: clip.customBox.w * w, h: clip.customBox.h * h }
+    : getRegionBoxCoords(clip.regionPreset || 'full', w, h);
+  return { x: base.x + (clip.x || 0), y: base.y + (clip.y || 0), w: base.w, h: base.h };
+}
+
+function applyUnlimitedAutoN() {
+  const nReq = Math.max(2, Math.min(24, parseInt($('lpNSections').value) || 4));
+  const mode = $('lpNMode').value || 'grid';
+  let vTracks = State.tracks.filter(t => t.type === 'video' || t.type === 'overlay').reverse();
+  pushHistory();
+  // Auto-create missing video tracks if user asked for more sections than existing tracks!
+  while (vTracks.length < nReq) {
+    const num = State.tracks.filter(t => t.type === 'video').length + 1;
+    const nt = { id:uid('tr'), type:'video', name:`VIDEO ${num}`, hidden:false, locked:false, muted:false, solo:false, volume:1, defaultLayerCfg:{} };
+    State.tracks.unshift(nt);
+    vTracks.push(nt);
+  }
+  for (let i = 0; i < nReq; i++) {
+    const tr = vTracks[i];
+    const box = computeNSectionBox(nReq, i, mode);
+    tr.defaultLayerCfg = Object.assign(tr.defaultLayerCfg || {}, { regionPreset: 'custom', customBox: box, borderCol: '#ffffff' });
+    State.clips.filter(c => c.trackId === tr.id).forEach(c => {
+      c.regionPreset = 'custom'; c.customBox = Object.assign({}, box); c.borderCol = '#ffffff'; c.x = 0; c.y = 0;
+    });
+  }
+  $('layerPlacementModal').classList.remove('open');
+  renderTimeline(); renderInspector(); renderFrame();
+  toast(`✨ ${nReq}-Section (${mode.toUpperCase()}) Split Ready! Har section mein photo/video dalein ya finger se resize karein.`, 'success');
+}
+
+$('lpApplyAutoN')?.addEventListener('click', applyUnlimitedAutoN);
+$('lpAssignSlotBtn')?.addEventListener('click', () => {
+  const nReq = Math.max(2, Math.min(24, parseInt($('lpNSections').value) || 4));
+  const slot1 = Math.max(1, Math.min(nReq, parseInt($('lpNSlotIdx').value) || 1));
+  const mode = $('lpNMode').value || 'grid';
+  const box = computeNSectionBox(nReq, slot1 - 1, mode);
+  pushHistory();
+  if (lpTargetTrack) lpTargetTrack.defaultLayerCfg = Object.assign(lpTargetTrack.defaultLayerCfg || {}, { regionPreset:'custom', customBox:box, borderCol:'#ffffff' });
+  if (lpTargetClip) { lpTargetClip.regionPreset = 'custom'; lpTargetClip.customBox = box; lpTargetClip.borderCol = '#ffffff'; lpTargetClip.x = 0; lpTargetClip.y = 0; }
+  $('layerPlacementModal').classList.remove('open');
+  renderTimeline(); renderInspector(); renderFrame();
+  toast(`📐 Section ${slot1}/${nReq} assigned!`, 'success');
+});
+
+// Clear customBox when user clicks one of the named preset buttons
+document.querySelectorAll('#lpPresetGrid .lp-btn').forEach(b => b.addEventListener('click', () => {
+  if (lpTargetClip) delete lpTargetClip.customBox;
+  if (lpTargetTrack && lpTargetTrack.defaultLayerCfg) delete lpTargetTrack.defaultLayerCfg.customBox;
+}));
+
+// Direct Finger & Mouse Drag + 8-Handle Corner/Edge Resize on Preview Canvas!
+let cInteract = null; // { clip, mode: 'move'|'tl'|'tr'|'bl'|'br'|'t'|'b'|'l'|'r', sx, sy, origBox }
+function canvasPtFromClient(clientX, clientY) {
+  const r = previewCanvas.getBoundingClientRect();
+  return {
+    x: (clientX - r.left) * (previewCanvas.width / Math.max(1, r.width)),
+    y: (clientY - r.top) * (previewCanvas.height / Math.max(1, r.height))
+  };
+}
+
+previewCanvas.style.touchAction = 'none';
+previewCanvas.addEventListener('pointerdown', e => {
+  if (State.canvasMode === 'draw') return;
+  const c = getSelectedClip();
+  if (!c || c.kind === 'audio') return;
+  const pt = canvasPtFromClient(e.clientX, e.clientY);
+  const w = previewCanvas.width, h = previewCanvas.height;
+
+  if (c.kind === 'video' || c.kind === 'image') {
+    const sb = getClipScreenBox(c, w, h);
+    const hitR = Math.max(20, Math.round(Math.min(w, h) * 0.055)); // generous finger touch target
+    const handles = [
+      ['tl', sb.x, sb.y], ['tr', sb.x + sb.w, sb.y],
+      ['bl', sb.x, sb.y + sb.h], ['br', sb.x + sb.w, sb.y + sb.h],
+      ['t', sb.x + sb.w/2, sb.y], ['b', sb.x + sb.w/2, sb.y + sb.h],
+      ['l', sb.x, sb.y + sb.h/2], ['r', sb.x + sb.w, sb.y + sb.h/2]
+    ];
+    let mode = 'move';
+    for (const [hk, hx, hy] of handles) {
+      if (Math.hypot(pt.x - hx, pt.y - hy) <= hitR) { mode = hk; break; }
+    }
+    // Normalize current box into customBox (0..1) and fold x/y offset into it so resizing is rock-solid
+    const normBox = { x: sb.x / w, y: sb.y / h, w: sb.w / w, h: sb.h / h };
+    c.x = 0; c.y = 0; c.regionPreset = 'custom'; c.customBox = Object.assign({}, normBox);
+    cInteract = { clip: c, mode, sx: pt.x, sy: pt.y, origBox: normBox };
+    try { previewCanvas.setPointerCapture(e.pointerId); } catch (err) {}
+  } else {
+    cInteract = { clip: c, mode: 'offset', sx: pt.x, sy: pt.y, origX: c.x || 0, origY: c.y || 0 };
+  }
+});
+
+window.addEventListener('pointermove', e => {
+  if (!cInteract || State.canvasMode === 'draw') return;
+  const pt = canvasPtFromClient(e.clientX, e.clientY);
+  const w = previewCanvas.width, h = previewCanvas.height;
+  const dx = (pt.x - cInteract.sx) / w, dy = (pt.y - cInteract.sy) / h;
+  const c = cInteract.clip;
+
+  if (cInteract.mode === 'offset') {
+    c.x = Math.round(cInteract.origX + (pt.x - cInteract.sx));
+    c.y = Math.round(cInteract.origY + (pt.y - cInteract.sy));
+    renderFrame(); return;
+  }
+
+  const ob = cInteract.origBox;
+  const minS = 0.08;
+  let nx = ob.x, ny = ob.y, nw = ob.w, nh = ob.h;
+  const m = cInteract.mode;
+  if (m === 'move') {
+    nx = clamp(ob.x + dx, -0.5, 0.95);
+    ny = clamp(ob.y + dy, -0.5, 0.95);
+  } else {
+    if (m.includes('l')) { const maxDx = ob.w - minS; const d = clamp(dx, -ob.x - 0.2, maxDx); nx = ob.x + d; nw = ob.w - d; }
+    if (m.includes('r')) { nw = clamp(ob.w + dx, minS, 1.4); }
+    if (m.includes('t')) { const maxDy = ob.h - minS; const d = clamp(dy, -ob.y - 0.2, maxDy); ny = ob.y + d; nh = ob.h - d; }
+    if (m.includes('b')) { nh = clamp(ob.h + dy, minS, 1.4); }
+  }
+  c.customBox = { x: Number(nx.toFixed(4)), y: Number(ny.toFixed(4)), w: Number(nw.toFixed(4)), h: Number(nh.toFixed(4)) };
+  renderFrame();
+});
+window.addEventListener('pointerup', () => { cInteract = null; });
+
+// 2-Finger Pinch-to-Resize on Mobile Touchscreens!
+let pinchState = null;
+previewCanvas.addEventListener('touchstart', e => {
+  if (e.touches.length !== 2 || State.canvasMode === 'draw') return;
+  const c = getSelectedClip();
+  if (!c || (c.kind !== 'video' && c.kind !== 'image')) return;
+  e.preventDefault(); cInteract = null;
+  const dist = Math.hypot(e.touches[0].clientX - e.touches[1].clientX, e.touches[0].clientY - e.touches[1].clientY);
+  const sb = getClipScreenBox(c, previewCanvas.width, previewCanvas.height);
+  const norm = { x: sb.x / previewCanvas.width, y: sb.y / previewCanvas.height, w: sb.w / previewCanvas.width, h: sb.h / previewCanvas.height };
+  c.x = 0; c.y = 0; c.regionPreset = 'custom'; c.customBox = Object.assign({}, norm);
+  pinchState = { clip: c, dist: Math.max(10, dist), origBox: norm };
+}, { passive: false });
+
+previewCanvas.addEventListener('touchmove', e => {
+  if (!pinchState || e.touches.length !== 2) return;
+  e.preventDefault();
+  const dist = Math.hypot(e.touches[0].clientX - e.touches[1].clientX, e.touches[0].clientY - e.touches[1].clientY);
+  const ratio = clamp(dist / pinchState.dist, 0.2, 3.0);
+  const ob = pinchState.origBox;
+  const nw = clamp(ob.w * ratio, 0.1, 1.3), nh = clamp(ob.h * ratio, 0.1, 1.3);
+  const cx = ob.x + ob.w / 2, cy = ob.y + ob.h / 2;
+  pinchState.clip.customBox = { x: Number((cx - nw/2).toFixed(4)), y: Number((cy - nh/2).toFixed(4)), w: Number(nw.toFixed(4)), h: Number(nh.toFixed(4)) };
+  renderFrame();
+}, { passive: false });
+
+previewCanvas.addEventListener('touchend', e => { if (e.touches.length < 2) pinchState = null; });
+
+// Init V8 Studio
 function initStudio() {
   if (window.innerWidth <= 820) { State.easyMode = true; document.body.classList.add('easy-mode'); $('easyModeLbl').textContent = 'Easy'; $('previewResSelect').value = '0.5'; }
   const trVfx = { id:uid('tr'), type:'vfx', name:'VFX 1', hidden:false, locked:false, muted:false, solo:false, volume:1 };
