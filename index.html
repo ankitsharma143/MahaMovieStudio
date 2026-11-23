@@ -430,6 +430,8 @@ body.easy-mode #btnRippleToggle, body.easy-mode #btnDetectBeats, body.easy-mode 
         <button id="btnAutoDuck" class="active" title="Auto-Duck Music under Voice">🔉 Duck</button>
         <button id="btnBeatSyncMaker" class="primary">🥁 Beat-Sync</button>
         <button id="btnIntroCredits" class="cyan">🎬 Intro/Credits</button>
+        <button id="btnAiSongMaker" class="primary">🎤 AI Song</button>
+        <button id="btnSoundboard">🎛️ SFX Pads</button>
       </div>
       <div class="transport-group" style="gap:3px;">
         <button id="btnTrackSize" style="padding:2px 6px;font-size:10.5px;">↕ Trk:M</button>
@@ -449,7 +451,9 @@ body.easy-mode #btnRippleToggle, body.easy-mode #btnDetectBeats, body.easy-mode 
       <button id="cqStepMinus">-0.5s</button>
       <button id="cqStepPlus">+0.5s</button>
       <button id="cqCutAudio" class="cyan" style="display:none;">✂ Cut Part</button>
-      <button id="cqSlowMo" style="background:rgba(56,189,248,0.18);border-color:rgba(56,189,248,0.45);color:#bae6fd;">🐢 0.5x Slow-Mo</button>
+      <button id="cqSlowMo" style="background:rgba(56,189,248,0.18);border-color:rgba(56,189,248,0.45);color:#bae6fd;">🐢 Slow-Mo</button>
+      <button id="cqFreeze" style="background:rgba(168,85,247,0.18);border-color:rgba(168,85,247,0.45);color:#e9d5ff;">❄️ Freeze</button>
+      <button id="cqReverse" style="background:rgba(245,158,11,0.15);border-color:rgba(245,158,11,0.4);color:#fde68a;">⏪ Rev</button>
       <button id="cqLayer" class="primary">📐 Layer/Chroma</button>
       <button id="cqEdit" class="cyan">🎛 Edit</button>
       <button id="cqRemove" class="danger">🗑 Remove</button>
@@ -491,8 +495,8 @@ body.easy-mode #btnRippleToggle, body.easy-mode #btnDetectBeats, body.easy-mode 
           <img src="data:image/png;base64,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" alt="MahaMovieStudio" style="height:30px;width:auto;display:block;">
         </div>
         <div>
-          <div style="font-size:15px;font-weight:800;">MOVIE STUDIO <span style="color:var(--gold);">V16</span></div>
-          <div style="font-size:10px;color:var(--text-2);">Voice Changer • Beat-Sync Auto-Edit • 3D Intro/Credits • Motion Pin • Watermark</div>
+          <div style="font-size:15px;font-weight:800;">MOVIE STUDIO <span style="color:var(--gold);">V17</span></div>
+          <div style="font-size:10px;color:var(--text-2);">AI Song & BGM Maker • Color Wheels • Freeze/Reverse • Soundboard</div>
         </div>
       </div>
       <div style="display:flex;gap:6px;align-items:center;">
@@ -544,7 +548,7 @@ body.easy-mode #btnRippleToggle, body.easy-mode #btnDetectBeats, body.easy-mode 
       <button class="mm-quick-tile" id="mmQuickConverter"><span class="ico">⚡</span><span>HD Unblur &amp; MP3</span></button>
       <button class="mm-quick-tile" id="mmQuickCamera"><span class="ico">🎥</span><span>Camera + Screen</span></button>
       <button class="mm-quick-tile" id="mmQuickAi"><span class="ico">🤖</span><span>Voice → AI Movie</span></button>
-      <button class="mm-quick-tile" id="mmQuickMusic"><span class="ico">🎵</span><span>AI Music Studio</span></button>
+      <button class="mm-quick-tile" id="mmQuickMusic"><span class="ico">🎵</span><span>AI Song &amp; BGM Maker</span></button>
       <button class="mm-quick-tile" id="mmQuickColor"><span class="ico">🎨</span><span>Hollywood Color</span></button>
       <button class="mm-quick-tile" id="mmQuickInstall"><span class="ico">⚙</span><span>Settings / Install</span></button>
     </div>
@@ -1194,6 +1198,86 @@ VFX &amp; EDITING: MAHAMOVIESTUDIO</textarea></div>
   </div>
 </div>
 
+
+<!-- V17: AI SONG, LYRICS & BACKGROUND MUSIC MAKER (GIRL / MEN VOICE + TUNING) -->
+<div class="modal-backdrop" id="aiSongModal">
+  <div class="modal-box" style="width:660px;max-width:96vw;max-height:92dvh;">
+    <div class="modal-head"><span>🎤 AI Song, Lyrics &amp; Background Music Maker</span><button class="icon-btn" id="btnCloseAiSong">✕</button></div>
+    <div class="modal-body" style="gap:9px;">
+      <div style="font-size:11.5px;color:#bae6fd;background:rgba(6,182,212,0.1);border:1px solid rgba(6,182,212,0.35);border-radius:7px;padding:8px 10px;">
+        Apne song ka idea ya text likhein — AI uske hisab se fresh rhythmic <b>Lyrics</b>, <b>Girl ya Men Voice</b> tuning, aur studio-quality <b>AI Background Music (.WAV)</b> banakar seedha timeline par karaoke ke saath add kar dega!
+      </div>
+      <div class="prop-group">
+        <div class="prop-title">1. Song Text / Idea (Hindi, Hinglish ya English mein likhein)</div>
+        <textarea id="asPrompt" rows="2" placeholder="Jaise: Mohabbat ki baarish mein tere saath chalna hai, dil ki dhadkan tera naam le..."></textarea>
+        <div style="display:flex;gap:6px;flex-wrap:wrap;margin-top:4px;">
+          <button id="asGenLyricsBtn" class="cyan" style="flex:1;padding:6px;">✍️ Auto-Write / Enhance Pro Lyrics</button>
+          <select id="asGenre" style="flex:1;padding:6px;font-size:11.5px;">
+            <option value="Romantic">💖 Romantic Bollywood</option>
+            <option value="Action">💥 Action / Rap Trap Beat</option>
+            <option value="Sad">💔 Sad Emotional Lofi</option>
+            <option value="Party">🪩 Party EDM / Dance</option>
+            <option value="Bhakti">🕉️ Bhakti Devotional</option>
+          </select>
+        </div>
+        <textarea id="asLyricsBox" rows="4" placeholder="Yahan final song lyrics aayengi (aap edit bhi kar sakte hain)..." style="margin-top:5px;"></textarea>
+      </div>
+
+      <div class="grid-2" style="gap:8px;">
+        <div class="prop-group">
+          <div class="prop-title">2. Singer Voice &amp; Vocal Tuning</div>
+          <div class="prop-row"><label>Singer Voice</label>
+            <select id="asVoiceGender" style="flex:1;">
+              <option value="girl">👩 Girl Sound (Female Vocal)</option>
+              <option value="men">👨 Men Sound (Male Vocal)</option>
+              <option value="duet">👩👨 Duet (Girl + Men Mix)</option>
+            </select>
+          </div>
+          <div class="prop-row"><label>Vocal Pitch</label><input type="range" id="asPitch" min="-6" max="6" value="1"><span class="prop-val" id="asPitchV">+1</span></div>
+          <div class="prop-row"><label>Auto-Tune</label><input type="range" id="asTune" min="0" max="100" value="78"><span class="prop-val" id="asTuneV">78%</span></div>
+          <div class="prop-row"><label>Voice Style</label>
+            <select id="asLang"><option value="hi-IN">Hindi / Hinglish</option><option value="en-US">English</option></select>
+          </div>
+        </div>
+
+        <div class="prop-group">
+          <div class="prop-title">3. 🎹 AI Background Music Maker</div>
+          <div class="prop-row"><label>Tempo (BPM)</label><input type="range" id="asBpm" min="72" max="155" value="112"><span class="prop-val" id="asBpmV">112</span></div>
+          <div class="prop-row"><label>Music Scale</label>
+            <select id="asScale">
+              <option value="major">C Major (Happy/Romantic)</option>
+              <option value="minor">A Minor (Emotional/Epic)</option>
+              <option value="bolly">Bollywood Bhairavi</option>
+              <option value="trap">Dark Trap Minor</option>
+            </select>
+          </div>
+          <div class="prop-row"><label>Duration (s)</label><input type="range" id="asDur" min="10" max="30" value="16"><span class="prop-val" id="asDurV">16s</span></div>
+          <div class="prop-row"><label>Bass &amp; Drums</label><input type="range" id="asBass" min="20" max="100" value="82"><span class="prop-val" id="asBassV">82%</span></div>
+        </div>
+      </div>
+
+      <div id="asAudioOut" style="display:none;background:var(--bg-3);border:1px solid var(--border);border-radius:7px;padding:8px;"></div>
+      <div style="display:flex;gap:7px;flex-wrap:wrap;justify-content:flex-end;border-top:1px solid var(--border);padding-top:6px;">
+        <button id="asPreviewBtn">▶ Preview Song + Voice</button>
+        <button id="asStopBtn">⏹ Stop</button>
+        <button id="asBgmOnlyBtn" class="cyan">🎹 Generate AI BGM Only</button>
+        <button id="asAddTimelineBtn" class="primary" style="padding:8px 15px;">✨ Create Song + Karaoke on Timeline</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- V17: 24-PAD LIVE SOUNDBOARD MODAL -->
+<div class="modal-backdrop" id="soundboardModal">
+  <div class="modal-box" style="width:560px;max-width:96vw;">
+    <div class="modal-head"><span>🎛️ 24-Pad Live Soundboard (Tap to Preview &amp; Drop on Timeline)</span><button class="icon-btn" id="btnCloseSoundboard">✕</button></div>
+    <div class="modal-body" style="gap:8px;">
+      <div style="font-size:11px;color:var(--text-2);">Kisi bhi pad par tap karein — turant play hoga aur current playhead time par Audio track mein add ho jayega:</div>
+      <div class="grid-3" id="soundboardGrid" style="gap:6px;"></div>
+    </div>
+  </div>
+</div>
+
 <div id="toastWrap"></div>
 
 <script>
@@ -1311,7 +1395,7 @@ const State = {
   voiceChanger: 'normal', canvasMode: null, tempDrawPaths: [], targetAddTrackId: null, targetAddTime: null,
   trackSizeHeights: { tr: 44, vid: 54 }, beatMarkers: [],
   mediaPool: [], tracks: [], clips: [], undoStack: [], redoStack: [],
-  globalColor: { brightness:100, contrast:100, saturation:100, hue:0, temperature:0, bloom:0, grain:0, halation:0 },
+  globalColor: { brightness:100, contrast:100, saturation:100, hue:0, temperature:0, bloom:0, grain:0, halation:0, vignette:0, shadowTint:'none', highlightTint:'none' },
   audioMaster: { volume:0.9, bass:0, mid:0, treble:0, compressor:true },
   planner: {
     script: `SCENE 1 - EXT. ANCIENT TEMPLE DAWN\nGolden divine rays pierce the sky. A Shankh echoes.\n\nSCENE 2 - EXT. SPIRAL GALAXY PORTAL\nA cosmic portal opens across deep space.`,
@@ -2169,7 +2253,8 @@ function renderFrameAt(ctx, w, h, time) {
         if (m && m.el) {
           if (clip.kind === 'video' && m.el.readyState >= 2) {
             const curveLt = evalSpeedCurveTime(clip.speedCurve || 'linear', lt, clip.duration);
-            const tv = clamp((clip.trimStart||0) + curveLt*(clip.speed||1), 0, Math.max(0.1, m.duration-0.05));
+            const rawPos = (clip.trimStart||0) + curveLt*(clip.speed||1);
+            const tv = clip.reversed ? clamp(Math.max(0.1, m.duration-0.05) - rawPos, 0, Math.max(0.1, m.duration-0.05)) : clamp(rawPos, 0, Math.max(0.1, m.duration-0.05));
             if (Math.abs(m.el.currentTime - tv) > 0.18) try { m.el.currentTime = tv; } catch (e) {}
           }
           const mw = m.width || m.el.videoWidth || m.el.naturalWidth || w;
@@ -2337,6 +2422,29 @@ function renderFrameAt(ctx, w, h, time) {
     ctx.restore();
   }
   if (State.cinemaBars) { const bh = Math.round(h*0.115); ctx.fillStyle='#000'; ctx.fillRect(0,0,w,bh); ctx.fillRect(0,h-bh,w,bh); }
+  // V17: Pro Color Wheels (Shadow/Highlight Tint), Cinema Vignette & Film Grain
+  if (gc.shadowTint && gc.shadowTint !== 'none') {
+    ctx.save(); ctx.globalCompositeOperation = 'multiply'; ctx.globalAlpha = 0.22;
+    ctx.fillStyle = gc.shadowTint; ctx.fillRect(0, 0, w, h); ctx.restore();
+  }
+  if (gc.highlightTint && gc.highlightTint !== 'none') {
+    ctx.save(); ctx.globalCompositeOperation = 'screen'; ctx.globalAlpha = 0.16;
+    ctx.fillStyle = gc.highlightTint; ctx.fillRect(0, 0, w, h); ctx.restore();
+  }
+  if (gc.vignette && gc.vignette > 0) {
+    const vg = ctx.createRadialGradient(w/2, h/2, Math.min(w,h)*0.28, w/2, h/2, Math.max(w,h)*0.72);
+    vg.addColorStop(0, 'rgba(0,0,0,0)'); vg.addColorStop(1, `rgba(0,0,0,${clamp(gc.vignette/100,0,0.92)})`);
+    ctx.fillStyle = vg; ctx.fillRect(0, 0, w, h);
+  }
+  if (gc.grain && gc.grain > 0) {
+    ctx.save(); ctx.fillStyle = `rgba(255,255,255,${clamp((gc.grain/100)*0.18, 0, 0.2)})`;
+    const seed = Math.floor(time * 24);
+    for (let gi = 0; gi < 90; gi++) {
+      const gx = ((gi*73 + seed*131) % w), gy = ((gi*47 + seed*97) % h);
+      ctx.fillRect(gx, gy, 2, 2);
+    }
+    ctx.restore();
+  }
   if (State.watermarkEnabled && State.watermarkText) {
     ctx.save(); ctx.globalAlpha = 0.68; ctx.font = `800 ${Math.max(11, Math.round(w*0.022))}px system-ui`;
     ctx.fillStyle = '#fef08a'; ctx.strokeStyle = '#000'; ctx.lineWidth = 2.5;
@@ -2411,7 +2519,14 @@ function startAudioForPlayback(fromT) {
         const hasVoice = State.clips.some(vc => vc.isVoiceover && vc.start + vc.duration > fromT);
         if (hasVoice) baseV *= 0.32;
       }
-      g.gain.value = baseV;
+      const fi = clip.fadeIn || 0, fo = clip.fadeOut || 0;
+      const startAt = ctx.currentTime + Math.max(0, clip.start - fromT);
+      const remDur = Math.max(0.05, clip.duration - Math.max(0, fromT - clip.start));
+      if (fi > 0 || fo > 0) {
+        g.gain.setValueAtTime(fi > 0 ? 0.001 : baseV, startAt);
+        if (fi > 0) g.gain.linearRampToValueAtTime(baseV, startAt + Math.min(fi, remDur*0.45));
+        if (fo > 0) { g.gain.setValueAtTime(baseV, startAt + Math.max(0.05, remDur - fo)); g.gain.linearRampToValueAtTime(0.001, startAt + remDur); }
+      } else { g.gain.value = baseV; }
       src.connect(g); g.connect(eqLow);
       const del = Math.max(0, clip.start - fromT), off = Math.max(0, fromT - clip.start) + (clip.trimStart||0), dur = Math.max(0.05, clip.duration - Math.max(0, fromT - clip.start));
       try { src.start(ctx.currentTime + del, off % buf.duration, dur); activeAudioSources.push(src); } catch (e) {}
@@ -3008,6 +3123,17 @@ function renderLeftDrawer() {
     const gc = State.globalColor;
     body.innerHTML = `<div class="prop-group"><div class="prop-title">Hollywood Color Grading</div><div class="prop-row"><label>Brightness</label><input type="range" id="cgB" min="40" max="180" value="${gc.brightness}"></div><div class="prop-row"><label>Contrast</label><input type="range" id="cgC" min="40" max="190" value="${gc.contrast}"></div><div class="prop-row"><label>Saturation</label><input type="range" id="cgS" min="0" max="200" value="${gc.saturation}"></div><div class="prop-row"><label>Hue</label><input type="range" id="cgH" min="-180" max="180" value="${gc.hue}"></div></div>`;
     [['cgB','brightness'],['cgC','contrast'],['cgS','saturation'],['cgH','hue']].forEach(([id,k]) => $(id).addEventListener('input', e => { gc[k] = parseFloat(e.target.value); renderFrame(); }));
+    const wg = document.createElement('div'); wg.className = 'prop-group';
+    wg.innerHTML = `<div class="prop-title">🎡 Pro Color Wheels, Vignette &amp; Grain</div>
+      <div class="prop-row"><label>Shadows</label><select id="cgSh"><option value="none">Neutral</option><option value="#1e3a8a"${gc.shadowTint==='#1e3a8a'?' selected':''}>Teal/Blue Cinema</option><option value="#4c1d95"${gc.shadowTint==='#4c1d95'?' selected':''}>Purple Night</option><option value="#451a03"${gc.shadowTint==='#451a03'?' selected':''}>Warm Sepia</option><option value="#064e3b"${gc.shadowTint==='#064e3b'?' selected':''}>Matrix Green</option></select></div>
+      <div class="prop-row"><label>Highlights</label><select id="cgHi"><option value="none">Neutral</option><option value="#f59e0b"${gc.highlightTint==='#f59e0b'?' selected':''}>Golden Sun</option><option value="#ec4899"${gc.highlightTint==='#ec4899'?' selected':''}>Rose Glow</option><option value="#38bdf8"${gc.highlightTint==='#38bdf8'?' selected':''}>Cyber Cyan</option></select></div>
+      <div class="prop-row"><label>Vignette</label><input type="range" id="cgVig" min="0" max="90" value="${gc.vignette||0}"></div>
+      <div class="prop-row"><label>Film Grain</label><input type="range" id="cgGrn" min="0" max="100" value="${gc.grain||0}"></div>`;
+    body.appendChild(wg);
+    $('cgSh').addEventListener('change', e => { gc.shadowTint = e.target.value; renderFrame(); });
+    $('cgHi').addEventListener('change', e => { gc.highlightTint = e.target.value; renderFrame(); });
+    $('cgVig').addEventListener('input', e => { gc.vignette = parseInt(e.target.value)||0; renderFrame(); });
+    $('cgGrn').addEventListener('input', e => { gc.grain = parseInt(e.target.value)||0; renderFrame(); });
   } else if (mod === 'camera') {
     body.innerHTML = `<div class="prop-group"><div class="prop-title">Camera &amp; Screen Recorder</div><video id="camV" autoplay muted playsinline style="width:100%;height:120px;background:#000;border-radius:4px;"></video><div class="grid-2"><button id="cStart" class="cyan">📷 Camera</button><button id="cScreen" class="primary">🖥 Screen</button></div></div>`;
     $('cStart').addEventListener('click', async () => { try { $('camV').srcObject = await navigator.mediaDevices.getUserMedia({ video:true, audio:true }); toast('Camera active!','success'); } catch (e) { toast('Camera denied','error'); } });
@@ -3110,6 +3236,8 @@ function renderInspector() {
       <div class="prop-row"><label>🎭 Voice</label><select id="iVoiceFx"><option value="none">Normal</option><option value="trailer"${clip.voicePreset==='trailer'?' selected':''}>🎬 Deep Trailer</option><option value="ghost"${clip.voicePreset==='ghost'?' selected':''}>👻 Bhoot / Ghost</option><option value="robot"${clip.voicePreset==='robot'?' selected':''}>🤖 Robot</option><option value="chipmunk"${clip.voicePreset==='chipmunk'?' selected':''}>🐿️ High Pitch</option><option value="stadium"${clip.voicePreset==='stadium'?' selected':''}>🏟️ Stadium Echo</option></select></div>
       <div class="prop-row"><label>EQ Bass</label><input type="range" id="iEqB" min="-10" max="12" value="${clip.eqBass||0}"></div>
       <div class="prop-row"><label>Reverb</label><input type="range" id="iRev" min="0" max="100" value="${clip.reverbAmt||0}"></div>
+      <div class="prop-row"><label>Fade In</label><input type="range" id="iFadeI" min="0" max="3" step="0.1" value="${clip.fadeIn||0}"></div>
+      <div class="prop-row"><label>Fade Out</label><input type="range" id="iFadeO" min="0" max="3" step="0.1" value="${clip.fadeOut||0}"></div>
       ${clip.kind==='audio'?'<button id="iCutBtn" class="cyan" style="width:100%;">✂ Open Audio Part Cutter</button>':''}</div>`;
     paintSpeedCurveCanvas(clip.speedCurve || 'linear');
     $('iSp').addEventListener('input', e => { clip.speed = parseFloat(e.target.value); });
@@ -3119,6 +3247,8 @@ function renderInspector() {
     $('iVoiceFx').addEventListener('change', e => { clip.voicePreset = e.target.value; });
     $('iEqB').addEventListener('input', e => { clip.eqBass = parseInt(e.target.value)||0; });
     $('iRev').addEventListener('input', e => { clip.reverbAmt = parseInt(e.target.value)||0; });
+    $('iFadeI').addEventListener('input', e => { clip.fadeIn = parseFloat(e.target.value)||0; });
+    $('iFadeO').addEventListener('input', e => { clip.fadeOut = parseFloat(e.target.value)||0; });
     $('iCutBtn')?.addEventListener('click', () => openAudioPartCutter(null, clip.trackId, clip.start, clip));
   } else if (tab === 'keyframes') {
     const kfs = (clip.keyframes || []).sort((a,b) => a.t - b.t);
@@ -3449,7 +3579,7 @@ let allowExit = false;
 const pushGuard = () => { try { history.pushState({ maha:1 }, '', location.href); } catch (e) {} };
 pushGuard();
 function handleBack() {
-  for (const id of ['dialogModal','beatSyncModal','introCreditsModal','tplMakerModal','mastPreviewModal','layerPlacementModal','hindiGuideModal','tplUseModal','capcutTplModal','audioCutterModal','exportDoneModal','exportModal','settingsModal','trackAddModal','newTrackModal']) {
+  for (const id of ['dialogModal','aiSongModal','soundboardModal','beatSyncModal','introCreditsModal','tplMakerModal','mastPreviewModal','layerPlacementModal','hindiGuideModal','tplUseModal','capcutTplModal','audioCutterModal','exportDoneModal','exportModal','settingsModal','trackAddModal','newTrackModal']) {
     if ($(id)?.classList.contains('open')) { if (id === 'mastPreviewModal') stopMastPreview(); $(id).classList.remove('open'); return; }
   }
   if (State.canvasMode) { $('btnCanvasModeCancel').click(); return; }
@@ -4722,7 +4852,217 @@ $('icAddCreditsBtn')?.addEventListener('click', () => {
   toast('📜 Scrolling End-Credits Added!', 'success');
 });
 
-// Init V16 Studio
+
+// ============================================================================
+// V17: FREEZE-FRAME, REVERSE, 24-PAD SOUNDBOARD & AI SONG + LYRICS + BGM MAKER
+// ============================================================================
+$('cqFreeze')?.addEventListener('click', () => {
+  const c = getSelectedClip(); if (!c || (c.kind !== 'video' && c.kind !== 'image')) return toast('Select a video/photo clip first!', 'error');
+  try {
+    const url = previewCanvas.toDataURL('image/png');
+    const img = new Image(); img.src = url;
+    const mid = uid('frz');
+    State.mediaPool.push({ id:mid, name:'❄️ Freeze Frame', type:'image', url, el:img, width:previewCanvas.width, height:previewCanvas.height, duration:2.5 });
+    addClipToTimeline({ name:'❄️ Freeze Frame', kind:'image', mediaId:mid, start:Number(State.currentTime.toFixed(2)), duration:2.5, motionFn:'zoom_punch' }, 'video');
+    toast('❄️ Freeze-Frame Snapshot Added at Playhead!', 'success');
+  } catch (e) { toast('Freeze error: ' + e.message, 'error'); }
+});
+
+$('cqReverse')?.addEventListener('click', () => {
+  const c = getSelectedClip(); if (!c || c.kind !== 'video') return toast('Select a video clip to reverse!', 'error');
+  pushHistory(); c.reversed = !c.reversed;
+  renderTimeline(); renderFrame();
+  toast(c.reversed ? '⏪ Reverse Playback ON!' : '▶ Forward Playback ON', 'success');
+});
+
+// 24-Pad Live Soundboard
+const SOUNDBOARD_PADS = [
+  ['💥 Explosion','Explosion'],['⚡ Thunder','Thunder'],['🥊 Punch Hit','Bass Drop'],['🌪️ Whoosh','Whoosh'],
+  ['👻 Ghost Scream','Horror Stinger'],['🔫 Laser Zap','Laser'],['🕉️ Shankh','Shankh'],['✨ Magic Chime','Magic Chime'],
+  ['🌧️ Rain Ambience','Rain'],['💨 Wind Gust','Wind'],['🥁 Bass Drop','Bass Drop'],['🔔 Temple Bell','Magic Chime'],
+  ['🔥 Fire Crackle','Explosion'],['🚨 Alert Siren','Laser'],['💓 Heartbeat','Bass Drop'],['⚔️ Sword Clash','Whoosh'],
+  ['👏 Crowd Cheer','Magic Chime'],['😂 Laugh Stinger','Whoosh'],['🎥 Camera Click','Laser'],['🚀 Rocket Launch','Explosion'],
+  ['🧟 Zombie Growl','Horror Stinger'],['🌊 Ocean Wave','Wind'],['🎹 Piano Chord','Magic Chime'],['🎬 Cinema Boom','Explosion']
+];
+$('btnSoundboard')?.addEventListener('click', () => {
+  const g = $('soundboardGrid');
+  if (!g.children.length) {
+    SOUNDBOARD_PADS.forEach(([lbl, sfxKey]) => {
+      const b = document.createElement('button');
+      b.style.cssText = 'padding:9px 5px;font-size:10.5px;font-weight:700;background:var(--bg-3);border:1px solid var(--border);';
+      b.textContent = lbl;
+      b.addEventListener('click', async () => {
+        const buf = await renderSFXBuffer(sfxKey, 2.2);
+        playBufferPreview(buf, 0.92);
+        const k = 'pad_' + uid('a'); audioBufferCache.set(k, buf);
+        addClipToTimeline({ name:lbl, kind:'audio', start:Number(State.currentTime.toFixed(2)), duration:2.2, volume:0.95, audioBufferKey:k, waveform:extractWaveform(buf,36) }, 'audio');
+      });
+      g.appendChild(b);
+    });
+  }
+  $('soundboardModal').classList.add('open');
+});
+$('btnCloseSoundboard')?.addEventListener('click', () => $('soundboardModal').classList.remove('open'));
+
+// AI Song, Lyrics, Girl/Men Voice Tuning & Multi-Instrument AI Background Music Maker
+$('btnAiSongMaker')?.addEventListener('click', () => $('aiSongModal').classList.add('open'));
+$('mmQuickMusic')?.addEventListener('click', () => $('aiSongModal').classList.add('open'));
+$('btnCloseAiSong')?.addEventListener('click', () => { try { speechSynthesis.cancel(); } catch (e) {} stopAllAudio(); $('aiSongModal').classList.remove('open'); });
+[['asPitch','asPitchV',''],['asTune','asTuneV','%'],['asBpm','asBpmV',''],['asDur','asDurV','s'],['asBass','asBassV','%']].forEach(([id,vid,suf]) => {
+  $(id)?.addEventListener('input', e => $(vid).textContent = (id==='asPitch' && +e.target.value > 0 ? '+' : '') + e.target.value + suf);
+});
+
+async function generateProLyricsFromIdea() {
+  const idea = ($('asPrompt').value || 'Mohabbat aur sapno ka safar').trim();
+  const genre = $('asGenre').value;
+  toast('✍️ Fresh rhythmic lyrics taiyar ho rahi hain...');
+  // Try live Vercel Gemini API if online, else use rich offline rhythmic lyric composer
+  try {
+    const r = await fetch('/api/ai/script', {
+      method: 'POST', headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ prompt: `Write 6 short, catchy, rhythmic Hindi/Hinglish ${genre} song lines (no headers, 1 line per beat) based on: ${idea}` })
+    });
+    if (r.ok) {
+      const d = await r.json();
+      if (d && d.script && d.script.length > 20) { $('asLyricsBox').value = d.script.trim(); toast('✨ AI Lyrics Ready!', 'success'); return; }
+    }
+  } catch (e) {}
+  const templates = {
+    Romantic: `${idea}\nDil ki dhadkan mein sirf tera hi naam hai\nChaand sitaron se bhi pyara tera paigaam hai\nHaathon mein haath lekar chalna hai umr bhar\nTeri muskaan hi meri zindagi ki subah-o-shaam hai`,
+    Action: `${idea}\nAag hai seene mein, rukna mera kaam nahi\nToofano se takraoon, darta mera naam nahi\nHar kadam par goonje ab jeet ki dahaad\nAasman bhi jhukega, ab koi anjaam nahi`,
+    Sad: `${idea}\nKhamosh raaton mein teri yaad aati hai\nBheegi palkon par kahani reh jaati hai\nChhod gaye tum par ehsaas abhi zinda hai\nHar saans mein sirf teri kami satati hai`,
+    Party: `${idea}\nDJ beat bajegi saari raat non-stop\nLights upar, haath hawa mein, bass kare drop\nNach le jhoom le, yeh pal wapas na aaye\nMaha studio ke saath party jaaye on top`,
+    Bhakti: `${idea}\nMandir ki ghanti aur shankh ki goonj suhani hai\nTere charnon mein prabhu meri poori kahani hai\nJyoti jale man mein, har sankat door ho jaaye\nTeri kripa se hi yeh duniya deewani hai`
+  };
+  $('asLyricsBox').value = templates[genre] || templates.Romantic;
+  toast('✨ Fresh Rhythmic Lyrics Ready!', 'success');
+}
+
+async function synthesizeStudioBGM({ genre='Romantic', scale='major', bpm=112, dur=16, bassAmt=0.82, voiceGender='girl', pitchShift=0, includeVocalSynth=true }) {
+  const OAC = window.OfflineAudioContext || window.webkitOfflineAudioContext;
+  const sr = 44100, off = new OAC(2, Math.floor(sr * dur), sr);
+  const master = off.createGain(); master.gain.value = 0.85;
+  const comp = off.createDynamicsCompressor();
+  master.connect(comp); comp.connect(off.destination);
+
+  const scales = {
+    major: [261.63, 293.66, 329.63, 349.23, 392.00, 440.00, 493.88, 523.25],
+    minor: [220.00, 246.94, 261.63, 293.66, 329.63, 349.23, 392.00, 440.00],
+    bolly: [261.63, 277.18, 329.63, 349.23, 392.00, 415.30, 493.88, 523.25],
+    trap:  [196.00, 207.65, 233.08, 261.63, 293.66, 311.13, 349.23, 392.00]
+  };
+  const notes = scales[scale] || scales.major;
+  const pitchMul = Math.pow(2, (pitchShift || 0) / 12);
+  const beat = 60 / clamp(bpm, 70, 165);
+  const totalBeats = Math.floor(dur / beat);
+
+  for (let b = 0; b < totalBeats; b++) {
+    const t = b * beat;
+    // 1. Punchy Kick Drum on beats 0, 2
+    if (b % 2 === 0 || (genre === 'Party' || genre === 'Action')) {
+      const kOsc = off.createOscillator(), kG = off.createGain();
+      kOsc.type = 'sine'; kOsc.frequency.setValueAtTime(145, t); kOsc.frequency.exponentialRampToValueAtTime(42, t + 0.14);
+      kG.gain.setValueAtTime(0.65 * bassAmt, t); kG.gain.exponentialRampToValueAtTime(0.001, t + 0.18);
+      kOsc.connect(kG); kG.connect(master); kOsc.start(t); kOsc.stop(t + 0.19);
+    }
+    // 2. Warm Chord Pad every 4 beats
+    if (b % 4 === 0) {
+      const rootIdx = (Math.floor(b / 4) * 2) % 5;
+      [0, 2, 4].forEach(step => {
+        const pOsc = off.createOscillator(), pG = off.createGain();
+        pOsc.type = genre === 'Sad' ? 'sine' : 'triangle';
+        pOsc.frequency.value = notes[(rootIdx + step) % notes.length] * 0.5 * pitchMul;
+        pG.gain.setValueAtTime(0.001, t); pG.gain.linearRampToValueAtTime(0.11, t + 0.25); pG.gain.exponentialRampToValueAtTime(0.001, t + beat * 3.9);
+        pOsc.connect(pG); pG.connect(master); pOsc.start(t); pOsc.stop(t + beat * 4);
+      });
+    }
+    // 3. Harmonic Vocal-Formant Lead Melody tuned for Girl (higher octave) or Men (warm baritone)
+    if (includeVocalSynth) {
+      const vOsc = off.createOscillator(), vFlt = off.createBiquadFilter(), vG = off.createGain();
+      const oct = voiceGender === 'girl' ? 1.5 : (voiceGender === 'men' ? 0.75 : (b % 2 ? 1.5 : 0.75));
+      vOsc.type = voiceGender === 'girl' ? 'sine' : 'sawtooth';
+      vOsc.frequency.value = notes[(b * 3 + (b % 5)) % notes.length] * oct * pitchMul;
+      vFlt.type = 'bandpass'; vFlt.frequency.value = voiceGender === 'girl' ? 1450 : 720; vFlt.Q.value = 2.2;
+      vG.gain.setValueAtTime(0.001, t); vG.gain.linearRampToValueAtTime(0.22, t + 0.08); vG.gain.exponentialRampToValueAtTime(0.001, t + beat * 0.92);
+      vOsc.connect(vFlt); vFlt.connect(vG); vG.connect(master); vOsc.start(t); vOsc.stop(t + beat);
+    }
+  }
+  return await off.startRendering();
+}
+
+function speakLyricsPreview(lyrics, gender, pitchVal, lang) {
+  if (!window.speechSynthesis || !lyrics.trim()) return;
+  try {
+    speechSynthesis.cancel();
+    const u = new SpeechSynthesisUtterance(lyrics.replace(/\n+/g, '. '));
+    u.lang = lang || 'hi-IN';
+    u.pitch = clamp((gender === 'girl' ? 1.38 : 0.76) + (pitchVal * 0.05), 0.5, 2.0);
+    u.rate = 0.94;
+    const vs = speechSynthesis.getVoices();
+    const match = vs.find(v => v.lang.startsWith(u.lang.slice(0,2)) && (gender==='girl' ? /female|woman|heera|kalpana|samantha|google हिन्दी/i.test(v.name) : /male|man|ravi|hemant|alex|daniel/i.test(v.name))) || vs.find(v => v.lang.startsWith(u.lang.slice(0,2)));
+    if (match) u.voice = match;
+    speechSynthesis.speak(u);
+  } catch (e) {}
+}
+
+let lastAiSongBuf = null;
+$('asGenLyricsBtn')?.addEventListener('click', generateProLyricsFromIdea);
+$('asStopBtn')?.addEventListener('click', () => { try { speechSynthesis.cancel(); } catch (e) {} stopAllAudio(); });
+
+async function buildAiSong(bgmOnly = false, addToTimeline = false) {
+  if (!bgmOnly && !$('asLyricsBox').value.trim()) await generateProLyricsFromIdea();
+  const cfg = {
+    genre: $('asGenre').value, scale: $('asScale').value,
+    bpm: +$('asBpm').value || 112, dur: +$('asDur').value || 16,
+    bassAmt: (+$('asBass').value || 80) / 100,
+    voiceGender: $('asVoiceGender').value, pitchShift: +$('asPitch').value || 0,
+    includeVocalSynth: !bgmOnly
+  };
+  toast(bgmOnly ? '🎹 Generating AI Background Music...' : '🎤 Composing Song + Tuning + AI BGM...');
+  const buf = await synthesizeStudioBGM(cfg);
+  lastAiSongBuf = buf;
+  const wav = encodeWAV(buf), url = createTrackedURL(wav);
+  const out = $('asAudioOut'); out.style.display = 'block';
+  out.innerHTML = `<div style="font-size:11px;font-weight:700;color:var(--green);margin-bottom:4px;">✅ ${bgmOnly?'AI Background Music':'AI Song + Tuned Melody'} Ready (${cfg.dur}s • ${cfg.bpm} BPM)</div>
+    <audio src="${url}" controls style="width:100%;height:32px;"></audio>
+    <a href="${url}" download="Maha_AI_Song_${cfg.genre}.wav" style="display:block;margin-top:4px;text-decoration:none;"><button style="width:100%;font-size:11px;">⬇ Download .WAV</button></a>`;
+
+  if (!addToTimeline) {
+    stopAllAudio(); playBufferPreview(buf, 0.9);
+    if (!bgmOnly) speakLyricsPreview($('asLyricsBox').value, cfg.voiceGender, cfg.pitchShift, $('asLang').value);
+    return;
+  }
+
+  pushHistory();
+  const k = 'aisong_' + uid('a'); audioBufferCache.set(k, buf);
+  const trAud = findOrCreateTrack('audio');
+  State.clips.push({ id:uid('c'), trackId:trAud.id, name:`🎤 ${bgmOnly?'AI BGM':'AI Song'} (${cfg.voiceGender})`, kind:'audio', start:0, duration:cfg.dur, volume:0.95, audioBufferKey:k, waveform:extractWaveform(buf,56) });
+
+  if (!bgmOnly) {
+    const lines = $('asLyricsBox').value.split('\n').map(x => x.trim()).filter(Boolean);
+    const trTxt = findOrCreateTrack('text');
+    const perL = cfg.dur / Math.max(1, lines.length);
+    lines.forEach((ln, i) => {
+      State.clips.push({
+        id:uid('c'), trackId:trTxt.id, name:ln, kind:'text', text:ln,
+        start:Number((i*perL).toFixed(2)), duration:Number(perL.toFixed(2)),
+        x:0, y:State.aspect==='9:16'?210:135, scale:1, opacity:1, textAnim:'karaoke_bounce',
+        textStyle:{ size:42, color:'#ffffff', karaoke:true, karaokeColor:'#facc15', style3d:true }
+      });
+    });
+  }
+  $('aiSongModal').classList.remove('open'); closeMainMenu();
+  State.currentTime = 0; recalcDuration(); renderTimeline(); renderFrame();
+  if (!State.playing) togglePlay();
+  if (!bgmOnly) speakLyricsPreview($('asLyricsBox').value, cfg.voiceGender, cfg.pitchShift, $('asLang').value);
+  toast('🎤 AI Song + Synced Karaoke Lyrics Added to Timeline!', 'success');
+}
+
+$('asPreviewBtn')?.addEventListener('click', () => buildAiSong(false, false));
+$('asBgmOnlyBtn')?.addEventListener('click', () => buildAiSong(true, true));
+$('asAddTimelineBtn')?.addEventListener('click', () => buildAiSong(false, true));
+
+// Init V17 Studio
 function initStudio() {
   if (window.innerWidth <= 820) { State.easyMode = true; document.body.classList.add('easy-mode'); $('easyModeLbl').textContent = 'Easy'; $('previewResSelect').value = '0.5'; }
   const trVfx = { id:uid('tr'), type:'vfx', name:'VFX 1', hidden:false, locked:false, muted:false, solo:false, volume:1 };
